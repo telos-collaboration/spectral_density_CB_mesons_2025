@@ -1,8 +1,8 @@
-# Analysis code for (arXiv:2405.01388)
+# Analysis code for (arXiv:####.#####)
 
 This is the analysis code built on top of **lsdensities** code (
 <a href="https://github.com/LupoA/lsdensities"> GitHub repository </a>) to
-reproduce the results in **([arXiv:2405.01388][paper])**.
+reproduce the results in **([arXiv:####.#####][paper])**.
 
 ## Authors
 
@@ -14,7 +14,7 @@ Maurizio Piai, Davide Vadacchino.
 ## Set up environment
 
 * Download this code
-* From the data release at https://doi.org/10.5281/zenodo.11048346
+* From the data release at https://doi.org/##.####/zenodo.########
   * Download ``chimera_data_full.hdf5``, and place it in ``input_correlators/``
   * Download ``input_topology.zip``,
     and extract its contents into    ``input_topology/``
@@ -59,7 +59,7 @@ Maurizio Piai, Davide Vadacchino.
      directory ``input_correlators/`` before running ``bash run_spectral_densities.sh``.
 
      The spectral densities can be found and fitted:
-      * If ``input_fit/`` has been filled (using the corresponding directory in https://doi.org/10.5281/zenodo.11048346)
+      * If ``input_fit/`` has been filled (using the corresponding directory in https://doi.org/##.####/zenodo.########)
         the fitting procedure will be applied to pre-reconstructed spectral densities.
       * If ``input_fit/`` is empty, the code will reconstruct from scratch the spectral densities and then
         to fit them. This procedure may take quite a long time.
@@ -80,4 +80,4 @@ The flow_analysis code in ```topologies/flow_analysis``` has been based on the f
 [GPL](https://choosealicense.com/licenses/gpl-3.0/)
 
 
-[paper]: https://arxiv.org/abs/2405.01388
+[paper]: https://arxiv.org/abs/####.#####
