@@ -227,8 +227,8 @@ def main():
     # Mesonic channels
     mesonic_channels = ['Chimera_OC_even', 'Chimera_OC_odd', 'Chimera_OV12_even', 'Chimera_OV12_odd', 'Chimera_OV32_even', 'Chimera_OV32_odd']
     # Ensembles: M1, M2, M3, M4, M5
-    ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    #ensembles = ['M1', 'M2']
+    #ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
+    ensembles = ['M1']
     # Roots in HDF5 for each ensemble
     roots = ['chimera_out_48x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
              'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
@@ -236,9 +236,11 @@ def main():
              'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.70mas1.01_APE0.4N50_smf0.2as0.12_s1',
              'chimera_out_64x32x32x32nc4nf2nas3b6.5mf0.72mas1.01_APE0.4N50_smf0.24as0.12_s1']
     # Representations considered
-    rep = 'fund'
+    #rep = 'fund'
+    reps = ['fund', 'anti']
     # Kernel in HLT
-    kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
+    #kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
+    kerneltype = ['HALFNORMGAUSS']
     # Initialize dictionaries to store the data
     Nsource_C_values_MN = {}
     Nsink_C_values_MN = {}
@@ -277,70 +279,75 @@ def main():
         for ensemble in ensembles
     ]
 
-    for kernel in kerneltype:
-        for index, ensemble in enumerate(ensembles):
-            for k, channel in enumerate(mesonic_channels):
-                Nsource = matrix_4D[index][4][k]
-                Nsink = matrix_4D[index][5][k]
-                group_prefixes = {
-                    'gi': ['g1', 'g2', 'g3'],
-                    'g0gi': ['g0g1', 'g0g2', 'g0g3'],
-                    'g5gi': ['g5g1', 'g5g2', 'g5g3'],
-                    'g0g5gi': ['g0g5g1', 'g0g5g2', 'g0g5g3']
-                }
-                prefix = group_prefixes.get(channel, [channel])
-                datasets = []
-                for g in prefix:
-                    dataset_path = f"{roots[index]}/source_N{Nsource}_sink_N{Nsink}/{channel}_re"
-                    group1 = f"source_N{Nsource}_sink_N{Nsink}"
-                    group2 = f"{channel}_re"
-                    datasets.append(read_hdf.extract_dataset(file_path, group2, roots[index], group1))
-                    with open('paths.log', 'a') as file:
-                        print(dataset_path, file=file)
-                dataset = sum(datasets) / len(datasets) if datasets else None
-                if dataset is not None:
-                    translate.save_matrix_to_file(dataset, f'corr_to_analyse_{channel}_{ensemble}.txt')
-                mpi = matrix_4D[index][1][k]
-                if kernel == 'HALFNORMGAUSS':
-                    tmp = mpi * matrix_4D[index][2][k]
-                elif kernel == 'CAUCHY':
-                    tmp = mpi * matrix_4D[index][3][k]
-                mpi = mpi
-                sigma = tmp
-                decimal_part = tmp / matrix_4D[index][1][k] % 1
-                decimal_as_int = int(decimal_part * 100)
-                datapath = f'./corr_to_analyse_{channel}_{ensemble}.txt'
-                if kernel == 'HALFNORMGAUSS':
-                    kernel2 = 'GAUSS'
-                elif kernel == 'CAUCHY':
-                    kernel2 = kernel
-                spdens_outdir = f'./{ensemble}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
-                all_items = os.listdir(spdens_outdir)
-                subdirectories = [item for item in all_items if os.path.isdir(os.path.join(spdens_outdir, item))]
-                if len(subdirectories) == 1:
-                    subdirectory_name = subdirectories[0]
-                    spdens_outdir = os.path.join(spdens_outdir, subdirectory_name)
-                    print("Path to the only subdirectory:", spdens_outdir)
-                else:
-                    print("There is either no subdirectory or more than one subdirectory in the directory.")
-                spdens_outdir = spdens_outdir + '/Logs/ResultHLT.txt'
+    for rep in reps:
+        for kernel in kerneltype:
+            for index, ensemble in enumerate(ensembles):
+                for k, channel in enumerate(mesonic_channels):
+                    if rep == 'fund':
+                        Nsource = matrix_4D[index][4][k]
+                        Nsink = matrix_4D[index][5][k]
+                    else:
+                        Nsource = matrix_4D[index][4][k + 6]
+                        Nsink = matrix_4D[index][5][k + 6]
+                    group_prefixes = {
+                        'gi': ['g1', 'g2', 'g3'],
+                        'g0gi': ['g0g1', 'g0g2', 'g0g3'],
+                        'g5gi': ['g5g1', 'g5g2', 'g5g3'],
+                        'g0g5gi': ['g0g5g1', 'g0g5g2', 'g0g5g3']
+                    }
+                    prefix = group_prefixes.get(channel, [channel])
+                    datasets = []
+                    for g in prefix:
+                        dataset_path = f"{roots[index]}/source_N{Nsource}_sink_N{Nsink}/{channel}_re"
+                        group1 = f"source_N{Nsource}_sink_N{Nsink}"
+                        group2 = f"{channel}_re"
+                        datasets.append(read_hdf.extract_dataset(file_path, group2, roots[index], group1))
+                        with open('paths.log', 'a') as file:
+                            print(dataset_path, file=file)
+                    dataset = sum(datasets) / len(datasets) if datasets else None
+                    if dataset is not None:
+                        translate.save_matrix_to_file(dataset, f'corr_to_analyse_{channel}_{rep}_{ensemble}.txt')
+                    mpi = matrix_4D[index][1][k]
+                    if kernel == 'HALFNORMGAUSS':
+                        tmp = mpi * matrix_4D[index][2][k]
+                    elif kernel == 'CAUCHY':
+                        tmp = mpi * matrix_4D[index][3][k]
+                    mpi = mpi
+                    sigma = tmp
+                    decimal_part = tmp / matrix_4D[index][1][k] % 1
+                    decimal_as_int = int(decimal_part * 100)
+                    datapath = f'./corr_to_analyse_{channel}_{rep}_{ensemble}.txt'
+                    if kernel == 'HALFNORMGAUSS':
+                        kernel2 = 'GAUSS'
+                    elif kernel == 'CAUCHY':
+                        kernel2 = kernel
+                    spdens_outdir = f'./{ensemble}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
+                    all_items = os.listdir(spdens_outdir)
+                    subdirectories = [item for item in all_items if os.path.isdir(os.path.join(spdens_outdir, item))]
+                    if len(subdirectories) == 1:
+                        subdirectory_name = subdirectories[0]
+                        spdens_outdir = os.path.join(spdens_outdir, subdirectory_name)
+                        print("Path to the only subdirectory:", spdens_outdir)
+                    else:
+                        print("There is either no subdirectory or more than one subdirectory in the directory.")
+                    spdens_outdir = spdens_outdir + '/Logs/ResultHLT.txt'
 
-                if rep == 'fund':
-                    outdir = f'../input_fit/{ensemble}/{channel}/{kernel2}/{channel}'
-                    part_outdir = f'../input_fit/{ensemble}/{channel}/{kernel2}/fit_results.txt'
+                    
+                    outdir = f'../input_fit/{ensemble}/{channel}_Nsource{Nsource}_Nsink{Nsink}/{kernel2}/{channel}_Nsource{Nsource}_Nsink{Nsink}'
+                    part_outdir = f'../input_fit/{ensemble}/{channel}_Nsource{Nsource}_Nsink{Nsink}/{kernel2}/fit_results.txt'
 
-                ne = 15
-                emin = 0.3
-                emax = 2.8
-                periodicity = 'COSH'
-                prec = 105
-                nboot = 300
-                e0 = 0.0
-                Na = 1
-                A0cut = 0.1
+                    ne = 15
+                    emin = 0.3
+                    emax = 2.8
+                    periodicity = 'COSH'
+                    prec = 105
+                    nboot = 300
+                    e0 = 0.0
+                    Na = 1
+                    A0cut = 0.1
 
 
-                printSamples(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi, spdens_outdir, part_outdir)
+                    printSamples(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi, spdens_outdir, part_outdir)
 
 
 if __name__ == "__main__":

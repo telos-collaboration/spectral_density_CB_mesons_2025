@@ -139,7 +139,7 @@ def main():
         )
         HLT.prepareHLT()
         HLT.run()
-        
+        '''
         HLT.stabilityPlot(
             generateHLTscan=True,
             generateLikelihoodShared=True,
@@ -147,6 +147,7 @@ def main():
             generateKernelsPlot=True,
         )  # Lots of plots as it is
         HLT.plotResult()
+        '''
         end()
         
 
@@ -157,8 +158,8 @@ def main():
     #mesonic_channels = ['Chimera_OC_even']
     #mesonic_channels = ['Chimera_OC_even']
     # Ensembles: M1, M2, M3, M4, M5
-    ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    #ensembles = ['M1']
+    #ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
+    ensembles = ['M1']
     # Roots in HDF5 for each ensemble
     roots = ['chimera_out_48x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
              'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
@@ -166,11 +167,11 @@ def main():
              'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.70mas1.01_APE0.4N50_smf0.2as0.12_s1',
              'chimera_out_64x32x32x32nc4nf2nas3b6.5mf0.72mas1.01_APE0.4N50_smf0.24as0.12_s1']
     # Representations considered
-    #reps = ['fund', 'anti']
-    reps = ['fund']
+    reps = ['fund', 'anti']
+    #reps = ['fund']
     # Kernel in HLT
-    kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
-    #kerneltype = ['HALFNORMGAUSS']
+    #kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
+    kerneltype = ['HALFNORMGAUSS']
     # Initialize dictionaries to store the data
     Nsource_C_values_MN = {}
     Nsink_C_values_MN = {}
@@ -209,8 +210,12 @@ def main():
         for ensemble in ensembles
     ]
     def process_channel(channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path):
-        Nsource = matrix_4D[index][4][k]
-        Nsink = matrix_4D[index][5][k]
+        if rep == 'fund':
+            Nsource = matrix_4D[index][4][k]
+            Nsink = matrix_4D[index][5][k]
+        else:
+            Nsource = matrix_4D[index][4][k + 6]
+            Nsink = matrix_4D[index][5][k + 6]
         group_prefixes = {
             'gi': ['g1', 'g2', 'g3'],
             'g0gi': ['g0g1', 'g0g2', 'g0g3'],
@@ -228,26 +233,32 @@ def main():
         dataset = sum(datasets) / len(datasets) if datasets else None
 
         if dataset is not None:
-            translate.save_matrix_to_file(dataset, f'corr_to_analyse_{channel}_{ensemble}.txt')
+            translate.save_matrix_to_file(dataset, f'corr_to_analyse_{channel}_{rep}_{ensemble}.txt')
         mpi = matrix_4D[index][1][k]
         if kernel == 'HALFNORMGAUSS':
-            tmp = mpi * matrix_4D[index][2][k]
+            if rep == 'fund':
+                tmp = mpi * matrix_4D[index][2][k]
+            else:
+                tmp = mpi * matrix_4D[index][2][k + 6]
         elif kernel == 'CAUCHY':
-            tmp = mpi * matrix_4D[index][3][k]
+            if rep == 'fund':
+                tmp = mpi * matrix_4D[index][3][k]
+            else:
+                tmp = mpi * matrix_4D[index][3][k + 6]
         mpi = mpi
         sigma = tmp
         decimal_part = tmp / matrix_4D[index][1][k] % 1
         decimal_as_int = int(decimal_part * 100)
-        datapath = f'./corr_to_analyse_{channel}_{ensemble}.txt'
+        datapath = f'./corr_to_analyse_{channel}_{rep}_{ensemble}.txt'
         outdir = f'./{ensemble}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
-        ne = 1
+        ne = 8
         emin = 0.3
         emax = 2.8
         periodicity = 'COSH'
         prec = 105
         nboot = 300
         e0 = 0.0
-        Na = 8
+        Na = 1
         A0cut = 0.1
         current_directory = os.getcwd()  # Get the current working directory
         subdirectory_path = os.path.join(current_directory, outdir)  # Create the full path to the subdirectory
@@ -273,17 +284,18 @@ def main():
     ################# Download and use lsdensities on correlators ########################
     # Replace 'your_file.h5' with the path to your HDF5 file
     file_path = '../input_correlators/chimera_data_full.hdf5'
-    rep = reps[0]
+    #rep = reps[0]
     for kernel in kerneltype:
         for index, ensemble in enumerate(ensembles):
             processes = []
-            for k, channel in enumerate(mesonic_channels):
-                process = multiprocessing.Process(target=process_channel, args=(
-                channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path))
-                processes.append(process)
-                process.start()
-            for process in processes:
-                process.join()
+            for rep in reps:
+                for k, channel in enumerate(mesonic_channels):
+                    process = multiprocessing.Process(target=process_channel, args=(
+                    channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path))
+                    processes.append(process)
+                    process.start()
+                for process in processes:
+                    process.join()
 
 if __name__ == "__main__":
     main()

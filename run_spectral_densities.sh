@@ -21,7 +21,7 @@ if [ "$all_subdirs_present" = false ]; then
         echo "Checking subdirectories for pattern: ${subdir}_*"
         count=$(find . -maxdepth 1 -type d -name "${subdir}_*" | wc -l)
         echo "Found $count subdirectories matching ${subdir}_*"
-        if [ "$count" -ne 24 ]; then
+        if [ "$count" -ne 72 ]; then
             inner_condition_met=false
             break
         fi
@@ -29,15 +29,27 @@ if [ "$all_subdirs_present" = false ]; then
 	
 
     if [ "$inner_condition_met" = false ]; then
-        python analyse_data.py
-        python print_samples.py
-        python fit_data.py
+        python analyse_data_mesons.py
+        python print_samples_mesons.py
+        python analyse_data_CB.py
+        python print_samples_CB.py
+        python fit_data_mesons.py
+        python fit_data_CB.py
+        python simultaneous_fits_mesons.py
+        python simultaneous_fits_CB.py
     else
-        python print_samples.py
-        python fit_data.py
+        python print_samples_mesons.py
+        python print_samples_CB.py
+        python fit_data_mesons.py
+        python fit_data_CB.py
+        python simultaneous_fits_mesons.py
+        python simultaneous_fits_CB.py
     fi
 
 else
-    python fit_data.py
+    python fit_data_mesons.py
+    python fit_data_CB.py
+    python simultaneous_fits_mesons.py
+    python simultaneous_fits_CB.py
 fi
 
