@@ -66,8 +66,8 @@ def read_csv():
 
 def read_csv2(file_path):
     ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    categories = ['g5', 'gi', 'g0gi', 'g5gi', 'g0g5gi', 'id']
-    repr = ['fund', 'as']
+    categories = ['PS', 'V', 'T', 'AV', 'AT', 'S']
+    repr = ['fund']
     ratio1 = {}
     ratio2 = {}
     with open(file_path, newline='') as csvfile:
@@ -82,20 +82,12 @@ def read_csv2(file_path):
             for rep in repr:
                 # Append data for each category to the respective lists
                 for category in categories:
-                    # print(category)
-                    # print(rep)
-                    if row[f'{category}_{rep}_ratio2'] == '':
-                        ratio1[ensemble].append(float(row[f'{category}_{rep}_ratio1']))
-                        ratio2[ensemble].append(0.0)
-                    else:
-                        ratio1[ensemble].append(float(row[f'{category}_{rep}_ratio1']))
-                        ratio2[ensemble].append(float(row[f'{category}_{rep}_ratio2']))
+                    ratio1[ensemble].append(float(row[f'{category}_cqr']))
     # Create a 2D matrix with ensemble index
     matrix_2D = [
         [
             ensemble,
-            ratio1[ensemble],
-            ratio2[ensemble],
+            ratio1[ensemble]
         ]
         for ensemble in ensembles
     ]
@@ -232,10 +224,10 @@ def chisq_correlated_2(params, kernel, sigma, energy, spectral_density_sample, c
     return chisq
 
 
-def fit_spectral_density_2_single_fixed_params(kernel, sigma, energy, spectral_density2, fixed_params, mpi):
+def fit_spectral_density_2_single_fixed_params(kernel, sigma, energy, spectral_density2, fixed_params, mpi, sugg):
     def fit_single_bootstrap(spectral_density2_sample, cholesky_cov):
         params = Parameters()
-        params.add('c0', value=0.01)
+        params.add('c0', value=sugg, min=sugg-0.001*sugg, max=sugg+0.001*sugg)
 
         minimizer = Minimizer(chisq_correlated_2, params,
                               fcn_args=(kernel, sigma, energy, spectral_density2_sample, cholesky_cov, fixed_params))
@@ -307,7 +299,7 @@ def plot_with_errors_single(kernel, sigma, energy, avg_spectral_density1, avg_sp
 
 def main():
     matrix_4D, k_peaks, Nboot_fit = read_csv()
-    file_path_MD = './metadata/ratioguesses_chimerabaryons_spectrum.csv'
+    file_path_MD = './metadata/metadata_spectralDensity_chimerabaryons.csv'
     matrix_2D = read_csv2(file_path_MD)
     # ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
     ensembles = ['M1']
@@ -368,20 +360,21 @@ def main():
                     print(f"a0: {fit_params_1_mean[0]:.14f} ± {fit_params_1_std[0]:.14f}")
                     print(f"E0: {fit_params_1_mean[1]:.14f} ± {fit_params_1_std[1]:.14f}")
                     print()
-
+                    sugg = matrix_2D[ensemble_num][1][channel_num-6] * np.sqrt(V) / 2
+                    #print('sugg: ', sugg*2/np.sqrt(V))
                     # Use the fitted parameters from the first fit to fit the second spectral density
                     fit_params_2_mean, fit_params_2_std, fit_params_2 = fit_spectral_density_2_single_fixed_params(
                         kernel, sigma, energy,
                         spectral_density[:,
                         1, :],
                         fit_params_1_mean,
-                        mpi)
+                        mpi, sugg)
 
                     # Print the fitting results for the second spectral density
                     print("Fit Results for Spectral Density 2:")
                     # print(f"c0: {(2* fit_params_2_mean[0] / (mpi*fit_params_1_mean[1])):.14f} ± { 2* fit_params_2_std[0] / (mpi*fit_params_1_mean[1]):.14f}")
 
-                    print(f"c0: {(2 * fit_params_2_mean[0] / np.sqrt(V)):.14f} ± {fit_params_2_std[0]:.14f}")
+                    print(f"c0: {(2 * fit_params_2_mean[0] / np.sqrt(V)):.14f} ± {2*fit_params_2_std[0]/np.sqrt(V):.14f}")
 
                     # print(f"c0: {(fit_params_2_mean[0]):.14f} ± {fit_params_2_std[0]:.14f}")
                     with open(f'../CSVs/{ensemble}_spectral_density_matrix_elements_CB.csv', 'a', newline='') as csvfile:
