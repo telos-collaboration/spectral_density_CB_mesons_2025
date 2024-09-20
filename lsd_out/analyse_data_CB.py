@@ -21,6 +21,8 @@ import numpy as np
 from lsdensities.InverseProblemWrapper import AlgorithmParameters, InverseProblemWrapper
 from lsdensities.utils.rhoUtils import MatrixBundle
 import random
+
+
 def main():
     def get_directory_size(directory):
         total_size = 0
@@ -30,6 +32,7 @@ def main():
                 if os.path.isfile(filepath):
                     total_size += os.path.getsize(filepath)
         return total_size
+
     def init_variables(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi):
         in_ = Inputs()
         in_.tmax = 0
@@ -42,8 +45,8 @@ def main():
         in_.num_boot = nboot
         in_.sigma = sigma
         in_.emax = (
-            emax * mpi
-        )  #   we pass it in unit of Mpi, here to turn it into lattice (working) units
+                emax * mpi
+        )  # we pass it in unit of Mpi, here to turn it into lattice (working) units
         if emin == 0:
             in_.emin = (mpi / 20) * mpi
         else:
@@ -53,11 +56,13 @@ def main():
         in_.Na = Na
         in_.A0cut = A0cut
         return in_
+
     def findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi):
         print(LogMessage(), "Initialising")
-        #args = parseArgumentRhoFromData()
+        # args = parseArgumentRhoFromData()
         init_precision(prec)
-        par = init_variables(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi)
+        par = init_variables(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut,
+                             mpi)
 
         seed = generate_seed(par)
         random.seed(seed)
@@ -116,7 +121,7 @@ def main():
         cNorm = mpf(str(corr.central[1] ** 2))
         lambdaMax = 1e4
         energies = np.linspace(par.emin, par.emax, par.Ne)
-        
+
         hltParams = AlgorithmParameters(
             alphaA=0,
             alphaB=1 / 2,
@@ -149,16 +154,16 @@ def main():
         HLT.plotResult()
         '''
         end()
-        
 
     ####################### External data for make rho finding easier #######################
     categories = ['PS', 'V', 'T', 'AV', 'AT', 'S', 'ps', 'v', 't', 'av', 'at', 's']
     # Mesonic channels
-    mesonic_channels = ['Chimera_OC_even', 'Chimera_OC_odd', 'Chimera_OV12_even', 'Chimera_OV12_odd', 'Chimera_OV32_even', 'Chimera_OV32_odd']
-    #mesonic_channels = ['Chimera_OC_even']
-    #mesonic_channels = ['Chimera_OC_even']
+    mesonic_channels = ['Chimera_OC_even', 'Chimera_OC_odd', 'Chimera_OV12_even', 'Chimera_OV12_odd',
+                        'Chimera_OV32_even', 'Chimera_OV32_odd']
+    # mesonic_channels = ['Chimera_OC_even']
+    # mesonic_channels = ['Chimera_OC_even']
     # Ensembles: M1, M2, M3, M4, M5
-    #ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
+    # ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
     ensembles = ['M1']
     # Roots in HDF5 for each ensemble
     roots = ['chimera_out_48x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
@@ -168,9 +173,9 @@ def main():
              'chimera_out_64x32x32x32nc4nf2nas3b6.5mf0.72mas1.01_APE0.4N50_smf0.24as0.12_s1']
     # Representations considered
     reps = ['fund', 'anti']
-    #reps = ['fund']
+    # reps = ['fund']
     # Kernel in HLT
-    #kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
+    # kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
     kerneltype = ['HALFNORMGAUSS']
     # Initialize dictionaries to store the data
     Nsource_C_values_MN = {}
@@ -209,6 +214,7 @@ def main():
         ]
         for ensemble in ensembles
     ]
+
     def process_channel(channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path):
         if rep == 'fund':
             Nsource = matrix_4D[index][4][k]
@@ -279,23 +285,23 @@ def main():
             print(f"Size of the subdirectory '{outdir}': {size_in_megabytes:.2f} MB")
             findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi)
 
-
-
     ################# Download and use lsdensities on correlators ########################
     # Replace 'your_file.h5' with the path to your HDF5 file
     file_path = '../input_correlators/chimera_data_full.hdf5'
-    #rep = reps[0]
+    # rep = reps[0]
     for kernel in kerneltype:
+        processes = []
         for index, ensemble in enumerate(ensembles):
-            processes = []
+            
             for rep in reps:
                 for k, channel in enumerate(mesonic_channels):
                     process = multiprocessing.Process(target=process_channel, args=(
-                    channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path))
+                        channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path))
                     processes.append(process)
                     process.start()
-                for process in processes:
-                    process.join()
+        for process in processes:
+            process.join()
+
 
 if __name__ == "__main__":
     main()

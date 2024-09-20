@@ -295,16 +295,17 @@ def main():
         # Replace 'your_file.h5' with the path to your HDF5 file
         file_path = '../input_correlators/chimera_data_full.hdf5'
         for kernel in kerneltype:
+            processes = []
             for index, ensemble in enumerate(ensembles):
                 for rep in reps:
-                    processes = []
+                    
                     for k, channel in enumerate(mesonic_channels):
                         process = multiprocessing.Process(target=process_channel, args=(
                             channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path))
                         processes.append(process)
                         process.start()
-                    for process in processes:
-                        process.join()
+            for process in processes:
+                process.join()
 
 
 if __name__ == "__main__":
