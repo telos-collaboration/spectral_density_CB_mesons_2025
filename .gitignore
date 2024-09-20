@@ -1,0 +1,7 @@
+__pycache__
+plots/
+input_correlators/chimera_data_full.hdf5
+input_fit
+input_topology
+tables
+CSVs
