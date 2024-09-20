@@ -1,2 +1,0 @@
-Data Points Values and Ratios
-Index	Value	Ratio (y/x)

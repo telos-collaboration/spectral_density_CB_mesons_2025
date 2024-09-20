@@ -163,8 +163,8 @@ def main():
     # mesonic_channels = ['Chimera_OC_even']
     # mesonic_channels = ['Chimera_OC_even']
     # Ensembles: M1, M2, M3, M4, M5
-    # ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    ensembles = ['M1']
+    ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
+    #ensembles = ['M1']
     # Roots in HDF5 for each ensemble
     roots = ['chimera_out_48x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
              'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
@@ -257,9 +257,9 @@ def main():
         decimal_as_int = int(decimal_part * 100)
         datapath = f'./corr_to_analyse_{channel}_{rep}_{ensemble}.txt'
         outdir = f'./{ensemble}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
-        ne = 8
+        ne = 12
         emin = 0.3
-        emax = 2.8
+        emax = 2.4
         periodicity = 'COSH'
         prec = 105
         nboot = 300
