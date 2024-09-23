@@ -12,10 +12,7 @@ plt.style.use("paperdraft.mplstyle")
 CB_color_cycle = ['#377eb8', '#ff7f00', '#4daf4a',
                   '#f781bf', '#a65628', '#984ea3',
                   '#999999', '#e41a1c', '#dede00']
-
-V = 20 ** 3
-
-
+#V = 20 ** 3
 def read_csv():
     ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
     categories = ['PS', 'V', 'T', 'AV', 'AT', 'S', 'ps', 'v', 't', 'av', 'at', 's']
@@ -301,14 +298,14 @@ def main():
     matrix_4D, k_peaks, Nboot_fit = read_csv()
     file_path_MD = './metadata/metadata_spectralDensity_chimerabaryons.csv'
     matrix_2D = read_csv2(file_path_MD)
-    # ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    ensembles = ['M1']
+    ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
+    #ensembles = ['M1']
     mesonic_channels = ['Chimera_OC_even', 'Chimera_OC_odd', 'Chimera_OV12_even', 'Chimera_OV12_odd', 'Chimera_OV32_even', 'Chimera_OV32_odd']
     # mesonic_channels = ['id']
     reps = ['as']
     # reps = ['as']
-    # kerneltype = ['GAUSS', 'CAUCHY']
-    kerneltype = ['GAUSS']
+    kerneltype = ['GAUSS', 'CAUCHY']
+    #kerneltype = ['GAUSS']
     # ensemble_num = 1
     # channel_num = 5
 
@@ -328,7 +325,10 @@ def main():
                         cauchy_fit = False
                     elif kernel == 'CAUCHY':
                         cauchy_fit = True
-
+                    if ensemble_num == 4:
+                        V = 32**3
+                    else:
+                        V = 20**3
                     # Directories containing the data
                     mpi = matrix_4D[ensemble_num][1][channel_num]
                     if kernel == 'GAUSS':
