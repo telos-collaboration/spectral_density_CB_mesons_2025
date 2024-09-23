@@ -175,8 +175,8 @@ def main():
     reps = ['fund', 'anti']
     # reps = ['fund']
     # Kernel in HLT
-    # kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
-    kerneltype = ['HALFNORMGAUSS']
+    kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
+    #kerneltype = ['HALFNORMGAUSS']
     # Initialize dictionaries to store the data
     Nsource_C_values_MN = {}
     Nsink_C_values_MN = {}

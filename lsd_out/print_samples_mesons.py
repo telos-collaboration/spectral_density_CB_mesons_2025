@@ -227,8 +227,8 @@ def main():
     # Mesonic channels
     mesonic_channels = ['g5', 'gi', 'g0gi', 'g5gi', 'g0g5gi', 'id']
     # Ensembles: M1, M2, M3, M4, M5
-    #ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    ensembles = ['M1']
+    ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
+    #ensembles = ['M1']
     # Roots in HDF5 for each ensemble
     roots = ['chimera_out_48x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
              'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
@@ -238,8 +238,8 @@ def main():
     # Representations considered
     reps = ['fund', 'anti']
     # Kernel in HLT
-    #kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
-    kerneltype = ['HALFNORMGAUSS']
+    kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
+    #kerneltype = ['HALFNORMGAUSS']
     for sources in range(2):
         # Initialize dictionaries to store the data
         Nsource_C_values_MN = {}
