@@ -21,6 +21,7 @@ import numpy as np
 from lsdensities.InverseProblemWrapper import AlgorithmParameters, InverseProblemWrapper
 from lsdensities.utils.rhoUtils import MatrixBundle
 import random
+import shutil
 
 
 def main():
@@ -57,7 +58,8 @@ def main():
         in_.A0cut = A0cut
         return in_
 
-    def findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi):
+    def findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,
+                hltParams):
         print(LogMessage(), "Initialising")
         # args = parseArgumentRhoFromData()
         init_precision(prec)
@@ -153,7 +155,7 @@ def main():
         )  # Lots of plots as it is
         HLT.plotResult()
         '''
-        end()
+        #end()
 
     ####################### External data for make rho finding easier #######################
     categories = ['PS', 'V', 'T', 'AV', 'AT', 'S', 'ps', 'v', 't', 'av', 'at', 's']
@@ -161,7 +163,7 @@ def main():
     mesonic_channels = ['g5', 'gi', 'g0gi', 'g5gi', 'g0g5gi', 'id']
     # Ensembles: M1, M2, M3, M4, M5
     ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    #ensembles = ['M1']
+    # ensembles = ['M1']
     # Roots in HDF5 for each ensemble
     roots = ['chimera_out_48x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
              'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
@@ -172,7 +174,8 @@ def main():
     reps = ['fund', 'anti']
     # Kernel in HLT
     kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
-    #kerneltype = ['HALFNORMGAUSS']
+
+    # kerneltype = ['HALFNORMGAUSS']
 
     def process_channel(channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path):
         Nsource = matrix_4D[index][4][k]
@@ -240,13 +243,16 @@ def main():
                 print(f"The subdirectory '{outdir}' exists and its size is at least 12 MB.")
             else:
                 print(f"The subdirectory '{outdir}' does not exist or its size is less than 12 MB.")
-                findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi)
+                findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,
+                        hltParams)
         else:
             print(f"The subdirectory '{outdir}' does not exist or its size is less than 12 MB.")
             directory_size = get_directory_size(subdirectory_path)
             size_in_megabytes = directory_size / (1024 * 1024)  # Convert bytes to megabytes
             print(f"Size of the subdirectory '{outdir}': {size_in_megabytes:.2f} MB")
-            findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi)
+            findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,
+                    hltParams)
+
     for sources in range(2):
         # Initialize dictionaries to store the data
         Nsource_C_values_MN = {}
@@ -289,8 +295,20 @@ def main():
             ]
             for ensemble in ensembles
         ]
+        lambdaMax = 1e3
 
-
+        hltParams = AlgorithmParameters(
+            alphaA=0,
+            alphaB=1 / 2,
+            alphaC=+1.99,
+            lambdaMax=lambdaMax,
+            lambdaStep=lambdaMax / 2,
+            lambdaScanCap=8,
+            kfactor=0.1,
+            lambdaMin=5e-2,
+            comparisonRatio=0.3,
+        )
+        '''
         ################# Download and use lsdensities on correlators ########################
         # Replace 'your_file.h5' with the path to your HDF5 file
         file_path = '../input_correlators/chimera_data_full.hdf5'
@@ -298,7 +316,7 @@ def main():
             processes = []
             for index, ensemble in enumerate(ensembles):
                 for rep in reps:
-                    
+
                     for k, channel in enumerate(mesonic_channels):
                         process = multiprocessing.Process(target=process_channel, args=(
                             channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path))
@@ -306,6 +324,60 @@ def main():
                         process.start()
             for process in processes:
                 process.join()
+        '''
+        # Consider M1 for vector meson fundamental
+        mpi = matrix_4D[0][1][1]
+        channel = 'g5'
+        rep = 'fund'
+        kernel = 'HALFNORMGAUSS'
+        ensemble = 'M1'
+        tmp = mpi * 0.33
+        sigma = tmp
+        decimal_part = tmp / mpi % 1
+        decimal_as_int = int(decimal_part * 100)
+        Nsource = 80
+        Nsink = 80
+        datapath = f'./corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt'
+        outdir = f'./{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
+        ne = 1
+        emin = 0.90
+        emax = 0.90
+        periodicity = 'COSH'
+        prec = 105
+        nboot = 300
+        e0 = 0.0
+        Na = 3
+        A0cut = 0.1
+
+        findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,
+                hltParams)
+
+        tmax = 24
+
+        outdir2 = outdir + f'/tmax{tmax}sigma{sigma}Ne{ne}nboot{nboot}mNorm{mpi}prec{prec}Na{Na}KerType{kernel}/Logs/'
+
+        # Define the log files to copy
+        log_files = [
+            'InverseProblemLOG_AlphaA.log',
+            'InverseProblemLOG_AlphaB.log',
+            'InverseProblemLOG_AlphaC.log'
+        ]
+
+        # Define the destination directory
+        destination_dir = '../input_fit/stability_plot'
+
+        # Ensure the destination directory exists
+        os.makedirs(destination_dir, exist_ok=True)
+
+        # Copy each log file from outdir to the destination directory
+        for log_file in log_files:
+            src_file = os.path.join(outdir2, log_file)
+            dest_file = os.path.join(destination_dir, log_file)
+            if os.path.exists(src_file):
+                shutil.copy(src_file, dest_file)
+                print(f"Copied {src_file} to {dest_file}")
+            else:
+                print(f"File {src_file} does not exist and cannot be copied")
 
 
 if __name__ == "__main__":
