@@ -273,13 +273,13 @@ def main():
             directory_size = get_directory_size(subdirectory_path)
             size_in_megabytes = directory_size / (1024 * 1024)  # Convert bytes to megabytes
             print(f"Size of the subdirectory '{outdir}': {size_in_megabytes:.2f} MB")
-            if size_in_megabytes >= 12:
-                print(f"The subdirectory '{outdir}' exists and its size is at least 12 MB.")
+            if size_in_megabytes >= 0.285:
+                print(f"The subdirectory '{outdir}' exists and its size is at least 0.285 MB.")
             else:
-                print(f"The subdirectory '{outdir}' does not exist or its size is less than 12 MB.")
+                print(f"The subdirectory '{outdir}' does not exist or its size is less than 0.285 MB.")
                 findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi)
         else:
-            print(f"The subdirectory '{outdir}' does not exist or its size is less than 12 MB.")
+            print(f"The subdirectory '{outdir}' does not exist or its size is less than 0.285 MB.")
             directory_size = get_directory_size(subdirectory_path)
             size_in_megabytes = directory_size / (1024 * 1024)  # Convert bytes to megabytes
             print(f"Size of the subdirectory '{outdir}': {size_in_megabytes:.2f} MB")
