@@ -1,4 +1,5 @@
 import read_hdf
+import read_hdf2
 import translate
 import numpy as np
 import csv
@@ -233,13 +234,13 @@ def main():
         dataset_path = f"{roots[index]}/source_N{Nsource}_sink_N{Nsink}/{channel}_re"
         group1 = f"source_N{Nsource}_sink_N{Nsink}"
         group2 = f"{channel}_re"
-        datasets.append(read_hdf.extract_dataset(file_path, group2, roots[index], group1))
+        datasets.append(read_hdf2.extract_dataset(file_path, group2, roots[index], group1))
         with open('paths.log', 'a') as file:
             print(dataset_path, file=file)
         dataset = sum(datasets) / len(datasets) if datasets else None
 
         if dataset is not None:
-            translate.save_matrix_to_file(dataset, f'corr_to_analyse_{channel}_{rep}_{ensemble}.txt')
+            translate.save_matrix_to_file2(dataset, f'corr_to_analyse_{channel}_{rep}_{ensemble}.txt')
         mpi = matrix_4D[index][1][k]
         if kernel == 'HALFNORMGAUSS':
             if rep == 'fund':
@@ -287,7 +288,7 @@ def main():
 
     ################# Download and use lsdensities on correlators ########################
     # Replace 'your_file.h5' with the path to your HDF5 file
-    file_path = '../input_correlators/chimera_data_full.hdf5'
+    file_path = '../input_correlators/chimera_data_reduced.hdf5'
     # rep = reps[0]
     for kernel in kerneltype:
         processes = []

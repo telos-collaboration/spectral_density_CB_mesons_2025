@@ -1,4 +1,5 @@
 import read_hdf
+import read_hdf2
 import translate
 import numpy as np
 import csv
@@ -192,7 +193,7 @@ def main():
             dataset_path = f"{roots[index]}/source_N{Nsource}_sink_N{Nsink}/{rep} TRIPLET {g}"
             group1 = f"source_N{Nsource}_sink_N{Nsink}"
             group2 = f"{rep} TRIPLET {g}"
-            datasets.append(read_hdf.extract_dataset(file_path, group2, roots[index], group1))
+            datasets.append(read_hdf2.extract_dataset(file_path, group2, roots[index], group1))
             with open('paths.log', 'a') as file:
                 print(dataset_path, file=file)
         dataset = sum(datasets) / len(datasets) if datasets else None
@@ -200,11 +201,11 @@ def main():
             group2 = f"{rep} TRIPLET {channel}"
             dataset_path = f"{roots[index]}/{channel}/{rep} TRIPLET {channel}"
             group1 = f'source_N{Nsource}_sink_N{Nsink}'
-            dataset = read_hdf.extract_dataset(file_path, group2, roots[index], group1)
+            dataset = read_hdf2.extract_dataset(file_path, group2, roots[index], group1)
             with open('paths.log', 'a') as file:
                 print(dataset_path, file=file)
         if dataset is not None:
-            translate.save_matrix_to_file(dataset,
+            translate.save_matrix_to_file2(dataset,
                                           f'corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt')
         mpi = matrix_4D[index][1][k]
         if kernel == 'HALFNORMGAUSS':
@@ -308,10 +309,10 @@ def main():
             lambdaMin=5e-2,
             comparisonRatio=0.3,
         )
-        '''
+        
         ################# Download and use lsdensities on correlators ########################
         # Replace 'your_file.h5' with the path to your HDF5 file
-        file_path = '../input_correlators/chimera_data_full.hdf5'
+        file_path = '../input_correlators/chimera_data_reduced.hdf5'
         for kernel in kerneltype:
             processes = []
             for index, ensemble in enumerate(ensembles):
@@ -324,7 +325,7 @@ def main():
                         process.start()
             for process in processes:
                 process.join()
-        '''
+        
         # Consider M1 for vector meson fundamental
         mpi = matrix_4D[0][1][1]
         channel = 'g5'
