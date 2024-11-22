@@ -51,10 +51,12 @@ else
 	bash run_plateaus.sh
         bash run_spectral_densities.sh
         python CSVs_to_tables.py
+        python renormalise.py
         bash run_plots.sh
     else
         bash run_spectral_densities.sh
         python CSVs_to_tables.py
+        python renormalise.py
         bash run_plots.sh
     fi
 fi
