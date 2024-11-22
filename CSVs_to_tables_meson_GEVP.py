@@ -40,8 +40,9 @@ def add_error(channel_E0, err):
 
 
 # Read CSV files
-metadata = pd.read_csv('./lsd_out/metadata/metadata_spectralDensity_chimerabaryons.csv')
-gevp = pd.read_csv('./CSVs/CB_GEVP.csv')
+metadata = pd.read_csv('./lsd_out/metadata/metadata_spectralDensity.csv')
+f_meson_gevp = pd.read_csv('./CSVs/F_meson_GEVP.csv')
+as_meson_gevp = pd.read_csv('./CSVs/AS_meson_GEVP.csv')
 
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 prefix = ['48x20x20x20b6.5mf0.71mas1.01', '64x20x20x20b6.5mf0.71mas1.01', '96x20x20x20b6.5mf0.71mas1.01',
@@ -59,82 +60,151 @@ for n in range(3):
         latex_table += "\\hline\n"
         latex_table += "$C$ & $k$ & $N_{\\text{source}}$ & $N_{\\text{sink}}$ & "f"$aE_{n}$ $k$-G & $aE_{n}$ $(k+1)$-G & $aE_{n}$ $k$-C & $aE_{n}$ $(k+1)$-C$ & am_C & ""$\sigma_{G} / m_C$ & $\sigma_{C} / m_C$ \\\\\n"
         latex_table += "\\hline\n"
-        for chunk in pd.read_csv(f'./CSVs/{ensemble}_chimerabaryons_spectral_density_spectrum.csv', chunksize=chunk_size):
+        for chunk in pd.read_csv(f'./CSVs/{ensemble}_spectral_density_spectrum.csv', chunksize=chunk_size):
             channel = chunk['channel'].min()
             repr = chunk['rep'].min()
             print(channel)
             print(repr)
-            if channel == 'Chimera_OC_even' and repr == 'as':
-                CHANNEL2 = 'PS'
+            if channel == 'g5' and repr == 'fund':
+                CHANNEL = 'PS'
                 try:
-                    row2 = gevp[gevp['ENS'].str.contains(prefix[index])]
+                    row2 = f_meson_gevp[f_meson_gevp['ENS'].str.contains(prefix[index])]
                     channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
-                    err_row2 = gevp[gevp['ENS'].str.contains(prefix[index])]
+                    err_row2 = f_meson_gevp[f_meson_gevp['ENS'].str.contains(prefix[index])]
                     err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
                 except KeyError:
                     channel_E0 = '-'
                     err_channel_E0 = '-'
-            elif channel == 'Chimera_OC_odd' and repr == 'as':
-                CHANNEL2 = 'V'
+            # Add similar try-except blocks for other conditions
+            elif channel == 'g5' and repr == 'as':
+                CHANNEL = 'ps'
                 try:
-                    row2 = gevp[gevp['ENS'].str.contains(prefix[index])]
+                    row2 = as_meson_gevp[as_meson_gevp['ENS'].str.contains(prefix[index])]
                     channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
-                    err_row2 = gevp[gevp['ENS'].str.contains(prefix[index])]
-                    err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-            elif channel == 'Chimera_OV12_even' and repr == 'as':
-                CHANNEL2 = 'T'
-                try:
-                    row2 = gevp[gevp['ENS'].str.contains(prefix[index])]
-                    channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
-                    err_row2 = gevp[gevp['ENS'].str.contains(prefix[index])]
+                    err_row2 = as_meson_gevp[as_meson_gevp['ENS'].str.contains(prefix[index])]
                     err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
                 except KeyError:
                     channel_E0 = '-'
                     err_channel_E0 = '-'
                 # Add similar try-except blocks for other conditions
-            elif channel == 'Chimera_OV12_odd' and repr == 'as':
-                CHANNEL2 = 'AV'
+            elif channel == 'gi' and repr == 'fund':
+                CHANNEL = 'V'
                 try:
-                    row2 = gevp[gevp['ENS'].str.contains(prefix[index])]
+                    row2 = f_meson_gevp[f_meson_gevp['ENS'].str.contains(prefix[index])]
                     channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
-                    err_row2 = gevp[gevp['ENS'].str.contains(prefix[index])]
+                    err_row2 = f_meson_gevp[f_meson_gevp['ENS'].str.contains(prefix[index])]
                     err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
                 except KeyError:
                     channel_E0 = '-'
                     err_channel_E0 = '-'
                 # Add similar try-except blocks for other conditions
-            elif channel == 'Chimera_OV32_even' and repr == 'as':
-                CHANNEL2 = 'AT'
+            elif channel == 'gi' and repr == 'as':
+                CHANNEL = 'v'
                 try:
-                    row2 = gevp[gevp['ENS'].str.contains(prefix[index])]
+                    row2 = as_meson_gevp[as_meson_gevp['ENS'].str.contains(prefix[index])]
                     channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
-                    err_row2 = gevp[gevp['ENS'].str.contains(prefix[index])]
+                    err_row2 = as_meson_gevp[as_meson_gevp['ENS'].str.contains(prefix[index])]
                     err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
                 except KeyError:
                     channel_E0 = '-'
                     err_channel_E0 = '-'
                 # Add similar try-except blocks for other conditions
-            elif channel == 'Chimera_OV32_odd' and repr == 'as':
-                CHANNEL2 = 'S'
+            elif channel == 'g0gi' and repr == 'fund':
+                CHANNEL = 'T'
                 try:
-                    row2 = gevp[gevp['ENS'].str.contains(prefix[index])]
+                    row2 = f_meson_gevp[f_meson_gevp['ENS'].str.contains(prefix[index])]
                     channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
-                    err_row2 = gevp[gevp['ENS'].str.contains(prefix[index])]
+                    err_row2 = f_meson_gevp[f_meson_gevp['ENS'].str.contains(prefix[index])]
                     err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
                 except KeyError:
                     channel_E0 = '-'
                     err_channel_E0 = '-'
+                # Add similar try-except blocks for other conditions
+            elif channel == 'g0gi' and repr == 'as':
+                CHANNEL = 't'
+                try:
+                    row2 = as_meson_gevp[as_meson_gevp['ENS'].str.contains(prefix[index])]
+                    channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
+                    err_row2 = as_meson_gevp[as_meson_gevp['ENS'].str.contains(prefix[index])]
+                    err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                # Add similar try-except blocks for other conditions
+            elif channel == 'g5gi' and repr == 'fund':
+                CHANNEL = 'AV'
+                try:
+                    row2 = f_meson_gevp[f_meson_gevp['ENS'].str.contains(prefix[index])]
+                    channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
+                    err_row2 = f_meson_gevp[f_meson_gevp['ENS'].str.contains(prefix[index])]
+                    err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                # Add similar try-except blocks for other conditions
+            elif channel == 'g5gi' and repr == 'as':
+                CHANNEL = 'av'
+                try:
+                    row2 = as_meson_gevp[as_meson_gevp['ENS'].str.contains(prefix[index])]
+                    channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
+                    err_row2 = as_meson_gevp[as_meson_gevp['ENS'].str.contains(prefix[index])]
+                    err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                # Add similar try-except blocks for other conditions
+            elif channel == 'g0g5gi' and repr == 'fund':
+                CHANNEL = 'AT'
+                try:
+                    row2 = f_meson_gevp[f_meson_gevp['ENS'].str.contains(prefix[index])]
+                    channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
+                    err_row2 = f_meson_gevp[f_meson_gevp['ENS'].str.contains(prefix[index])]
+                    err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                # Add similar try-except blocks for other conditions
+            elif channel == 'g0g5gi' and repr == 'as':
+                CHANNEL = 'at'
+                try:
+                    row2 = as_meson_gevp[as_meson_gevp['ENS'].str.contains(prefix[index])]
+                    channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
+                    err_row2 = as_meson_gevp[as_meson_gevp['ENS'].str.contains(prefix[index])]
+                    err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                # Add similar try-except blocks for other conditions
+            elif channel == 'id' and repr == 'fund':
+                CHANNEL = 'S'
+                try:
+                    row2 = f_meson_gevp[f_meson_gevp['ENS'].str.contains(prefix[index])]
+                    channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
+                    err_row2 = f_meson_gevp[f_meson_gevp['ENS'].str.contains(prefix[index])]
+                    err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                # Add similar try-except blocks for other conditions
+            elif channel == 'id' and repr == 'as':
+                CHANNEL = 's'
+                try:
+                    row2 = as_meson_gevp[as_meson_gevp['ENS'].str.contains(prefix[index])]
+                    channel_E0 = round(row2[f"{channel}_E{n}"].values[0], 4)
+                    err_row2 = as_meson_gevp[as_meson_gevp['ENS'].str.contains(prefix[index])]
+                    err_channel_E0 = round(row2[f"{channel}_E{n}_error"].values[0], 4)
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                # Add similar try-except blocks for other conditions
 
-            # print(CHANNEL2)
+            # print(CHANNEL)
             # Extract required values from metadata
-            k_peaks = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_k_peaks"].values[0]
-            n_source = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_Nsource"].values[0]
-            n_sink = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_Nsink"].values[0]
-            sigma1_over_m = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_sigma1_over_m"].values[0]
-            sigma2_over_m = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_sigma2_over_m"].values[0]
+            k_peaks = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL}_k_peaks"].values[0]
+            n_source = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL}_Nsource_1"].values[0]
+            n_sink = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL}_Nsink_1"].values[0]
+            sigma1_over_m = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL}_sigma1_over_m"].values[0]
+            sigma2_over_m = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL}_sigma2_over_m"].values[0]
 
             try:
                 peak_gauss_min = chunk.loc[chunk['kernel'] == 'GAUSS', 'peaks'].min()
@@ -175,21 +245,9 @@ for n in range(3):
                 cauchy_min_with_error = '-'
                 cauchy_max_with_error = '-'
                 channel_E0_with_error = '-'
-            x_labels = ['$\Lambda^{+}_{\\rm CB}$', '$\Lambda^{-}_{\\rm CB}$', '$\Sigma^{+}_{\\rm CB}$', '$\Sigma^{-}_{\\rm CB}$', '$\Sigma^{* \, +}_{\\rm CB}$', '$\Sigma^{* \, -}_{\\rm CB}$']
-            if channel == 'Chimera_OC_even':
-                ch = x_labels[0]
-            if channel == 'Chimera_OC_odd':
-                ch = x_labels[1]
-            if channel == 'Chimera_OV12_even':
-                ch = x_labels[2]
-            if channel == 'Chimera_OV12_odd':
-                ch = x_labels[3]
-            if channel == 'Chimera_OV32_even':
-                ch = x_labels[4]
-            if channel == 'Chimera_OV32_odd':
-                ch = x_labels[5]
+
             # Adding the formatted value to the LaTeX table
-            latex_table += f"{ch} & {k_peaks} & {n_source} & {n_sink} & {gauss_min_with_error} & {gauss_max_with_error} & {cauchy_min_with_error} & {cauchy_max_with_error} & {channel_E0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
+            latex_table += f"{CHANNEL} & {k_peaks} & {n_source} & {n_sink} & {gauss_min_with_error} & {gauss_max_with_error} & {cauchy_min_with_error} & {cauchy_max_with_error} & {channel_E0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
 
         # Close LaTeX table for each chunk
         latex_table += "\\hline\n"
@@ -199,7 +257,7 @@ for n in range(3):
         latex_table += "\\end{table}\n"
 
         # Write LaTeX table to a file for each chunk
-        with open(f'./tables/{ensemble}_output_table_aE{n}.tex', 'w') as file:
+        with open(f'./tables/{ensemble}_output_table_aE{n}_meson.tex', 'w') as file:
             file.write(latex_table)
         # Reset LaTeX table for next chunk
         latex_table = ""
