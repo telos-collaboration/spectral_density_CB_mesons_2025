@@ -313,7 +313,7 @@ def main():
                             with open('paths.log', 'a') as file:
                                 print(dataset_path, file=file)
                         if dataset is not None:
-                            translate.save_matrix_to_file(dataset, f'corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt')
+                            translate.save_matrix_to_file2(dataset, f'corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt')
                         mpi = matrix_4D[index][1][k]
                         if kernel == 'HALFNORMGAUSS':
                             if rep == 'fund':

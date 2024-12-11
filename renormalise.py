@@ -61,21 +61,21 @@ for ens, tex_file in tex_files.items():
                     main_value = float(match.group(1))
                     uncertainty = match.group(2)
 
+                    # Determine the number of decimal places in the original value
+                    original_value_str = match.group(1)  # This is the original string of the main value
+                    decimal_places = len(original_value_str.split(".")[1]) if "." in original_value_str else 0
+
                     # Perform the multiplication on the main value
                     new_main_value = main_value * z_value
 
-                    # Format the result to keep four decimal places, and add back the original uncertainty
-                    if label in ['PS', 'V', 'AV']:  # For first half (PS, V, AV)
-                        new_value_str = f"{new_main_value:.4f}({uncertainty})"
-                        original_value_str = f"{main_value:.4f}({uncertainty})"
-                    else:  # For second half (ps, v, av)
-                        new_value_str = f"{new_main_value:.3f}({uncertainty})"
-                        original_value_str = f"{main_value:.3f}({uncertainty})"
+                    # Dynamically format the result based on the original number of decimal places
+                    format_str = f"{{:.{decimal_places}f}}({uncertainty})"
+                    new_value_str = format_str.format(new_main_value)
 
                     # Replace the original value with the new calculated value
-                    updated_line = updated_line.replace(original_value_str, new_value_str)
+                    updated_line = updated_line.replace(f"{main_value:.{decimal_places}f}({uncertainty})", new_value_str)
 
-                    print(f"Replaced '{original_value_str}' with '{new_value_str}' in line for label '{label}'")
+                    print(f"Replaced '{main_value:.{decimal_places}f}({uncertainty})' with '{new_value_str}' in line for label '{label}'")
 
                 # Append the updated line to the list and mark it as modified
                 updated_lines.append(updated_line)

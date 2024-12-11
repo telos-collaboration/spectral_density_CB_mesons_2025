@@ -306,7 +306,7 @@ def main():
                             print(dataset_path, file=file)
                     dataset = sum(datasets) / len(datasets) if datasets else None
                     if dataset is not None:
-                        translate.save_matrix_to_file(dataset, f'corr_to_analyse_{channel}_{rep}_{ensemble}.txt')
+                        translate.save_matrix_to_file2(dataset, f'corr_to_analyse_{channel}_{rep}_{ensemble}.txt')
                     mpi = matrix_4D[index][1][k]
                     if kernel == 'HALFNORMGAUSS':
                         tmp = mpi * matrix_4D[index][2][k]
