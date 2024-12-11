@@ -1,0 +1,4 @@
+host: niccolo-HP-ProBook-450-G8-Notebook-PC
+Building DAG of jobs...
+CreateCondaEnvironmentException:
+Conda must be version 24.7.1 or later, found version 4.10.1. Please update conda to the latest version. Note that you can also install conda into the snakemake environment without modifying your main conda installation.

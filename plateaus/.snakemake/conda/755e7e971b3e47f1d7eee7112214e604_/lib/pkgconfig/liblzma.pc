@@ -1,0 +1,19 @@
+#
+# Author: Lasse Collin
+#
+# This file has been put into the public domain.
+# You can do whatever you want with this file.
+#
+
+prefix=/home/niccolo/Downloads/lsd_workflow (1)/dynamical_mix_LSD_analysis/.snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+exec_prefix=/home/niccolo/Downloads/lsd_workflow (1)/dynamical_mix_LSD_analysis/.snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+libdir=/home/niccolo/Downloads/lsd_workflow (1)/dynamical_mix_LSD_analysis/.snakemake/conda/755e7e971b3e47f1d7eee7112214e604_/lib
+includedir=/home/niccolo/Downloads/lsd_workflow (1)/dynamical_mix_LSD_analysis/.snakemake/conda/755e7e971b3e47f1d7eee7112214e604_/include
+
+Name: liblzma
+Description: General purpose data compression library
+URL: https://tukaani.org/xz/
+Version: 5.2.6
+Cflags: -I${includedir}
+Libs: -L${libdir} -llzma
+Libs.private: -pthread -lrt  -lpthread
