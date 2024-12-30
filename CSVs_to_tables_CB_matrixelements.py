@@ -1,33 +1,37 @@
 import pandas as pd
 import numpy as np
+import json
+
+
+def bootstrap_error(data, n_bootstrap=1000):
+    """Compute the bootstrap error for a given dataset."""
+    bootstrap_means = [
+        np.mean(np.random.choice(data, size=len(data), replace=True)) for _ in range(n_bootstrap)
+    ]
+    return np.std(bootstrap_means)
+
 
 def add_error(channel_E0, err):
     if channel_E0 != 0 and not np.isnan(channel_E0):
-        # Calculate the number of decimal places in the error
         err_decimal_places = max(0, -int(np.floor(np.log10(err)))) if err > 0 else 0
-        
-        # Format the main value with the right number of decimal places
+
         if err_decimal_places > 0:
-            decimal_format = f".{err_decimal_places}f"  # Show one more decimal place than the error
+            decimal_format = f".4f"
         else:
-            decimal_format = ".0f"  # Show no decimals if error is very small
+            decimal_format = ".0f"
 
-        channel_E0_str = f"{channel_E0:{decimal_format}}"  # Main value formatting
-
-        # Round the error to the nearest integer for display
-        err_int = int(round(err * 1e6))  # Convert to an integer in the same precision scale
+        channel_E0_str = f"{channel_E0:{decimal_format}}"
+        err_int = int(round(err * 1e4))
 
         channel_E0_with_error = f"{channel_E0_str}({err_int})"
-
     else:
         channel_E0_with_error = '-'
     return channel_E0_with_error
 
 
 
-# Read CSV files
+# Read metadata CSV
 metadata = pd.read_csv('./lsd_out/metadata/metadata_spectralDensity_chimerabaryons.csv')
-CB_matrix_element = pd.read_csv('./CSVs/CB_matrix_element.csv')
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 
 # Mapping for ensemble and channel names
@@ -48,8 +52,15 @@ channel_map = {
     'Chimera_OV32_odd': 'b_SigmaS_odd'
 }
 
+channel2 = ['lambda_even', 'lambda_odd', 'sigma_even', 'sigma_odd', 'sigmastar_even', 'sigmastar_odd']
+
+prefix = ['Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20', 'Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20',
+          'Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20', 'Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20',
+          'Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32']
+
 # Iterate through each ensemble
-for ensemble in ensembles:
+for idx, ensemble in enumerate(ensembles):
+    ensemble2 = prefix[idx]
     matrix_elements_path = f'./CSVs/{ensemble}_spectral_density_matrix_elements_CB.csv'
     matrix_elements = pd.read_csv(matrix_elements_path)
     chunk_size = 4
@@ -59,28 +70,33 @@ for ensemble in ensembles:
     latex_table += "\\centering\n"
     latex_table += "\\begin{tabular}{|c|c|c|c|c|c|}\n"
     latex_table += "\\hline\n"
-    latex_table += "$C$ & $ac_{n}$ G & $ac_{n}$ C & $ac_{0} (GEVP)$ & $\sigma_{G} / m_C$ & $\sigma_{C} / m_C$ \\\\\n"
+    latex_table += "$C$ & $ac_{n}$ G & $ac_{n}$ C & $ac_{0} (GEVP)$ & $\\sigma_{G} / m_C$ & $\\sigma_{C} / m_C$ \\\\\n"
     latex_table += "\\hline\n"
-
+    idx2 = 0
     # Read data for the current ensemble in chunks
     for chunk in pd.read_csv(f'./CSVs/{ensemble}_chimerabaryons_spectral_density_spectrum.csv', chunksize=chunk_size):
         unique_channels = chunk['channel'].unique()
 
         for channel in unique_channels:
+            print(idx2)
+            channelone = channel2[idx2]
             # Map channel to label and metadata keys
             if channel == 'Chimera_OC_even':
-                CHANNEL2, ch = 'PS', '$\Lambda^{+}_{\\rm CB}$'
+                CHANNEL2, ch = 'PS', '$\\Lambda^{+}_{\\rm CB}$'
             elif channel == 'Chimera_OC_odd':
-                CHANNEL2, ch = 'V', '$\Lambda^{-}_{\\rm CB}$'
+                CHANNEL2, ch = 'V', '$\\Lambda^{-}_{\\rm CB}$'
             elif channel == 'Chimera_OV12_even':
-                CHANNEL2, ch = 'T', '$\Sigma^{+}_{\\rm CB}$'
+                CHANNEL2, ch = 'T', '$\\Sigma^{+}_{\\rm CB}$'
             elif channel == 'Chimera_OV12_odd':
-                CHANNEL2, ch = 'AV', '$\Sigma^{-}_{\\rm CB}$'
+                CHANNEL2, ch = 'AV', '$\\Sigma^{-}_{\\rm CB}$'
             elif channel == 'Chimera_OV32_even':
-                CHANNEL2, ch = 'AT', '$\Sigma^{* \, +}_{\\rm CB}$'
+                CHANNEL2, ch = 'AT', '$\\Sigma^{* \\, +}_{\\rm CB}$'
             elif channel == 'Chimera_OV32_odd':
-                CHANNEL2, ch = 'S', '$\Sigma^{* \, -}_{\\rm CB}$'
-
+                CHANNEL2, ch = 'S', '$\\Sigma^{* \\, -}_{\\rm CB}$'
+            # Load JSON data
+            print(channelone)
+            with open(f'./JSONs/{ensemble2}/chimera_extraction_{channelone}_samples.json', 'r') as json_file:
+                json_data = json.load(json_file)
             # Retrieve metadata values for the current channel and ensemble
             try:
                 sigma1_over_m = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_sigma1_over_m"].values[0]
@@ -90,9 +106,11 @@ for ensemble in ensembles:
                 sigma1_over_m = sigma2_over_m = '-'
 
             # Retrieve c0 and errorc0 values for current channel in matrix elements
-            gauss_data = matrix_elements[(matrix_elements['kernel'] == 'GAUSS') & (matrix_elements['channel'] == channel)]
-            cauchy_data = matrix_elements[(matrix_elements['kernel'] == 'CAUCHY') & (matrix_elements['channel'] == channel)]
-            
+            gauss_data = matrix_elements[
+                (matrix_elements['kernel'] == 'GAUSS') & (matrix_elements['channel'] == channel)]
+            cauchy_data = matrix_elements[
+                (matrix_elements['kernel'] == 'CAUCHY') & (matrix_elements['channel'] == channel)]
+
             # Check if data exists for GAUSS and CAUCHY kernels
             if not gauss_data.empty:
                 gauss_min, err_gauss_min = gauss_data['c0'].min(), gauss_data['errorc0'].min()
@@ -106,18 +124,14 @@ for ensemble in ensembles:
             else:
                 cauchy_min_with_error = '-'
 
-            # Retrieve the b_* values from CB_matrix_element.csv
-            ac0_gevp_values = CB_matrix_element.loc[
-                (CB_matrix_element['ENS'] == ensemble_map[ensemble]),
-                [channel_map[channel], f"{channel_map[channel]}_error"]
-            ].values
-
-            # Format ac0 (GEVP) value with error
-            if ac0_gevp_values.size > 0:
-                ac0_val, ac0_err = ac0_gevp_values[0]
+            if f'{channelone}_matrix_element_samples' in json_data:
+                samples = np.array(json_data[f'{channelone}_matrix_element_samples'])
+                ac0_val = np.mean(samples)
+                ac0_err = bootstrap_error(samples)
                 ac0_with_error = add_error(ac0_val, ac0_err)
             else:
                 ac0_with_error = '-'
+            idx2 = idx2 + 1
 
             # Add the unique row for each channel to the LaTeX table
             latex_table += f"{ch} & {gauss_min_with_error} & {cauchy_min_with_error} & {ac0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
@@ -131,4 +145,3 @@ for ensemble in ensembles:
         file.write(latex_table)
 
     print(f"Table generated and saved in ./tables/{ensemble}_output_table_matrix_CB.tex")
-

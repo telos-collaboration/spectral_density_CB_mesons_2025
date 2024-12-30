@@ -1,5 +1,14 @@
 import pandas as pd
 import numpy as np
+import json
+import math
+
+
+def bootstrap_error(data, n_resamples=1000):
+    """Calculate the bootstrap error for a given array."""
+    resampled_means = [np.mean(np.random.choice(data, size=len(data), replace=True)) for _ in range(n_resamples)]
+    return np.std(resampled_means)
+
 
 def add_error(channel_E0, err):
     if channel_E0 != 0 and not np.isnan(channel_E0):
@@ -18,11 +27,9 @@ def add_error(channel_E0, err):
         channel_E0_with_error = '-'
     return channel_E0_with_error
 
-# Read CSV files
+
+# Read metadata CSV file
 metadata = pd.read_csv('./lsd_out/metadata/metadata_spectralDensity.csv')
-F_meson_decay = pd.read_csv('./CSVs/F_meson_decay.csv')
-AS_meson_decay = pd.read_csv('./CSVs/AS_meson_decay.csv')
-ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 
 ensemble_map = {
     'M1': '48x20x20x20b6.5mf0.71mas1.01',
@@ -51,7 +58,13 @@ channel_map2 = {
 }
 
 # Generate LaTeX table for each ensemble
-for ensemble in ensembles:
+ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
+prefix = ['Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20', 'Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20',
+          'Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20', 'Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20',
+          'Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32']
+for idx, ensemble in enumerate(ensembles):
+    ensemble2 = prefix[idx]
+
     matrix_elements_path = f'./CSVs/{ensemble}_spectral_density_matrix_elements.csv'
     matrix_elements = pd.read_csv(matrix_elements_path)
     chunk_size = 4
@@ -60,30 +73,45 @@ for ensemble in ensembles:
     latex_table += "\\centering\n"
     latex_table += "\\begin{tabular}{|c|c|c|c|c|c|}\n"
     latex_table += "\\hline\n"
-    latex_table += "$C$ & $ac_{n}$ G & $ac_{n}$ C & $ac_{0} (GEVP)$ & $\sigma_{G} / m_C$ & $\sigma_{C} / m_C$ \\\\\n"
+    latex_table += "$C$ & $ac_{n}$ G & $ac_{n}$ C & $ac_{0} (GEVP)$ & $\\sigma_{G} / m_C$ & $\\sigma_{C} / m_C$ \\\\\n"
     latex_table += "\\hline\n"
 
     row_count = 0
-
+    rep = 'fund'
     for chunk in pd.read_csv(f'./CSVs/{ensemble}_spectral_density_spectrum.csv', chunksize=chunk_size):
         unique_channels = chunk['channel'].unique()
 
         for channel in unique_channels:
             CHANNEL2 = channel_map2.get(channel, 'Unknown')
             ch = CHANNEL2 if CHANNEL2 != 'Unknown' else channel
+            if row_count == 6:
+               row_count = 0
+               rep = 'as'
             if ch == 'PS' and row_count >= 6:
                 ch = 'ps'
+            if ch == 'PS':
+                ch2 = 'ps'
             if ch == 'V' and row_count >= 6:
                 ch = 'v'
+            if ch == 'V':
+                ch2 = 'v'
             if ch == 'T' and row_count >= 6:
                 ch = 't'
+            if ch == 'T':
+                ch2 = 't'
             if ch == 'AV' and row_count >= 6:
                 ch = 'av'
+            if ch == 'AV':
+                ch2 = 'av'
             if ch == 'AT' and row_count >= 6:
                 ch = 'at'
+            if ch == 'AT':
+                ch2 = 'at'
             if ch == 'S' and row_count >= 6:
                 ch = 's'
-            #print('CHANNEL2', channel)
+            if ch == 'S':
+                ch2 = 's'
+
             # Safely retrieve metadata values
             try:
                 sigma1_over_m = metadata.loc[metadata['Ensemble'] == ensemble, f"{ch}_sigma1_over_m"].values
@@ -94,37 +122,50 @@ for ensemble in ensembles:
                 print(f"KeyError for {ensemble} in metadata: {e}")
                 sigma1_over_m = sigma2_over_m = '-'
 
-            if row_count < 6:
-                gauss_data = matrix_elements[(matrix_elements['kernel'] == 'GAUSS') & (matrix_elements['channel'] == channel)]['c0'].min()
-                cauchy_data = matrix_elements[(matrix_elements['kernel'] == 'CAUCHY') & (matrix_elements['channel'] == channel)]['c0'].min()
-            else:
-                gauss_data = matrix_elements[(matrix_elements['kernel'] == 'GAUSS') & (matrix_elements['channel'] == channel)]['c0'].max()
-                cauchy_data = matrix_elements[(matrix_elements['kernel'] == 'CAUCHY') & (matrix_elements['channel'] == channel)]['c0'].max()
+                # Load JSON files
+            with open(f'./JSONs/{ensemble2}/meson_extraction_f_{ch2}_samples.json', 'r') as f:
+                f_ps_data = json.load(f)
 
-            err_gauss_min = matrix_elements[(matrix_elements['kernel'] == 'GAUSS') & (matrix_elements['channel'] == channel)]['errorc0'].min()
-            err_cauchy_min = matrix_elements[(matrix_elements['kernel'] == 'CAUCHY') & (matrix_elements['channel'] == channel)]['errorc0'].min()
+            with open(f'./JSONs/{ensemble2}/meson_extraction_as_{ch2}_samples.json', 'r') as f:
+                as_ps_data = json.load(f)
+
+            if rep == 'fund':
+                print('ch2: ', ch2)
+                name = f"f_{ch2}_matrix_element_samples"
+                data = f_ps_data[name]
+            else:
+                print('ch2: ', ch2)
+                name = f"as_{ch2}_matrix_element_samples"
+                data = as_ps_data[name]
+
+            if data:
+                ac0_val = np.mean(data)
+                ac0_err = bootstrap_error(data)
+            else:
+                ac0_val = ac0_err = 0
+
+            gauss_data = \
+            matrix_elements[(matrix_elements['kernel'] == 'GAUSS') & (matrix_elements['channel'] == channel)][
+                'c0'].min()
+            cauchy_data = \
+            matrix_elements[(matrix_elements['kernel'] == 'CAUCHY') & (matrix_elements['channel'] == channel)][
+                'c0'].min()
+
+            err_gauss_min = \
+            matrix_elements[(matrix_elements['kernel'] == 'GAUSS') & (matrix_elements['channel'] == channel)][
+                'errorc0'].min()
+            err_cauchy_min = \
+            matrix_elements[(matrix_elements['kernel'] == 'CAUCHY') & (matrix_elements['channel'] == channel)][
+                'errorc0'].min()
 
             gauss_min_with_error = add_error(gauss_data, err_gauss_min) if not pd.isna(gauss_data) else '-'
             cauchy_min_with_error = add_error(cauchy_data, err_cauchy_min) if not pd.isna(cauchy_data) else '-'
 
-            if row_count < 6:
-                ac0_gevp_values = F_meson_decay.loc[
-                    (F_meson_decay['ENS'] == ensemble_map[ensemble]),
-                    [channel_map[channel], f"{channel_map[channel]}_error"]
-                ].values
-            else:
-                ac0_gevp_values = AS_meson_decay.loc[
-                    (AS_meson_decay['ENS'] == ensemble_map[ensemble]),
-                    [channel_map[channel], f"{channel_map[channel]}_error"]
-                ].values
-
-            if ac0_gevp_values.size > 0:
-                ac0_val, ac0_err = ac0_gevp_values[0]
-                ac0_with_error = add_error(ac0_val, ac0_err)
-            else:
-                ac0_with_error = '-'
-
-            latex_table += f"{ch} & {gauss_min_with_error} & {cauchy_min_with_error} & {ac0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
+            ac0_with_error = add_error(ac0_val, ac0_err)
+            if rep == 'fund':
+                 latex_table += f"{ch} & {gauss_min_with_error} & {cauchy_min_with_error} & {ac0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\ \n"
+            else: 
+                 latex_table += f"{ch2} & {gauss_min_with_error} & {cauchy_min_with_error} & {ac0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\ \n"
             row_count += 1
 
     latex_table += "\\hline\n"
