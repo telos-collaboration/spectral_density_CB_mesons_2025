@@ -1,4 +1,4 @@
-name: analysis-env
+name: analysis-env4
 channels:
   - defaults
 dependencies:
@@ -63,7 +63,7 @@ dependencies:
     - keras==2.13.1
     - libclang==18.1.1
     - lmfit==1.2.2
-    - lsdensities==0.0.1
+    - lsdensities==0.0.3
     - lsqfit==13.2
     - markdown==3.6
     - markdown-it-py==3.0.0
