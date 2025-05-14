@@ -176,7 +176,7 @@ def main():
     # Kernel in HLT
     kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
 
-    # kerneltype = ['HALFNORMGAUSS']
+    #kerneltype = ['CAUCHY']
 
     def process_channel(channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path):
         Nsource = matrix_4D[index][4][k]
