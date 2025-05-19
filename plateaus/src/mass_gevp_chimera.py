@@ -76,10 +76,10 @@ def main():
 
     eigenvalues = gevp_extraction(ensemble, args)
     masses, chiquares = extract.extract_energy_states(eigenvalues, args)
-
+    '''
     if args.effmass_plot_file:
         plot_baryon_gevp_energy_states(args, eigenvalues, masses)
-
+    '''
     metadata = {
         "ensemble_name": args.ensemble_name,
         "beta": args.beta,

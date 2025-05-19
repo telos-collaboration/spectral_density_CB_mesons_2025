@@ -91,7 +91,7 @@ def get_standard_plot_args(fit_results=False, external_data=False):
 
 def standard_plot_main(plot_function, **args_options):
     args = get_standard_plot_args(**args_options)
-    plt.style.use(args.plot_styles)
+    #plt.style.use(args.plot_styles)
     data = read_sample_files(args.data_filenames)
 
     external_data = (
@@ -238,7 +238,7 @@ def plot_mass_eff_cosh(ax, corr_bootstrapset, ti, tf, measurement):
     )
 
 def plot_baryon_gevp_energy_states(args, eigenvalues, energy_states):
-    plt.style.use(args.plot_styles)
+    #plt.style.use(args.plot_styles)
     fig, ax = plt.subplots(layout="constrained")
 
     for n, eigenvalue in enumerate(eigenvalues):
@@ -261,7 +261,7 @@ def plot_baryon_gevp_energy_states(args, eigenvalues, energy_states):
 
 
 def plot_meson_gevp_energy_states(args, eigenvalues, energy_states):
-    plt.style.use(args.plot_styles)
+    #plt.style.use(args.plot_styles)
     fig, ax = plt.subplots(layout="constrained")
 
     for n, eigenvalue in enumerate(eigenvalues):
@@ -280,4 +280,4 @@ def plot_meson_gevp_energy_states(args, eigenvalues, energy_states):
     ax.set_ylabel("$aE_n$")
     ax.set_ylim(0.2, 2)
     fig.legend(loc="upper right")
-    fig.savefig(args.effmass_plot_file)
+    #fig.savefig(args.effmass_plot_file)

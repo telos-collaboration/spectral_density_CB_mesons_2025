@@ -1,0 +1,2 @@
+[console_scripts]
+format_multiple_errors = format_multiple_errors.__main__:cli
