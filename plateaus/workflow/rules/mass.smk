@@ -25,11 +25,12 @@ rule gevp_chimera_baryon_mass:
         script="src/mass_gevp_chimera.py",
     output:
         samples=f"../JSONs/{dir_template}/chimera_gevp_{{channel}}_samples.json",
-        plot=f"../JSONs/{dir_template}/chimera_gevp_{{channel}}_eff_mass.pdf",
+        #plot=f"../JSONs/{dir_template}/chimera_gevp_{{channel}}_eff_mass.pdf",
     conda:
         "../envs/flow_analysis.yml"
     shell:
-        "python -m {params.module} {input.data} --output_file_samples {output.samples} --ensemble_name {params.metadata.ensemble_name} --effmass_plot_file {output.plot} --plot_styles {plot_styles}"
+        "python -m {params.module} {input.data} --output_file_samples {output.samples} --ensemble_name {params.metadata.ensemble_name}"
+        #" --effmass_plot_file {output.plot} --plot_styles {plot_styles}"
         " --beta {params.metadata.beta} --mF {params.metadata.mF} --mAS {params.metadata.mAS} --Nt {params.metadata.Nt} --Ns {params.metadata.Ns}"
         " --min_trajectory {params.metadata.init_conf} --max_trajectory {params.metadata.final_conf} --trajectory_step {params.metadata.delta_conf_spectrum}"
         " --channel {wildcards.channel} --gevp_t0 {params.metadata.gevp_t0}"
@@ -73,11 +74,12 @@ rule gevp_meson_mass:
         script="src/mass_gevp_meson.py",
     output:
         samples=f"../JSONs/{dir_template}/meson_gevp_{{channel}}_samples.json",
-        plot=f"../JSONs/{dir_template}/meson_gevp_{{channel}}_eff_mass.pdf",
+        #plot=f"../JSONs/{dir_template}/meson_gevp_{{channel}}_eff_mass.pdf",
     conda:
         "../envs/flow_analysis.yml"
     shell:
-        "python -m {params.module} {input.data} --output_file_samples {output.samples} --ensemble_name {params.metadata.ensemble_name} --effmass_plot_file {output.plot} --plot_styles {plot_styles}"
+        "python -m {params.module} {input.data} --output_file_samples {output.samples} --ensemble_name {params.metadata.ensemble_name}"
+        #" --effmass_plot_file {output.plot} --plot_styles {plot_styles}"
         " --beta {params.metadata.beta} --mF {params.metadata.mF} --mAS {params.metadata.mAS} --Nt {params.metadata.Nt} --Ns {params.metadata.Ns}"
         " --min_trajectory {params.metadata.init_conf} --max_trajectory {params.metadata.final_conf} --trajectory_step {params.metadata.delta_conf_spectrum}"
         " --channel {wildcards.channel} --gevp_t0 {params.metadata.gevp_t0}"
@@ -132,7 +134,6 @@ def mass_gevp_samples(wildcards):
         for parity in ["even", "odd"]
     ]
 
-
 rule mass_plot:
     params:
         module=lambda wildcards, input: input.script.replace("/", ".")[:-3],
@@ -145,4 +146,4 @@ rule mass_plot:
     conda:
         "../envs/flow_analysis.yml"
     shell:
-        "python -m {params.module} {input.gevp_data} {input.extraction_data} --plot_styles {plot_styles} --plot_file {output.plot}"
+        "python -m {params.module} {input.gevp_data} {input.extraction_data} --plot_file {output.plot}"

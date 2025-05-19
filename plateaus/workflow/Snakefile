@@ -8,7 +8,7 @@ include: "rules/spectrum_tables.smk"
 include: "rules/extrapolation.smk"
 
 
-plot_styles = "styles/paperdraft.mplstyle"
+#plot_styles = "styles/paperdraft.mplstyle"
 plot_filetype = "pdf"
 
 h5_data = expand(

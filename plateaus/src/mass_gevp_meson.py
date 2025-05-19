@@ -63,10 +63,10 @@ def main():
 
     eigenvalues = gevp_meson_extraction(ensemble, args)
     masses, chiquares = extract.extract_energy_states(eigenvalues, args)
-
+    '''
     if args.effmass_plot_file:
         plot_meson_gevp_energy_states(args, eigenvalues, masses)
-
+    '''
     metadata = {
         "ensemble_name": args.ensemble_name,
         "beta": args.beta,
