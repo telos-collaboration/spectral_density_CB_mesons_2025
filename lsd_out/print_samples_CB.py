@@ -221,7 +221,7 @@ def printSamples(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, p
     #end()
 
 def main():
-    file_path = '../input_correlators/chimera_data_full.hdf5'
+    file_path = '../input_correlators/chimera_data_reduced.hdf5'
     ####################### External data for make rho finding easier #######################
     categories = ['PS', 'V', 'T', 'AV', 'AT', 'S', 'ps', 'v', 't', 'av', 'at', 's']
     # Mesonic channels
