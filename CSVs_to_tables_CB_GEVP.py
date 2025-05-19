@@ -73,7 +73,7 @@ def add_error(channel_E0, err):
 
 # Read CSV files
 metadata = pd.read_csv('./lsd_out/metadata/metadata_spectralDensity_chimerabaryons.csv')
-gevp = pd.read_csv('./CSVs/CB_GEVP.csv')
+#gevp = pd.read_csv('./CSVs/CB_GEVP.csv')
 
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 prefix = ['48x20x20x20b6.5mf0.71mas1.01', '64x20x20x20b6.5mf0.71mas1.01', '96x20x20x20b6.5mf0.71mas1.01',

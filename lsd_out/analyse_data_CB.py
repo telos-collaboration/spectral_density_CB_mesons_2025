@@ -120,7 +120,7 @@ def main():
 
         #   Prepare
         cNorm = mpf(str(corr.central[1] ** 2))
-        lambdaMax = 1e4
+        lambdaMax = 1e0
         energies = np.linspace(par.emin, par.emax, par.Ne)
 
         hltParams = AlgorithmParameters(

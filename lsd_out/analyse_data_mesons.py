@@ -122,7 +122,7 @@ def main():
 
         #   Prepare
         cNorm = mpf(str(corr.central[1] ** 2))
-        lambdaMax = 1e4
+        lambdaMax = 1e0
         energies = np.linspace(par.emin, par.emax, par.Ne)
 
         hltParams = AlgorithmParameters(
@@ -339,7 +339,7 @@ def main():
         Nsource = 80
         Nsink = 80
         datapath = f'./corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt'
-        outdir = f'./{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
+        outdir = f'./stability_{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
         ne = 1
         emin = 0.90
         emax = 0.90
