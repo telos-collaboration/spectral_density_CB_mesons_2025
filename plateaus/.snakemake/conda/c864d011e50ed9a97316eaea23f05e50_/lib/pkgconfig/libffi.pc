@@ -1,0 +1,11 @@
+prefix=/home/niccolo/work/data_releases/data_release_chimera/plateaus/.snakemake/conda/c864d011e50ed9a97316eaea23f05e50_
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+toolexeclibdir=${libdir}
+includedir=/home/niccolo/work/data_releases/data_release_chimera/plateaus/.snakemake/conda/c864d011e50ed9a97316eaea23f05e50_/include
+
+Name: libffi
+Description: Library supporting Foreign Function Interfaces
+Version: 3.4.2
+Libs: -L${toolexeclibdir} -lffi
+Cflags: -I${includedir}

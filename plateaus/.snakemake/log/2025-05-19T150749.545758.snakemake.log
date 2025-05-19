@@ -1,0 +1,233 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: sl1.sunbird.supercomputingwales.ac.uk
+Building DAG of jobs...
+Your conda installation is not configured to use strict channel priorities. This is however important for having robust and correct environments (for details, see https://conda-forge.org/docs/user/tipsandtricks.html). Please consider to configure strict priorities by executing 'conda config --set channel_priority strict'.
+Creating conda environment workflow/envs/flow_analysis.yml...
+Downloading and installing remote packages.
+Cleaning up conda package tarballs.
+Environment for /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/workflow/rules/../envs/flow_analysis.yml created (location: .snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_)
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Job stats:
+job                         count
+------------------------  -------
+chimera_matrix_element         30
+gevp_chimera_baryon_mass       30
+gevp_meson_mass                60
+mass_plot                       1
+meson_matrix_element           60
+total                         181
+
+Select jobs to execute...
+Execute 6 jobs...
+[Mon May 19 15:10:17 2025]
+localrule meson_matrix_element:
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/matrix_element_meson.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/meson_extraction_as_at_samples.json
+    jobid: 124
+    reason: Missing output files: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/meson_extraction_as_at_samples.json; Software environment definition has changed since last execution
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=96, Ns=20, channel=as_at
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+[Mon May 19 15:10:17 2025]
+localrule gevp_meson_mass:
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_meson.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_eff_mass.pdf
+    jobid: 46
+    reason: Missing output files: ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_samples.json; Software environment definition has changed since last execution
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.7, mAS=-1.01, Nt=64, Ns=20, channel=as_at
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+[Mon May 19 15:10:17 2025]
+localrule gevp_chimera_baryon_mass:
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_eff_mass.pdf
+    jobid: 80
+    reason: Missing output files: ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_samples.json; Software environment definition has changed since last execution
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.7, mAS=-1.01, Nt=64, Ns=20, channel=lambda_odd
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+[Mon May 19 15:10:17 2025]
+localrule gevp_chimera_baryon_mass:
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_eff_mass.pdf
+    jobid: 90
+    reason: Missing output files: ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_samples.json; Software environment definition has changed since last execution
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.72, mAS=-1.01, Nt=64, Ns=32, channel=sigmastar_odd
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+[Mon May 19 15:10:17 2025]
+localrule gevp_chimera_baryon_mass:
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_eff_mass.pdf
+    jobid: 70
+    reason: Missing output files: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_samples.json; Software environment definition has changed since last execution
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=64, Ns=20, channel=sigma_odd
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+[Mon May 19 15:10:17 2025]
+localrule chimera_matrix_element:
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/matrix_element_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/chimera_extraction_sigma_even_samples.json
+    jobid: 165
+    reason: Missing output files: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/chimera_extraction_sigma_even_samples.json; Software environment definition has changed since last execution
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=96, Ns=20, channel=sigma_even
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+Select jobs to execute...
+[Mon May 19 15:12:55 2025]
+Finished jobid: 165 (Rule: chimera_matrix_element)
+1 of 181 steps (1%) done
+Execute 1 jobs...
+[Mon May 19 15:12:55 2025]
+localrule gevp_chimera_baryon_mass:
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_eff_mass.pdf
+    jobid: 69
+    reason: Missing output files: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_samples.json; Software environment definition has changed since last execution
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=64, Ns=20, channel=sigma_even
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+Select jobs to execute...
+RuleException:
+CalledProcessError in file "/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/workflow/rules/mass.smk", line 38:
+Command 'source /home/s.2227764/.conda/envs/snakemake_x86/bin/activate '/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_'; set -euo pipefail;  python -m src.mass_gevp_chimera ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_samples.json --ensemble_name M5 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.72 --mAS -1.01 --Nt 64 --Ns 32 --min_trajectory 3020 --max_trajectory 8900 --trajectory_step 20 --channel sigmastar_odd --gevp_t0 1 --E0_plateau_start 13 --E0_plateau_end 25 --E1_plateau_start 9 --E1_plateau_end 16 --E2_plateau_start 0 --E2_plateau_end 0' returned non-zero exit status 1.
+[Mon May 19 15:12:57 2025]
+Error in rule gevp_chimera_baryon_mass:
+    message: None
+    jobid: 90
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_eff_mass.pdf
+    conda-env: /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+    shell:
+        python -m src.mass_gevp_chimera ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_samples.json --ensemble_name M5 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.72 --mAS -1.01 --Nt 64 --Ns 32 --min_trajectory 3020 --max_trajectory 8900 --trajectory_step 20 --channel sigmastar_odd --gevp_t0 1 --E0_plateau_start 13 --E0_plateau_end 25 --E1_plateau_start 9 --E1_plateau_end 16 --E2_plateau_start 0 --E2_plateau_end 0
+        (command exited with non-zero exit code)
+Removing output files of failed job gevp_chimera_baryon_mass since they might be corrupted:
+../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_samples.json
+RuleException:
+CalledProcessError in file "/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/workflow/rules/mass.smk", line 86:
+Command 'source /home/s.2227764/.conda/envs/snakemake_x86/bin/activate '/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_'; set -euo pipefail;  python -m src.mass_gevp_meson ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_samples.json --ensemble_name M4 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.7 --mAS -1.01 --Nt 64 --Ns 20 --min_trajectory 1000 --max_trajectory 22520 --trajectory_step 20 --channel as_at --gevp_t0 1 --E0_plateau_start 10 --E0_plateau_end 20 --E1_plateau_start 8 --E1_plateau_end 10 --E2_plateau_start 0 --E2_plateau_end 0' returned non-zero exit status 1.
+[Mon May 19 15:12:57 2025]
+Error in rule gevp_meson_mass:
+    message: None
+    jobid: 46
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_meson.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_eff_mass.pdf
+    conda-env: /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+    shell:
+        python -m src.mass_gevp_meson ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_samples.json --ensemble_name M4 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.7 --mAS -1.01 --Nt 64 --Ns 20 --min_trajectory 1000 --max_trajectory 22520 --trajectory_step 20 --channel as_at --gevp_t0 1 --E0_plateau_start 10 --E0_plateau_end 20 --E1_plateau_start 8 --E1_plateau_end 10 --E2_plateau_start 0 --E2_plateau_end 0
+        (command exited with non-zero exit code)
+Removing output files of failed job gevp_meson_mass since they might be corrupted:
+../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_samples.json
+RuleException:
+CalledProcessError in file "/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/workflow/rules/mass.smk", line 38:
+Command 'source /home/s.2227764/.conda/envs/snakemake_x86/bin/activate '/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_'; set -euo pipefail;  python -m src.mass_gevp_chimera ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_samples.json --ensemble_name M2 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.71 --mAS -1.01 --Nt 64 --Ns 20 --min_trajectory 1000 --max_trajectory 21616 --trajectory_step 28 --channel sigma_odd --gevp_t0 1 --E0_plateau_start 14 --E0_plateau_end 22 --E1_plateau_start 11 --E1_plateau_end 16 --E2_plateau_start 0 --E2_plateau_end 0' returned non-zero exit status 1.
+[Mon May 19 15:12:58 2025]
+Error in rule gevp_chimera_baryon_mass:
+    message: None
+    jobid: 70
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_eff_mass.pdf
+    conda-env: /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+    shell:
+        python -m src.mass_gevp_chimera ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_samples.json --ensemble_name M2 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.71 --mAS -1.01 --Nt 64 --Ns 20 --min_trajectory 1000 --max_trajectory 21616 --trajectory_step 28 --channel sigma_odd --gevp_t0 1 --E0_plateau_start 14 --E0_plateau_end 22 --E1_plateau_start 11 --E1_plateau_end 16 --E2_plateau_start 0 --E2_plateau_end 0
+        (command exited with non-zero exit code)
+Removing output files of failed job gevp_chimera_baryon_mass since they might be corrupted:
+../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_samples.json
+RuleException:
+CalledProcessError in file "/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/workflow/rules/mass.smk", line 38:
+Command 'source /home/s.2227764/.conda/envs/snakemake_x86/bin/activate '/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_'; set -euo pipefail;  python -m src.mass_gevp_chimera ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_samples.json --ensemble_name M4 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.7 --mAS -1.01 --Nt 64 --Ns 20 --min_trajectory 1000 --max_trajectory 22520 --trajectory_step 20 --channel lambda_odd --gevp_t0 1 --E0_plateau_start 15 --E0_plateau_end 22 --E1_plateau_start 9 --E1_plateau_end 14 --E2_plateau_start 0 --E2_plateau_end 0' returned non-zero exit status 1.
+[Mon May 19 15:12:58 2025]
+Error in rule gevp_chimera_baryon_mass:
+    message: None
+    jobid: 80
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_eff_mass.pdf
+    conda-env: /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+    shell:
+        python -m src.mass_gevp_chimera ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_samples.json --ensemble_name M4 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.7 --mAS -1.01 --Nt 64 --Ns 20 --min_trajectory 1000 --max_trajectory 22520 --trajectory_step 20 --channel lambda_odd --gevp_t0 1 --E0_plateau_start 15 --E0_plateau_end 22 --E1_plateau_start 9 --E1_plateau_end 14 --E2_plateau_start 0 --E2_plateau_end 0
+        (command exited with non-zero exit code)
+Removing output files of failed job gevp_chimera_baryon_mass since they might be corrupted:
+../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_samples.json
+RuleException:
+CalledProcessError in file "/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/workflow/rules/mass.smk", line 38:
+Command 'source /home/s.2227764/.conda/envs/snakemake_x86/bin/activate '/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_'; set -euo pipefail;  python -m src.mass_gevp_chimera ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_samples.json --ensemble_name M2 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.71 --mAS -1.01 --Nt 64 --Ns 20 --min_trajectory 1000 --max_trajectory 21616 --trajectory_step 28 --channel sigma_even --gevp_t0 1 --E0_plateau_start 18 --E0_plateau_end 30 --E1_plateau_start 13 --E1_plateau_end 20 --E2_plateau_start 11 --E2_plateau_end 13' returned non-zero exit status 1.
+[Mon May 19 15:13:06 2025]
+Error in rule gevp_chimera_baryon_mass:
+    message: None
+    jobid: 69
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_eff_mass.pdf
+    conda-env: /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+    shell:
+        python -m src.mass_gevp_chimera ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_samples.json --ensemble_name M2 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.71 --mAS -1.01 --Nt 64 --Ns 20 --min_trajectory 1000 --max_trajectory 21616 --trajectory_step 28 --channel sigma_even --gevp_t0 1 --E0_plateau_start 18 --E0_plateau_end 30 --E1_plateau_start 13 --E1_plateau_end 20 --E2_plateau_start 11 --E2_plateau_end 13
+        (command exited with non-zero exit code)
+Removing output files of failed job gevp_chimera_baryon_mass since they might be corrupted:
+../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_samples.json
+[Mon May 19 15:13:50 2025]
+Finished jobid: 124 (Rule: meson_matrix_element)
+2 of 181 steps (1%) done
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look below for error messages
+[Mon May 19 15:13:50 2025]
+Error in rule gevp_meson_mass:
+    message: None
+    jobid: 46
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_meson.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_eff_mass.pdf
+    conda-env: /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+    shell:
+        python -m src.mass_gevp_meson ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_samples.json --ensemble_name M4 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.7 --mAS -1.01 --Nt 64 --Ns 20 --min_trajectory 1000 --max_trajectory 22520 --trajectory_step 20 --channel as_at --gevp_t0 1 --E0_plateau_start 10 --E0_plateau_end 20 --E1_plateau_start 8 --E1_plateau_end 10 --E2_plateau_start 0 --E2_plateau_end 0
+        (command exited with non-zero exit code)
+[Mon May 19 15:13:50 2025]
+Error in rule gevp_chimera_baryon_mass:
+    message: None
+    jobid: 80
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_eff_mass.pdf
+    conda-env: /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+    shell:
+        python -m src.mass_gevp_chimera ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_samples.json --ensemble_name M4 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_gevp_lambda_odd_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.7 --mAS -1.01 --Nt 64 --Ns 20 --min_trajectory 1000 --max_trajectory 22520 --trajectory_step 20 --channel lambda_odd --gevp_t0 1 --E0_plateau_start 15 --E0_plateau_end 22 --E1_plateau_start 9 --E1_plateau_end 14 --E2_plateau_start 0 --E2_plateau_end 0
+        (command exited with non-zero exit code)
+[Mon May 19 15:13:50 2025]
+Error in rule gevp_chimera_baryon_mass:
+    message: None
+    jobid: 90
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_eff_mass.pdf
+    conda-env: /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+    shell:
+        python -m src.mass_gevp_chimera ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_samples.json --ensemble_name M5 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigmastar_odd_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.72 --mAS -1.01 --Nt 64 --Ns 32 --min_trajectory 3020 --max_trajectory 8900 --trajectory_step 20 --channel sigmastar_odd --gevp_t0 1 --E0_plateau_start 13 --E0_plateau_end 25 --E1_plateau_start 9 --E1_plateau_end 16 --E2_plateau_start 0 --E2_plateau_end 0
+        (command exited with non-zero exit code)
+[Mon May 19 15:13:50 2025]
+Error in rule gevp_chimera_baryon_mass:
+    message: None
+    jobid: 70
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_eff_mass.pdf
+    conda-env: /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+    shell:
+        python -m src.mass_gevp_chimera ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_samples.json --ensemble_name M2 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_odd_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.71 --mAS -1.01 --Nt 64 --Ns 20 --min_trajectory 1000 --max_trajectory 21616 --trajectory_step 28 --channel sigma_odd --gevp_t0 1 --E0_plateau_start 14 --E0_plateau_end 22 --E1_plateau_start 11 --E1_plateau_end 16 --E2_plateau_start 0 --E2_plateau_end 0
+        (command exited with non-zero exit code)
+[Mon May 19 15:13:50 2025]
+Error in rule gevp_chimera_baryon_mass:
+    message: None
+    jobid: 69
+    input: ../input_correlators/chimera_data_reduced.hdf5, src/mass_gevp_chimera.py
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_samples.json, ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_eff_mass.pdf
+    conda-env: /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_
+    shell:
+        python -m src.mass_gevp_chimera ../input_correlators/chimera_data_reduced.hdf5 --output_file_samples ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_samples.json --ensemble_name M2 --effmass_plot_file ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_sigma_even_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.71 --mAS -1.01 --Nt 64 --Ns 20 --min_trajectory 1000 --max_trajectory 21616 --trajectory_step 28 --channel sigma_even --gevp_t0 1 --E0_plateau_start 18 --E0_plateau_end 30 --E1_plateau_start 13 --E1_plateau_end 20 --E2_plateau_start 11 --E2_plateau_end 13
+        (command exited with non-zero exit code)
+Complete log(s): /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/log/2025-05-19T150749.545758.snakemake.log
+WorkflowError:
+At least one job did not complete successfully.

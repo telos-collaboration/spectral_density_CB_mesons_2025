@@ -1,0 +1,6 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: sl1.sunbird.supercomputingwales.ac.uk
+Building DAG of jobs...
+MissingRuleException:
+No rule to produce assets/plots/test.pdf (if you use input functions make sure that they don't raise unexpected exceptions).

@@ -1,0 +1,11 @@
+prefix=/home/niccolo/Downloads/lsd_workflow (1)/dynamical_mix_LSD_analysis/.snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include 
+
+Name: OpenSSL-libssl
+Description: Secure Sockets Layer and cryptography libraries
+Version: 3.3.2
+Requires.private: libcrypto
+Libs: -L${libdir} -lssl
+Cflags: -I${includedir}

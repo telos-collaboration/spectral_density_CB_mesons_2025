@@ -1,0 +1,387 @@
+host: niccolo-HP-ProBook-450-G8-Notebook-PC
+Building DAG of jobs...
+Using shell: /usr/bin/bash
+Provided cores: 6
+Rules claiming more threads will be scaled down.
+Job stats:
+job                         count
+------------------------  -------
+chimera_matrix_element         28
+gevp_chimera_baryon_mass       30
+gevp_meson_mass                58
+mass_plot                       1
+meson_matrix_element           56
+total                         173
+
+Select jobs to execute...
+Execute 6 jobs...
+
+[Tue Dec  3 18:18:09 2024]
+localrule meson_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/meson_extraction_as_v_samples.json
+    jobid: 94
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/meson_extraction_as_v_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=48, Ns=20, channel=as_v
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+
+[Tue Dec  3 18:18:09 2024]
+localrule gevp_chimera_baryon_mass:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/mass_gevp_chimera.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_lambda_even_samples.json, intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_lambda_even_eff_mass.pdf
+    jobid: 67
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_gevp_lambda_even_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=64, Ns=20, channel=lambda_even
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+
+[Tue Dec  3 18:18:10 2024]
+localrule gevp_chimera_baryon_mass:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/mass_gevp_chimera.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigma_even_samples.json, intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigma_even_eff_mass.pdf
+    jobid: 87
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_gevp_sigma_even_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.72, mAS=-1.01, Nt=64, Ns=32, channel=sigma_even
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+
+[Tue Dec  3 18:18:10 2024]
+localrule gevp_meson_mass:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/mass_gevp_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_f_ps_samples.json, intermediary_data/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_f_ps_eff_mass.pdf
+    jobid: 37
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_f_ps_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.7, mAS=-1.01, Nt=64, Ns=20, channel=f_ps
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+
+[Tue Dec  3 18:18:10 2024]
+localrule gevp_meson_mass:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/mass_gevp_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/meson_gevp_f_at_samples.json, intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/meson_gevp_f_at_eff_mass.pdf
+    jobid: 57
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/meson_gevp_f_at_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.72, mAS=-1.01, Nt=64, Ns=32, channel=f_at
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+
+[Tue Dec  3 18:18:11 2024]
+localrule meson_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_extraction_as_ps_samples.json
+    jobid: 128
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_extraction_as_ps_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.7, mAS=-1.01, Nt=64, Ns=20, channel=as_ps
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:24 2024]
+Finished job 94.
+1 of 173 steps (1%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:24 2024]
+localrule chimera_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_chimera.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_extraction_sigmastar_even_samples.json
+    jobid: 179
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/chimera_extraction_sigmastar_even_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.72, mAS=-1.01, Nt=64, Ns=32, channel=sigmastar_even
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:26 2024]
+Finished job 67.
+2 of 173 steps (1%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:26 2024]
+localrule chimera_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_chimera.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_extraction_lambda_even_samples.json
+    jobid: 157
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_extraction_lambda_even_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=64, Ns=20, channel=lambda_even
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:29 2024]
+Finished job 128.
+3 of 173 steps (2%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:29 2024]
+localrule chimera_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_chimera.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/chimera_extraction_lambda_odd_samples.json
+    jobid: 164
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/chimera_extraction_lambda_odd_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=96, Ns=20, channel=lambda_odd
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:31 2024]
+Finished job 179.
+4 of 173 steps (2%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:31 2024]
+localrule chimera_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_chimera.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_extraction_sigma_odd_samples.json
+    jobid: 160
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/chimera_extraction_sigma_odd_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=64, Ns=20, channel=sigma_odd
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:32 2024]
+Finished job 37.
+5 of 173 steps (3%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:32 2024]
+localrule chimera_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_chimera.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/chimera_extraction_lambda_even_samples.json
+    jobid: 163
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/chimera_extraction_lambda_even_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=96, Ns=20, channel=lambda_even
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:33 2024]
+Finished job 87.
+6 of 173 steps (3%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:33 2024]
+localrule gevp_meson_mass:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/mass_gevp_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/meson_gevp_as_av_samples.json, intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/meson_gevp_as_av_eff_mass.pdf
+    jobid: 56
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/meson_gevp_as_av_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.72, mAS=-1.01, Nt=64, Ns=32, channel=as_av
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:33 2024]
+Finished job 57.
+7 of 173 steps (4%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:33 2024]
+localrule meson_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/meson_extraction_f_s_samples.json
+    jobid: 149
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/meson_extraction_f_s_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.72, mAS=-1.01, Nt=64, Ns=32, channel=f_s
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:36 2024]
+Finished job 157.
+8 of 173 steps (5%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:36 2024]
+localrule gevp_chimera_baryon_mass:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/mass_gevp_chimera.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/chimera_gevp_sigma_odd_samples.json, intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/chimera_gevp_sigma_odd_eff_mass.pdf
+    jobid: 76
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/chimera_gevp_sigma_odd_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=96, Ns=20, channel=sigma_odd
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:39 2024]
+Finished job 164.
+9 of 173 steps (5%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:39 2024]
+localrule meson_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_extraction_as_av_samples.json
+    jobid: 134
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_extraction_as_av_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.7, mAS=-1.01, Nt=64, Ns=20, channel=as_av
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:40 2024]
+Finished job 160.
+10 of 173 steps (6%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:40 2024]
+localrule gevp_meson_mass:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/mass_gevp_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/meson_gevp_as_v_samples.json, intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/meson_gevp_as_v_eff_mass.pdf
+    jobid: 16
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/meson_gevp_as_v_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=64, Ns=20, channel=as_v
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:41 2024]
+Finished job 163.
+11 of 173 steps (6%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:42 2024]
+localrule meson_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/meson_extraction_f_av_samples.json
+    jobid: 97
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/meson_extraction_f_av_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=48, Ns=20, channel=f_av
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:46 2024]
+Finished job 56.
+12 of 173 steps (7%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:46 2024]
+localrule meson_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/meson_extraction_as_at_samples.json
+    jobid: 112
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20/meson_extraction_as_at_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=64, Ns=20, channel=as_at
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:18:58 2024]
+Finished job 16.
+13 of 173 steps (8%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:18:58 2024]
+localrule meson_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/meson_extraction_as_v_samples.json
+    jobid: 142
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32/meson_extraction_as_v_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.72, mAS=-1.01, Nt=64, Ns=32, channel=as_v
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:19:02 2024]
+Finished job 149.
+14 of 173 steps (8%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:19:02 2024]
+localrule chimera_matrix_element:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/matrix_element_chimera.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_extraction_sigma_odd_samples.json
+    jobid: 172
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/chimera_extraction_sigma_odd_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.7, mAS=-1.01, Nt=64, Ns=20, channel=sigma_odd
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:19:03 2024]
+Finished job 76.
+15 of 173 steps (9%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:19:03 2024]
+localrule gevp_meson_mass:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/mass_gevp_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_samples.json, intermediary_data/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_eff_mass.pdf
+    jobid: 46
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20/meson_gevp_as_at_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.7, mAS=-1.01, Nt=64, Ns=20, channel=as_at
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:19:05 2024]
+Finished job 97.
+16 of 173 steps (9%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:19:05 2024]
+localrule gevp_chimera_baryon_mass:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/mass_gevp_chimera.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/chimera_gevp_sigmastar_odd_samples.json, intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/chimera_gevp_sigmastar_odd_eff_mass.pdf
+    jobid: 66
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/chimera_gevp_sigmastar_odd_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=48, Ns=20, channel=sigmastar_odd
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:19:12 2024]
+Finished job 172.
+17 of 173 steps (10%) done
+Select jobs to execute...
+Execute 1 jobs...
+
+[Tue Dec  3 18:19:12 2024]
+localrule gevp_meson_mass:
+    input: data_assets/corr_sp4_dyn_mix.h5, src/mass_gevp_meson.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/meson_gevp_as_ps_samples.json, intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/meson_gevp_as_ps_eff_mass.pdf
+    jobid: 26
+    reason: Missing output files: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20/meson_gevp_as_ps_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=96, Ns=20, channel=as_ps
+    resources: tmpdir=/tmp
+
+Activating conda environment: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+[Tue Dec  3 18:19:14 2024]
+Error in rule gevp_chimera_baryon_mass:
+    jobid: 66
+    input: data_assets/corr_sp4_dyn_mix.h5, src/mass_gevp_chimera.py
+    output: intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/chimera_gevp_sigmastar_odd_samples.json, intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/chimera_gevp_sigmastar_odd_eff_mass.pdf
+    conda-env: /home/niccolo/Downloads/lsd_workflow (1)/dynamical_mix_LSD_analysis/.snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+    shell:
+        python -m src.mass_gevp_chimera data_assets/corr_sp4_dyn_mix.h5 --output_file_samples intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/chimera_gevp_sigmastar_odd_samples.json --ensemble_name M1 --effmass_plot_file intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/chimera_gevp_sigmastar_odd_eff_mass.pdf --plot_styles styles/paperdraft.mplstyle --beta 6.5 --mF -0.71 --mAS -1.01 --Nt 48 --Ns 20 --min_trajectory 3006 --max_trajectory 15214 --trajectory_step 14 --channel sigmastar_odd --gevp_t0 1 --E0_plateau_start 11 --E0_plateau_end 18 --E1_plateau_start 12 --E1_plateau_end 17 --E2_plateau_start 0 --E2_plateau_end 0
+        (one of the commands exited with non-zero exit code; note that snakemake uses bash strict mode!)
+
+Removing output files of failed job gevp_chimera_baryon_mass since they might be corrupted:
+intermediary_data/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/chimera_gevp_sigmastar_odd_samples.json
+[Tue Dec  3 18:19:18 2024]
+Finished job 46.
+18 of 173 steps (10%) done
+[Tue Dec  3 18:19:32 2024]
+Finished job 26.
+19 of 173 steps (11%) done
+[Tue Dec  3 18:19:38 2024]
+Finished job 142.
+20 of 173 steps (12%) done
+[Tue Dec  3 18:19:42 2024]
+Finished job 134.
+21 of 173 steps (12%) done
+[Tue Dec  3 18:19:43 2024]
+Finished job 112.
+22 of 173 steps (13%) done
+Shutting down, this might take some time.
+Exiting because a job execution failed. Look above for error message
+Complete log: .snakemake/log/2024-12-03T181737.308800.snakemake.log
+WorkflowError:
+At least one job did not complete successfully.

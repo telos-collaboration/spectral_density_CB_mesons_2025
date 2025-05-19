@@ -1,0 +1,10 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: sl1.sunbird.supercomputingwales.ac.uk
+Building DAG of jobs...
+MissingInputException in rule gevp_meson_mass in file "/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/workflow/rules/mass.smk", line 62:
+Missing input files for rule gevp_meson_mass:
+    output: ../JSONs/Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20/meson_gevp_f_ps_samples.json
+    wildcards: Nc=4, beta=6.5, nF=2, nAS=3, mF=-0.71, mAS=-1.01, Nt=48, Ns=20, channel=f_ps
+    affected files:
+        ../input_correlators/chimera_data_reduced.hdf5

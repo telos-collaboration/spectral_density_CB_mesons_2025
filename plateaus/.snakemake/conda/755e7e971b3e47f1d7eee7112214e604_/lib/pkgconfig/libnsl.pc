@@ -1,0 +1,12 @@
+prefix=/home/niccolo/Downloads/lsd_workflow (1)/dynamical_mix_LSD_analysis/.snakemake/conda/755e7e971b3e47f1d7eee7112214e604_
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: libnsl
+Description: Library containing NIS functions using TI-RPC (IPv6 enabled)
+Requires: libtirpc >= 1.0.1
+Version: 2.0.1
+Libs: -L${exec_prefix}/lib -lnsl
+Cflags: -I${prefix}/include
+

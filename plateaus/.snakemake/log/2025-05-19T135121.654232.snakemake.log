@@ -1,0 +1,152 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: sl1.sunbird.supercomputingwales.ac.uk
+Building DAG of jobs...
+Your conda installation is not configured to use strict channel priorities. This is however important for having robust and correct environments (for details, see https://conda-forge.org/docs/user/tipsandtricks.html). Please consider to configure strict priorities by executing 'conda config --set channel_priority strict'.
+Creating conda environment workflow/envs/flow_analysis.yml...
+Downloading and installing remote packages.
+CreateCondaEnvironmentException:
+Could not create conda environment from /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/workflow/rules/../envs/flow_analysis.yml:
+Command:
+conda env create --quiet --no-default-packages --file "/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_.yaml" --prefix "/scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_"
+Output:
+/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/base/context.py:201: FutureWarning: Adding 'defaults' to channel list implicitly is deprecated and will be removed in 25.3. 
+
+To remove this warning, please choose a default channel explicitly with conda's regular configuration system, e.g. by adding 'defaults' to the list of channels:
+
+  conda config --add channels defaults
+
+For more information see https://docs.conda.io/projects/conda/en/stable/user-guide/configuration/use-condarc.html
+
+  deprecated.topic(
+Channels:
+ - conda-forge
+ - defaults
+Platform: linux-64
+Collecting package metadata (repodata.json): ...working... failed
+/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/base/context.py:201: FutureWarning: Adding 'defaults' to channel list implicitly is deprecated and will be removed in 25.3. 
+
+To remove this warning, please choose a default channel explicitly with conda's regular configuration system, e.g. by adding 'defaults' to the list of channels:
+
+  conda config --add channels defaults
+
+For more information see https://docs.conda.io/projects/conda/en/stable/user-guide/configuration/use-condarc.html
+
+  deprecated.topic(
+
+# >>>>>>>>>>>>>>>>>>>>>> ERROR REPORT <<<<<<<<<<<<<<<<<<<<<<
+
+    Traceback (most recent call last):
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/exception_handler.py", line 18, in __call__
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/cli/main.py", line 61, in main_subshell
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/cli/conda_argparse.py", line 205, in do_call
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/notices/core.py", line 132, in wrapper
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/cli/main_env_create.py", line 178, in execute
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/env/installers/conda.py", line 51, in install
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/core/solve.py", line 153, in solve_for_transaction
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/core/solve.py", line 222, in solve_for_diff
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda_libmamba_solver/solver.py", line 231, in solve_final_state
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda_libmamba_solver/index.py", line 136, in __init__
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda_libmamba_solver/index.py", line 335, in _load_channels
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/concurrent/futures/_base.py", line 619, in result_iterator
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/concurrent/futures/_base.py", line 317, in _result_or_cancel
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/concurrent/futures/_base.py", line 456, in result
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/concurrent/futures/_base.py", line 401, in __get_result
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/concurrent/futures/thread.py", line 59, in run
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda_libmamba_solver/index.py", line 254, in _fetch_channel
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/core/subdir_data.py", line 213, in repo_fetch
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/core/subdir_data.py", line 227, in cache_path_base
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/gateways/repodata/__init__.py", line 954, in create_cache_dir
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/core/package_cache_data.py", line 207, in first_writable
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/core/package_cache_data.py", line 89, in __call__
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/core/package_cache_data.py", line 102, in __init__
+      File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/conda/core/package_cache_data.py", line 542, in __init__
+    BrokenPipeError: [Errno 108] Cannot send after transport endpoint shutdown: '/home/s.2227764/.conda/pkgs/urls.txt'
+
+`$ /home/s.2227764/.conda/envs/snakemake_x86/bin/conda env create --quiet --no-default-packages --file /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_.yaml --prefix /scratch/s.2227764/chimera_def6/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/1224b9cbf1752c0a8b73158d064e9fca_`
+
+  environment variables:
+                 CIO_TEST=<not set>
+        CONDA_DEFAULT_ENV=snakemake_x86
+                CONDA_EXE=/apps/local/languages/anaconda/2024.06/bin/conda
+             CONDA_PREFIX=/home/s.2227764/.conda/envs/snakemake_x86
+           CONDA_PREFIX_1=/apps/local/languages/anaconda/2024.06
+           CONDA_PREFIX_2=/home/s.2227764/.conda/envs/snakemake_x86
+           CONDA_PREFIX_3=/home/s.2227764/.conda/envs/analysis-env4
+    CONDA_PROMPT_MODIFIER=(snakemake_x86)
+         CONDA_PYTHON_EXE=/apps/local/languages/anaconda/2024.06/bin/python
+               CONDA_ROOT=/home/s.2227764/.conda/envs/snakemake_x86
+              CONDA_SHLVL=4
+                    CPATH=/opt/slurm/23.02.6/el7/include/slurm:/opt/slurm/23.02.6/el7/include/sl
+                          urm
+           CURL_CA_BUNDLE=<not set>
+          LD_LIBRARY_PATH=/opt/slurm/23.02.6/el7/lib:/opt/slurm/23.02.6/el7/lib
+               LD_PRELOAD=<not set>
+                  MANPATH=/opt/slurm/23.02.6/el7/share/man:/usr/share/man:/usr/local/share/man:/
+                          opt/slurm/23.02.6/el7/share/man
+               MODULEPATH=/opt/slurm/modules/el7/:/apps/modules/legacy:/apps/modules/compilers:/
+                          apps/modules/languages:/apps/modules/libraries:/apps/modules/system:/a
+                          pps/modules/tools:/apps/modules/biology:/apps/modules/chemistry:/apps/
+                          modules/creative:/apps/modules/environment:/apps/modules/financial:/ap
+                          ps/modules/genomics:/apps/modules/machine-learning:/apps/modules/mater
+                          ials:/apps/modules/medical:/apps/modules/physics:/apps/local/modules/g
+                          enomics:/apps/local/modules/languages:/apps/local/modules/libraries:/a
+                          pps/local/modules/tools:/apps/local/modules/life-
+                          sciences:/usr/share/Modules/modulefiles:/etc/modulefiles
+                     PATH=/home/s.2227764/.conda/envs/snakemake_x86/bin:/apps/local/languages/an
+                          aconda/2024.06/condabin:/apps/local/languages/anaconda/2024.06/bin:/op
+                          t/slurm/23.02.6/el7/bin:/opt/slurm/23.02.6/el7/sbin:/usr/local/bin:/us
+                          r/bin:/usr/local/sbin:/usr/sbin:/opt/slurm/23.02.6/el7/bin:/opt/slurm/
+                          23.02.6/el7/sbin:/home/s.2227764/bin
+       REQUESTS_CA_BUNDLE=<not set>
+            SSL_CERT_FILE=<not set>
+
+     active environment : base
+    active env location : /home/s.2227764/.conda/envs/snakemake_x86
+            shell level : 4
+       user config file : /home/s.2227764/.condarc
+ populated config files : 
+          conda version : 24.11.3
+    conda-build version : not installed
+         python version : 3.12.10.final.0
+                 solver : libmamba (default)
+       virtual packages : __archspec=1=skylake_avx512
+                          __conda=24.11.3=0
+                          __glibc=2.17=0
+                          __linux=3.10.0=0
+                          __unix=0=0
+       base environment : /home/s.2227764/.conda/envs/snakemake_x86  (read only)
+      conda av data dir : /home/s.2227764/.conda/envs/snakemake_x86/etc/conda
+  conda av metadata url : None
+           channel URLs : https://repo.anaconda.com/pkgs/main/linux-64
+                          https://repo.anaconda.com/pkgs/main/noarch
+                          https://repo.anaconda.com/pkgs/r/linux-64
+                          https://repo.anaconda.com/pkgs/r/noarch
+          package cache : /home/s.2227764/.conda/envs/snakemake_x86/pkgs
+                          /home/s.2227764/.conda/pkgs
+       envs directories : /home/s.2227764/.conda/envs
+                          /home/s.2227764/.conda/envs/snakemake_x86/envs
+               platform : linux-64
+             user-agent : conda/24.11.3 requests/2.32.3 CPython/3.12.10 Linux/3.10.0-1160.76.1.el7.x86_64 centos/7.9.2009 glibc/2.17 solver/libmamba conda-libmamba-solver/24.9.0 libmambapy/1.5.12
+                UID:GID : 5001535:5001535
+             netrc file : None
+           offline mode : False
+
+
+An unexpected error has occurred. Conda has prepared the above report.
+If you suspect this error is being caused by a malfunctioning plugin,
+consider using the --no-plugins option to turn off plugins.
+
+Example: conda --no-plugins install <package>
+
+Alternatively, you can set the CONDA_NO_PLUGINS environment variable on
+the command line to run the command without plugins enabled.
+
+Example: CONDA_NO_PLUGINS=true conda install <package>
+
+
+  File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/snakemake/cli.py", line 2173, in args_to_api
+  File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/snakemake/api.py", line 603, in execute_workflow
+  File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/snakemake/workflow.py", line 1266, in execute
+  File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/snakemake/dag.py", line 523, in create_conda_envs
+  File "/home/s.2227764/.conda/envs/snakemake_x86/lib/python3.12/site-packages/snakemake/deployment/conda.py", line 648, in create

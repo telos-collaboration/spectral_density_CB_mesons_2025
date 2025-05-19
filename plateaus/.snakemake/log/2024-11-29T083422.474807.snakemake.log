@@ -1,0 +1,4 @@
+host: niccolo-HP-ProBook-450-G8-Notebook-PC
+Building DAG of jobs...
+MissingRuleException:
+No rule to produce assets/tables/test.tex (if you use input functions make sure that they don't raise unexpected exceptions).

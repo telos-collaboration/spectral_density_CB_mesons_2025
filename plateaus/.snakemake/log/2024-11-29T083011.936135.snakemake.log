@@ -1,0 +1,7 @@
+host: niccolo-HP-ProBook-450-G8-Notebook-PC
+Building DAG of jobs...
+Your conda installation is not configured to use strict channel priorities. This is however important for having robust and correct environments (for details, see https://conda-forge.org/docs/user/tipsandtricks.html). Please consider to configure strict priorities by executing 'conda config --set channel_priority strict'.
+Creating conda environment workflow/envs/flow_analysis.yml...
+Downloading and installing remote packages.
+Environment for /home/niccolo/Downloads/lsd_workflow (1)/dynamical_mix_LSD_analysis/workflow/rules/../envs/flow_analysis.yml created (location: .snakemake/conda/755e7e971b3e47f1d7eee7112214e604_)
+Nothing to be done (all requested files are present and up to date).
