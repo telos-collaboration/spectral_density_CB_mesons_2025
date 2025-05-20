@@ -83,7 +83,7 @@ def get_standard_plot_args(fit_results=False, external_data=False):
     )
     parser.add_argument(
         "--plot_styles",
-        #default="styles/paperdraft.mplstyle",
+        default="styles/paperdraft.mplstyle",
         help="Stylesheet to use for plots",
     )
     return parser.parse_args()
@@ -257,7 +257,7 @@ def plot_baryon_gevp_energy_states(args, eigenvalues, energy_states):
     ax.set_ylabel("$aE_n$")
     ax.set_ylim(0.5, 1.7)
     fig.legend(loc="upper right")
-    #fig.savefig(args.effmass_plot_file)
+    fig.savefig(args.effmass_plot_file)
 
 
 def plot_meson_gevp_energy_states(args, eigenvalues, energy_states):
