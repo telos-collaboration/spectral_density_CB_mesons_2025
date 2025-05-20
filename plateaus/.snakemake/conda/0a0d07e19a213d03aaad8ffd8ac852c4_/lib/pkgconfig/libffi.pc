@@ -1,0 +1,11 @@
+prefix=/scratch/s.2227764/chimera_def11/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/0a0d07e19a213d03aaad8ffd8ac852c4_
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+toolexeclibdir=${libdir}
+includedir=/scratch/s.2227764/chimera_def11/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/0a0d07e19a213d03aaad8ffd8ac852c4_/include
+
+Name: libffi
+Description: Library supporting Foreign Function Interfaces
+Version: 3.4.2
+Libs: -L${toolexeclibdir} -lffi
+Cflags: -I${includedir}
