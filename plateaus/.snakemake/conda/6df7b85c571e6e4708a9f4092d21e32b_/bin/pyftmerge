@@ -1,0 +1,10 @@
+#!/bin/sh
+'''exec' /home/niccolo/work/data_releases/data_release_chimera3/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/6df7b85c571e6e4708a9f4092d21e32b_/bin/python "$0" "$@"
+' '''
+# -*- coding: utf-8 -*-
+import re
+import sys
+from fontTools.merge import main
+if __name__ == '__main__':
+    sys.argv[0] = re.sub(r'(-script\.pyw|\.exe)?$', '', sys.argv[0])
+    sys.exit(main())

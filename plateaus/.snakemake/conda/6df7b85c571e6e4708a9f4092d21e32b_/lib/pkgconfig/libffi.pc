@@ -1,0 +1,11 @@
+prefix=/home/niccolo/work/data_releases/data_release_chimera3/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/6df7b85c571e6e4708a9f4092d21e32b_
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+toolexeclibdir=${libdir}
+includedir=/home/niccolo/work/data_releases/data_release_chimera3/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/6df7b85c571e6e4708a9f4092d21e32b_/include
+
+Name: libffi
+Description: Library supporting Foreign Function Interfaces
+Version: 3.4.2
+Libs: -L${toolexeclibdir} -lffi
+Cflags: -I${includedir}
