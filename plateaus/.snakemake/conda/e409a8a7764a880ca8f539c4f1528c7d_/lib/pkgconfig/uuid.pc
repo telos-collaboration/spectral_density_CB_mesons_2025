@@ -1,0 +1,11 @@
+prefix=/scratch/s.2227764/chimera_def9/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/e409a8a7764a880ca8f539c4f1528c7d_
+exec_prefix=/scratch/s.2227764/chimera_def9/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/e409a8a7764a880ca8f539c4f1528c7d_
+libdir=/scratch/s.2227764/chimera_def9/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/e409a8a7764a880ca8f539c4f1528c7d_/lib
+includedir=/scratch/s.2227764/chimera_def9/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/e409a8a7764a880ca8f539c4f1528c7d_/include
+
+Name: uuid
+Description: Universally unique id library
+Version: 2.38.1
+Requires:
+Cflags: -I${includedir}/uuid
+Libs: -L${libdir} -luuid

@@ -1,0 +1,13 @@
+# Package Information for pkg-config
+
+prefix=/scratch/s.2227764/chimera_def9/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/e409a8a7764a880ca8f539c4f1528c7d_
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: SQLite
+Description: SQL database engine
+Version: 3.46.1
+Libs: -L${libdir} -lsqlite3
+Libs.private: -lz -lm -ldl -lpthread 
+Cflags: -I${includedir}

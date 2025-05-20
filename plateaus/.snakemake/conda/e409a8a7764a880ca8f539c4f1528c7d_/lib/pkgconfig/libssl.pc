@@ -1,0 +1,11 @@
+prefix=/scratch/s.2227764/chimera_def9/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/e409a8a7764a880ca8f539c4f1528c7d_
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include 
+
+Name: OpenSSL-libssl
+Description: Secure Sockets Layer and cryptography libraries
+Version: 3.3.2
+Requires.private: libcrypto
+Libs: -L${libdir} -lssl
+Cflags: -I${includedir}
