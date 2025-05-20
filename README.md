@@ -11,15 +11,27 @@ Deog Ki Hong, Jong-Wan Lee, C.-J. David Lin, Biagio Lucini, Alessandro Lupo,
 Maurizio Piai, Davide Vadacchino.
 
 
-## Set up environment
+## Set up environments
 
 * Download this code
 * From the data release at https://doi.org/##.####/zenodo.########
-  * Download ``chimera_data_full.hdf5``, and place it in ``input_correlators/``
+  * Download ``chimera_data_reduced.hdf5``, and place it in ``input_correlators/``
   * Download ``input_topology.zip``,
     and extract its contents into    ``input_topology/``
   * Download ``input_fit/``,
-    and extract its contentse into ``input_fit/``.
+    and extract its contents into ``input_fit/``.
+
+* To automate find gevp plateaus, a x86-64 version of Snakemake must be used. To set this up, create a new x86-64 Conda environment with Snakemake, using
+      
+      conda create -n snakemake_x86 -c conda-forge -c bioconda snakemake
+  
+  and activate it
+ 
+      conda activate snakemake_x86
+ 
+  and then install Mamba
+  
+      conda install -c conda-forge 'mamba<2.0.0'
 
 
 * Then, create the conda environment in terminal with conda installed:
