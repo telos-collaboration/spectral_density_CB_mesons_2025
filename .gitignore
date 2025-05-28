@@ -1,5 +1,5 @@
 __pycache__
-plots/
+./plots/
 input_correlators
 input_fit
 input_topology

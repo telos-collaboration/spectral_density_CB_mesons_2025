@@ -30,7 +30,6 @@ rule gevp_chimera_baryon_mass:
         "../envs/flow_analysis.yml"
     shell:
         "python -m {params.module} {input.data} --output_file_samples {output.samples} --ensemble_name {params.metadata.ensemble_name}"
-        #" --effmass_plot_file {output.plot} --plot_styles {plot_styles}"
         " --beta {params.metadata.beta} --mF {params.metadata.mF} --mAS {params.metadata.mAS} --Nt {params.metadata.Nt} --Ns {params.metadata.Ns}"
         " --min_trajectory {params.metadata.init_conf} --max_trajectory {params.metadata.final_conf} --trajectory_step {params.metadata.delta_conf_spectrum}"
         " --channel {wildcards.channel} --gevp_t0 {params.metadata.gevp_t0}"
@@ -79,7 +78,6 @@ rule gevp_meson_mass:
         "../envs/flow_analysis.yml"
     shell:
         "python -m {params.module} {input.data} --output_file_samples {output.samples} --ensemble_name {params.metadata.ensemble_name}"
-        #" --effmass_plot_file {output.plot} --plot_styles {plot_styles}"
         " --beta {params.metadata.beta} --mF {params.metadata.mF} --mAS {params.metadata.mAS} --Nt {params.metadata.Nt} --Ns {params.metadata.Ns}"
         " --min_trajectory {params.metadata.init_conf} --max_trajectory {params.metadata.final_conf} --trajectory_step {params.metadata.delta_conf_spectrum}"
         " --channel {wildcards.channel} --gevp_t0 {params.metadata.gevp_t0}"
