@@ -25,13 +25,19 @@ if ! command -v latex > /dev/null 2>&1; then
     cd ..
 
     if [ "$inner_condition_met" = false ]; then
-	bash run_plateaus.sh
+	echo 'here lalala'
+        source activate
+        conda activate snakemake_x86
+        bash run_plateaus.sh
+        conda activate analysis-env4
         bash run_spectral_densities.sh
     else
+        source activate
+        conda activate analysis-env4
         bash run_spectral_densities.sh
     fi
     
-else
+els
     cd CSVs
     echo "Latex is installed. Running full workflow."
     inner_condition_met=true
@@ -48,14 +54,23 @@ else
     cd ..
 
     if [ "$inner_condition_met" = false ]; then
-	bash run_plateaus.sh
+	conda activate snakemake_x86
+        bash run_plateaus.sh
+        conda activate analysis-env4
         bash run_spectral_densities.sh
-        python CSVs_to_tables.py
+        CSVs_to_tables_meson_GEVP.py
+        CSVs_to_tables_CB_GEVP.py
+        CSVs_to_tables_meson_matrixelements.py
+        CSVs_to_tables_CB_matrixelements.py
         python renormalise.py
         bash run_plots.sh
     else
+        conda activate analysis-env4
         bash run_spectral_densities.sh
-        python CSVs_to_tables.py
+        CSVs_to_tables_meson_GEVP.py
+        CSVs_to_tables_CB_GEVP.py
+        CSVs_to_tables_meson_matrixelements.py
+        CSVs_to_tables_CB_matrixelements.py
         python renormalise.py
         bash run_plots.sh
     fi

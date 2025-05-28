@@ -14,3 +14,4 @@ axes.linewidth : 1
 legend.fontsize : small
 legend.handletextpad : 0.3
 legend.columnspacing : 0.5
+text.usetex: False
