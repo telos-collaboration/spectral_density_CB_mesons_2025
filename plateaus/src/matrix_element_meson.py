@@ -32,8 +32,8 @@ def ps_extraction(ensemble, args):
         args.E0_plateau_end,
         args.Nt
     )
-
-    return mass, matrix_element, chi2
+    result_samples= matrix_element.samples *np.sqrt(2*mass.samples)
+    return mass, result_samples, chi2
 
 def ch_extraction(ensemble, args):
     """
@@ -53,8 +53,8 @@ def ch_extraction(ensemble, args):
         args.Nt
     )
     
-
-    return mass, matrix_element, chi2
+    result_samples= matrix_element.samples *np.sqrt(2*mass.samples)
+    return mass, result_samples, chi2
 
 def main():
     args = get_args()
