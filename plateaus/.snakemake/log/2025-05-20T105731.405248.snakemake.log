@@ -1,0 +1,9 @@
+Assuming unrestricted shared filesystem usage.
+None
+host: sl1.sunbird.supercomputingwales.ac.uk
+Building DAG of jobs...
+MissingInputException in rule mass_plot in file "/scratch/s.2227764/chimera_def12/spectral_density_CB_mesons_2024/plateaus/workflow/rules/mass.smk", line 137:
+Missing input files for rule mass_plot:
+    output: assets/plots/test.pdf
+    affected files:
+        src/plots/gevp_meson.py

@@ -1,0 +1,11 @@
+prefix=/scratch/s.2227764/chimera_def12/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/0b31db4a2010951a246d171c3c5cf2ff_
+exec_prefix=${prefix}
+libdir=${exec_prefix}/lib
+includedir=${prefix}/include
+
+Name: History
+Description: Gnu History library for managing previously-entered lines
+URL: http://tiswww.cwru.edu/php/chet/readline/rltop.html
+Version: 8.2
+Libs: -L${libdir} -lhistory
+Cflags: -I${includedir}
