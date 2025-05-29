@@ -1,0 +1,3 @@
+[submodule "decay_constant"]
+	path = decay_constant
+	url = https://github.com/fzierler/decay_constant.git
