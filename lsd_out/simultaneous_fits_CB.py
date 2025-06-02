@@ -79,7 +79,7 @@ def read_csv2(file_path):
             for rep in repr:
                 # Append data for each category to the respective lists
                 for category in categories:
-                    ratio1[ensemble].append(float(row[f'{category}_cqr']))
+                    ratio1[ensemble].append(float(row[f'{category}_cqr'])/100.)
     # Create a 2D matrix with ensemble index
     matrix_2D = [
         [
