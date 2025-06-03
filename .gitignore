@@ -5,3 +5,4 @@ input_fit
 input_topology
 tables
 CSVs
+plateaus/.snakemake/**
