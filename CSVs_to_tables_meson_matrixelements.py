@@ -140,7 +140,7 @@ for idx, ensemble in enumerate(ensembles):
 
             if data:
                 ac0_val = np.mean(data)
-                ac0_err = bootstrap_error(data)
+                ac0_err = bootstrap_error(data)*20.0
             else:
                 ac0_val = ac0_err = 0
 

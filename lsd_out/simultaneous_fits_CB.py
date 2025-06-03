@@ -381,9 +381,9 @@ def main():
                     with open(f'../CSVs/{ensemble}_spectral_density_matrix_elements_CB.csv', 'a', newline='') as csvfile:
                         csvwriter = csv.writer(csvfile)
                         if kernel == 'GAUSS':
-                            csvwriter.writerow([ensemble, kernel, rep, channel, 2 * fit_params_2_mean[0] / np.sqrt(V), 2 * fit_params_2_mean[0] / np.sqrt(V) * 0.011])
+                            csvwriter.writerow([ensemble, kernel, rep, channel, 3*2 * fit_params_2_mean[0] / np.sqrt(V), 2 * fit_params_2_mean[0] / np.sqrt(V) * 0.011])
                         else:
-                            csvwriter.writerow([ensemble, kernel, rep, channel, 2 * fit_params_2_mean[0] / np.sqrt(V), 2 * fit_params_2_mean[0] / np.sqrt(V) * 0.012])
+                            csvwriter.writerow([ensemble, kernel, rep, channel, 3*2 * fit_params_2_mean[0] / np.sqrt(V), 2 * fit_params_2_mean[0] / np.sqrt(V) * 0.012])
 
                     print()
 
