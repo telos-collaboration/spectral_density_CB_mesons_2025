@@ -124,8 +124,8 @@ for idx, ensemble in enumerate(ensembles):
             else:
                 cauchy_min_with_error = '-'
 
-            if f'{channelone}_matrix_element_samples' in json_data:
-                samples = np.array(json_data[f'{channelone}_matrix_element_samples'])
+            if f'{channelone}_matrix_element' in json_data:
+                samples = np.array(json_data[f'{channelone}_matrix_element'])
                 ac0_val = np.mean(samples)
                 ac0_err = bootstrap_error(samples)
                 ac0_with_error = add_error(ac0_val, ac0_err)
