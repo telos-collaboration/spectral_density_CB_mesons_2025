@@ -8,17 +8,17 @@ import matplotlib.patches as mpatches
 # Define constants and configuration
 w0_values = {'M1': 2.5210, 'M2': 2.5290, 'M3': 2.5237, 'M4': 2.3664, 'M5': 2.6927}
 files = [
-    ('M1', ['M1_ground.txt', 'M1_first.txt']),
-    ('M2', ['M2_ground.txt', 'M2_first.txt', 'M2_second.txt']),
-    ('M3', ['M3_ground.txt', 'M3_first.txt', 'M3_second.txt']),
-    ('M4', ['M4_ground.txt', 'M4_first.txt', 'M4_second.txt']),
-    ('M5', ['M5_ground.txt', 'M5_first.txt', 'M5_second.txt']),
+    ('M1', ['../../../input_fit/final_spectrum/M1_ground.txt', '../../../input_fit/final_spectrum/M1_first.txt']),
+    ('M2', ['../../../input_fit/final_spectrum/M2_ground.txt', '../../../input_fit/final_spectrum/M2_first.txt', '../../../input_fit/final_spectrum/M2_second.txt']),
+    ('M3', ['../../../input_fit/final_spectrum/M3_ground.txt', '../../../input_fit/final_spectrum/M3_first.txt', '../../../input_fit/final_spectrum/M3_second.txt']),
+    ('M4', ['../../../input_fit/final_spectrum/M4_ground.txt', '../../../input_fit/final_spectrum/M4_first.txt', '../../../input_fit/final_spectrum/M4_second.txt']),
+    ('M5', ['../../../input_fit/final_spectrum/M5_ground.txt', '../../../input_fit/final_spectrum/M5_first.txt', '../../../input_fit/final_spectrum/M5_second.txt']),
     # CB channels
-    ('M1', ['CB_M1_ground.txt', 'CB_M1_first.txt', 'CB_M1_second.txt']),
-    ('M2', ['CB_M2_ground.txt', 'CB_M2_first.txt', 'CB_M2_second.txt']),
-    ('M3', ['CB_M3_ground.txt', 'CB_M3_first.txt', 'CB_M3_second.txt']),
-    ('M4', ['CB_M4_ground.txt', 'CB_M4_first.txt', 'CB_M4_second.txt']),
-    ('M5', ['CB_M5_ground.txt', 'CB_M5_first.txt', 'CB_M5_second.txt'])
+    ('M1', ['../../../input_fit/final_spectrum/CB_M1_ground.txt', '../../../input_fit/final_spectrum/CB_M1_first.txt', '../../../input_fit/final_spectrum/CB_M1_second.txt']),
+    ('M2', ['../../../input_fit/final_spectrum/CB_M2_ground.txt', '../../../input_fit/final_spectrum/CB_M2_first.txt', '../../../input_fit/final_spectrum/CB_M2_second.txt']),
+    ('M3', ['../../../input_fit/final_spectrum/CB_M3_ground.txt', '../../../input_fit/final_spectrum/CB_M3_first.txt', '../../../input_fit/final_spectrum/CB_M3_second.txt']),
+    ('M4', ['../../../input_fit/final_spectrum/CB_M4_ground.txt', '../../../input_fit/final_spectrum/CB_M4_first.txt', '../../../input_fit/final_spectrum/CB_M4_second.txt']),
+    ('M5', ['../../../input_fit/final_spectrum/CB_M5_ground.txt', '../../../input_fit/final_spectrum/CB_M5_first.txt', '../../../input_fit/final_spectrum/CB_M5_second.txt'])
 ]
 
 plt.style.use("paperdraft.mplstyle")
