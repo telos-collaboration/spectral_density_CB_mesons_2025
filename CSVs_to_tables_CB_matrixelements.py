@@ -128,7 +128,7 @@ for idx, ensemble in enumerate(ensembles):
             if f'{channelone}_matrix_element' in json_data:
                 samples = np.array(json_data[f'{channelone}_matrix_element'])
                 ac0_val = np.mean(samples)
-                ac0_err = bootstrap_error(samples)
+                ac0_err = bootstrap_error(samples)*3.
                 ac0_with_error = add_error(ac0_val, ac0_err)
             else:
                 ac0_with_error = '-'
