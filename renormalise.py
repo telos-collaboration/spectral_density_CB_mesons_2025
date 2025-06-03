@@ -1,5 +1,6 @@
 import pandas as pd
 import re
+import os
 
 # Path to the CSV file
 csv_file_path = './lsd_out/metadata/renormalise.csv'
@@ -92,3 +93,62 @@ for ens, tex_file in tex_files.items():
         file.writelines(updated_lines)
 
     print(f"Updated {tex_file} and saved as {output_file}")
+    
+    
+df = pd.read_csv(csv_file_path)
+
+ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
+
+for ens in ensembles:
+    z_values = df[df['Ens'] == ens].iloc[0]
+    cb_file = f'./tables/{ens}_output_table_matrix_CB.tex'
+    cb_output = f'./tables/renormalised_{ens}_output_table_matrix_CB.tex'
+
+    if not os.path.exists(cb_file):
+        print(f"Missing: {cb_file}")
+        continue
+
+    with open(cb_file, 'r') as file:
+        lines = file.readlines()
+
+    updated_lines = []
+
+    for line in lines:
+        original_line = line
+        # Only modify lines containing data (skip headers, hline etc.)
+        if re.match(r"^\s*\$", line.strip()):
+            # Decide Z factor
+            if 'Lambda' in line:
+                z = z_values['Z_Lambda']
+            elif 'Sigma' in line:
+                z = z_values['Z_Sigma']
+            else:
+                updated_lines.append(line)
+                continue
+
+            # Match numbers with uncertainties: only in columns 2-4
+            matches = list(re.finditer(r"([-+]?\d*\.\d+)\((\d+)\)", line))
+            if len(matches) < 3:
+                updated_lines.append(line)
+                continue
+
+            updated_line = line
+            for i in range(3):  # Only apply to the first three matches
+                match = matches[i]
+                main_val = float(match.group(1))
+                unc = match.group(2)
+                dec = len(match.group(1).split('.')[1])
+                new_val = main_val * z
+                formatted = f"{new_val:.{dec}f}({unc})"
+                original = match.group(0)
+                updated_line = updated_line.replace(original, formatted, 1)
+
+            updated_lines.append(updated_line)
+        else:
+            updated_lines.append(line)
+
+    with open(cb_output, 'w') as f:
+        f.writelines(updated_lines)
+
+    print(f"Renormalised {cb_file} and saved to {cb_output}")
+

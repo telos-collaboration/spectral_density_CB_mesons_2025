@@ -83,6 +83,9 @@ prefix2 = ['Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20', 'Sp4b6.5nF2nAS3mF-0.71mAS-1.01
 # Iterate through chunks of 4 rows in M3_spectral_density_spectrum.csv
 chunk_size = 4
 
+# Store lines in a dictionary by label
+table_rows = {}
+
 for n in range(3):
     if n == 0:
         energy = 'E0'
@@ -317,11 +320,32 @@ for n in range(3):
             if channel == 'Chimera_OV32_odd':
                 ch = x_labels[5]
             # Adding the formatted value to the LaTeX table
-            latex_table += f"{ch} & {k_peaks} & {n_source} & {n_sink} & {gauss_min_with_error} & {gauss_max_with_error} & {cauchy_min_with_error} & {cauchy_max_with_error} & {channel_E0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
+            #latex_table += f"{ch} & {k_peaks} & {n_source} & {n_sink} & {gauss_min_with_error} & {gauss_max_with_error} & {cauchy_min_with_error} & {cauchy_max_with_error} & {channel_E0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
+            
 
-        # Close LaTeX table for each chunk
+            # Store the line
+            row_line = f"{ch} & {k_peaks} & {n_source} & {n_sink} & {gauss_min_with_error} & {gauss_max_with_error} & {cauchy_min_with_error} & {cauchy_max_with_error} & {channel_E0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
+            table_rows[ch] = row_line
+
+
+        # Desired row order
+        row_order = [
+            '$\Lambda^{+}_{\\rm CB}$',
+            '$\Sigma^{+}_{\\rm CB}$',
+            '$\Sigma^{* \, +}_{\\rm CB}$',
+            '$\Lambda^{-}_{\\rm CB}$',
+            '$\Sigma^{-}_{\\rm CB}$',
+            '$\Sigma^{* \, -}_{\\rm CB}$'
+        ]
+
+        # Add rows to LaTeX table in desired order
+        for key in row_order:
+            if key in table_rows:
+                latex_table += table_rows[key]
+
         latex_table += "\\hline\n"
         latex_table += "\\end{tabular}\n"
+
         # latex_table += "\\caption{Your caption here.}\n"
         # latex_table += "\\label{table:my_table}\n"
         latex_table += "\\end{table}\n"
