@@ -407,10 +407,21 @@ for n in range(3):
                     cauchy_min_with_error = '-'
                     cauchy_max_with_error = '-'
                 else:
-                    gauss_min_with_error = add_error(gauss_min, err_gauss_min)
-                    gauss_max_with_error = add_error(gauss_max, err_gauss_max)
-                    cauchy_min_with_error = add_error(cauchy_min, err_cauchy_min)
-                    cauchy_max_with_error = add_error(cauchy_max, err_cauchy_max)
+                    if err_gauss_min != 0.0:
+                        gauss_min_with_error = add_error(gauss_min, err_gauss_min)
+                    else:
+                        gauss_min_with_error = add_error(gauss_min, 0.01*gauss_min)
+                    if err_gauss_max != 0.0:
+                        gauss_max_with_error = add_error(gauss_max, 0.01*gauss_max)
+                    if err_cauchy_min != 0.0:
+                        cauchy_min_with_error = add_error(cauchy_min, err_cauchy_min)
+                    else:
+                        cauchy_min_with_error = add_error(cauchy_min, 0.01*cauchy_min)
+                    if err_cauchy_max != 0.0:
+                        cauchy_max_with_error = add_error(cauchy_max, err_cauchy_max)
+                    else:
+                        cauchy_max_with_error = add_error(cauchy_max, 0.01*cauchy_max)
+                     
                 channel_E0_with_error = add_error(channel_E0, err_channel_E0)
             except KeyError:
                 gauss_min_with_error = '-'
