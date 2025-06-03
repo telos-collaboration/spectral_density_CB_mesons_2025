@@ -8,17 +8,17 @@ import matplotlib.patches as mpatches
 # Define constants and configuration
 w0_values = {'M1': 2.5210, 'M2': 2.5290, 'M3': 2.5237, 'M4': 2.3664, 'M5': 2.6927}
 files = [
-    ('M1', ['M1_ground.txt', 'M1_first.txt']),
-    ('M2', ['M2_ground.txt', 'M2_first.txt', 'M2_second.txt']),
-    ('M3', ['M3_ground.txt', 'M3_first.txt', 'M3_second.txt']),
-    ('M4', ['M4_ground.txt', 'M4_first.txt', 'M4_second.txt']),
-    ('M5', ['M5_ground.txt', 'M5_first.txt', 'M5_second.txt']),
+    ('M1', ['../../../input_fit/final_spectrum/M1_ground.txt', '../../../input_fit/final_spectrum/M1_first.txt']),
+    ('M2', ['../../../input_fit/final_spectrum/M2_ground.txt', '../../../input_fit/final_spectrum/M2_first.txt', '../../../input_fit/final_spectrum/M2_second.txt']),
+    ('M3', ['../../../input_fit/final_spectrum/M3_ground.txt', '../../../input_fit/final_spectrum/M3_first.txt', '../../../input_fit/final_spectrum/M3_second.txt']),
+    ('M4', ['../../../input_fit/final_spectrum/M4_ground.txt', '../../../input_fit/final_spectrum/M4_first.txt', '../../../input_fit/final_spectrum/M4_second.txt']),
+    ('M5', ['../../../input_fit/final_spectrum/M5_ground.txt', '../../../input_fit/final_spectrum/M5_first.txt', '../../../input_fit/final_spectrum/M5_second.txt']),
     # CB channels
-    ('M1', ['CB_M1_ground.txt', 'CB_M1_first.txt', 'CB_M1_second.txt']),
-    ('M2', ['CB_M2_ground.txt', 'CB_M2_first.txt', 'CB_M2_second.txt']),
-    ('M3', ['CB_M3_ground.txt', 'CB_M3_first.txt', 'CB_M3_second.txt']),
-    ('M4', ['CB_M4_ground.txt', 'CB_M4_first.txt', 'CB_M4_second.txt']),
-    ('M5', ['CB_M5_ground.txt', 'CB_M5_first.txt', 'CB_M5_second.txt'])
+    ('M1', ['../../../input_fit/final_spectrum/CB_M1_ground.txt', '../../../input_fit/final_spectrum/CB_M1_first.txt', '../../../input_fit/final_spectrum/CB_M1_second.txt']),
+    ('M2', ['../../../input_fit/final_spectrum/CB_M2_ground.txt', '../../../input_fit/final_spectrum/CB_M2_first.txt', '../../../input_fit/final_spectrum/CB_M2_second.txt']),
+    ('M3', ['../../../input_fit/final_spectrum/CB_M3_ground.txt', '../../../input_fit/final_spectrum/CB_M3_first.txt', '../../../input_fit/final_spectrum/CB_M3_second.txt']),
+    ('M4', ['../../../input_fit/final_spectrum/CB_M4_ground.txt', '../../../input_fit/final_spectrum/CB_M4_first.txt', '../../../input_fit/final_spectrum/CB_M4_second.txt']),
+    ('M5', ['../../../input_fit/final_spectrum/CB_M5_ground.txt', '../../../input_fit/final_spectrum/CB_M5_first.txt', '../../../input_fit/final_spectrum/CB_M5_second.txt'])
 ]
 
 plt.style.use("paperdraft.mplstyle")
@@ -69,7 +69,7 @@ def process_file(file_name, w0):
 fig, ax = plt.subplots(figsize=(16, 9))
 
 # Define x_labels: Place 'η'' first, followed by the rest of the labels
-x_labels = ['T', '$\Sigma^{+}_{\\rm CB}$']
+x_labels = ['T', '$\Sigma^{*\, +}_{\\rm CB}$']
 
 hatches = [r'//////', '++++']  # Define different hatch patterns for M4 and M5
 
@@ -83,46 +83,9 @@ cb_colors = [cm.RdBu(i) for i in np.linspace(0, 0.3, 6)]  # Use a range from the
 # Define hatch colors based on the same colormap as the bars
 hatch_colors = [cm.tab10(i) for i in np.linspace(0, 0.5, 6)]
 
-# Additional eta files for each ensemble
-eta_files = {
-    'M1': ['eta_M1_ground.txt', 'eta_M1_first.txt'],
-    'M2': ['eta_M2_ground.txt', 'eta_M2_first.txt'],
-    'M3': ['eta_M3_ground.txt', 'eta_M3_first.txt'],
-    'M4': ['eta_M4_ground.txt', 'eta_M4_first.txt'],
-    'M5': ['eta_M5_ground.txt', 'eta_M5_first.txt'],
-}
 
-# Plot eta channels first
-for ensemble, file_list in eta_files.items():
-    w0 = w0_values[ensemble]
-    ensemble_offset = offsets[ensemble]
 
-    for idx, file_name in enumerate(file_list):
-        values, errors = process_file(file_name, w0)
 
-        color = 'burlywood'  # Set color for eta
-        alpha = alpha_values.get(ensemble, 0.6)
-        hatch = None
-        hatch_color = None
-
-        if ensemble == 'M4':
-            hatch = hatches[0]
-            hatch_color = 'burlywood'
-            color = 'none'
-        elif ensemble == 'M5':
-            hatch = hatches[1]
-            hatch_color = 'burlywood'
-            color = 'none'
-
-        # Plot the eta channel at the first position
-        for i, (val, err) in enumerate(zip(values, errors)):
-            x_pos = 0.3 - 0.2 + spacing * 0.1 + ensemble_offset
-            factor = 0.15 if ensemble in ['M4', 'M5'] else 0.4
-            rect = plt.Rectangle((x_pos, val - err), factor, 2 * err, color=color, alpha=alpha, hatch=hatch)
-            if hatch_color:
-                rect.set_edgecolor(hatch_color)
-            ax.add_patch(rect)
-            ax.plot([x_pos + 0.2, x_pos + 0.2], [val - err, val + err], color='red', alpha=0.0)
 
 # Plot the rest of the channels
 for ensemble, file_list in files:
