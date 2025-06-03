@@ -64,6 +64,7 @@ if [ "$all_subdirs_present" = false ]; then
         python fit_data_CB.py
         python simultaneous_fits_mesons.py
         python simultaneous_fits_CB.py
+        python post_analysis_spdens.py
     else
         python print_samples_mesons.py
         python print_samples_CB.py
@@ -71,6 +72,7 @@ if [ "$all_subdirs_present" = false ]; then
         python fit_data_CB.py
         python simultaneous_fits_mesons.py
         python simultaneous_fits_CB.py
+        python post_analysis_spdens.py
     fi
 
 else
@@ -78,5 +80,6 @@ else
     python fit_data_CB.py
     python simultaneous_fits_mesons.py
     python simultaneous_fits_CB.py
+    python post_analysis_spdens.py
 fi
 
