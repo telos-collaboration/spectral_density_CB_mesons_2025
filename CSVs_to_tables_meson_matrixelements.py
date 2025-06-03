@@ -80,7 +80,7 @@ for idx, ensemble in enumerate(ensembles):
     rep = 'fund'
     for chunk in pd.read_csv(f'./CSVs/{ensemble}_spectral_density_spectrum.csv', chunksize=chunk_size):
         unique_channels = chunk['channel'].unique()
-
+        print(unique_channels)
         for channel in unique_channels:
             CHANNEL2 = channel_map2.get(channel, 'Unknown')
             ch = CHANNEL2 if CHANNEL2 != 'Unknown' else channel
@@ -131,11 +131,11 @@ for idx, ensemble in enumerate(ensembles):
 
             if rep == 'fund':
                 print('ch2: ', ch2)
-                name = f"f_{ch2}_matrix_element_samples"
+                name = f"f_{ch2}_matrix_element"
                 data = f_ps_data[name]
             else:
                 print('ch2: ', ch2)
-                name = f"as_{ch2}_matrix_element_samples"
+                name = f"as_{ch2}_matrix_element"
                 data = as_ps_data[name]
 
             if data:
@@ -145,28 +145,33 @@ for idx, ensemble in enumerate(ensembles):
                 ac0_val = ac0_err = 0
 
             gauss_data = \
-            matrix_elements[(matrix_elements['kernel'] == 'GAUSS') & (matrix_elements['channel'] == channel)][
+            matrix_elements[(matrix_elements['kernel'] == 'GAUSS') & (matrix_elements['channel'] == channel) & (matrix_elements['rep'] == rep)][
                 'c0'].min()
             cauchy_data = \
-            matrix_elements[(matrix_elements['kernel'] == 'CAUCHY') & (matrix_elements['channel'] == channel)][
+            matrix_elements[(matrix_elements['kernel'] == 'CAUCHY') & (matrix_elements['channel'] == channel)  & (matrix_elements['rep'] == rep)][
                 'c0'].min()
 
             err_gauss_min = \
-            matrix_elements[(matrix_elements['kernel'] == 'GAUSS') & (matrix_elements['channel'] == channel)][
+            matrix_elements[(matrix_elements['kernel'] == 'GAUSS') & (matrix_elements['channel'] == channel)  & (matrix_elements['rep'] == rep)][
                 'errorc0'].min()
             err_cauchy_min = \
-            matrix_elements[(matrix_elements['kernel'] == 'CAUCHY') & (matrix_elements['channel'] == channel)][
+            matrix_elements[(matrix_elements['kernel'] == 'CAUCHY') & (matrix_elements['channel'] == channel)  & (matrix_elements['rep'] == rep)][
                 'errorc0'].min()
-
+            print(rep)
             gauss_min_with_error = add_error(gauss_data, err_gauss_min) if not pd.isna(gauss_data) else '-'
             cauchy_min_with_error = add_error(cauchy_data, err_cauchy_min) if not pd.isna(cauchy_data) else '-'
-
+            row_count +=1
             ac0_with_error = add_error(ac0_val, ac0_err)
             if rep == 'fund':
+                 # Skip unwanted channels
+                 if ch in ['T', 'AT', 'S', 't', 'at', 's']:
+                      continue
                  latex_table += f"{ch} & {gauss_min_with_error} & {cauchy_min_with_error} & {ac0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\ \n"
-            else: 
+            else:
+                 # Skip unwanted channels
+                 if ch in ['T', 'AT', 'S', 't', 'at', 's']:
+                      continue 
                  latex_table += f"{ch2} & {gauss_min_with_error} & {cauchy_min_with_error} & {ac0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\ \n"
-            row_count += 1
 
     latex_table += "\\hline\n"
     latex_table += "\\end{tabular}\n"

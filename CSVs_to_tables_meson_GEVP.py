@@ -104,6 +104,7 @@ for n in range(3):
         latex_table += "\\hline\n"
         for chunk in pd.read_csv(f'./CSVs/{ensemble}_spectral_density_spectrum.csv', chunksize=chunk_size):
             channel = chunk['channel'].min()
+            #print(channel)
             repr = chunk['rep'].min()
             if repr == 'fund':
                 rep = 'f'
@@ -111,7 +112,7 @@ for n in range(3):
                 rep = repr
             
             ENSEMBLE = prefix2[index]
-            
+            CHANNEL2 = 'ciao' 
             if channel == 'g5' and repr == 'fund':
                 CHANNEL2 = 'ps'
                 try:

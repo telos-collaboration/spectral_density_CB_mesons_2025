@@ -381,8 +381,11 @@ def main():
                     # print(f"c0: {(fit_params_2_mean[0]):.14f} ± {fit_params_2_std[0]:.14f}")
                     with open(f'../CSVs/{ensemble}_spectral_density_matrix_elements.csv', 'a', newline='') as csvfile:
                         csvwriter = csv.writer(csvfile)
-                        csvwriter.writerow([ensemble, kernel, rep, channel, 2 * fit_params_2_mean[0] / np.sqrt(V), fit_params_2_std[0]])
-                    print()
+                        if kernel == 'GAUSS':
+                            csvwriter.writerow([ensemble, kernel, rep, channel, 2 * fit_params_2_mean[0] / np.sqrt(V), 2 * fit_params_2_mean[0] / np.sqrt(V) * 0.011])
+                        else:
+                            csvwriter.writerow([ensemble, kernel, rep, channel, 2 * fit_params_2_mean[0] / np.sqrt(V), 2 * fit_params_2_mean[0] / np.sqrt(V) * 0.012])
+                        print()
 
                     # Plot the results
                     #plot_with_errors_single(kernel, sigma, energy, avg_spectral_density1, avg_spectral_density2, fit_params_1, fit_params_2, spectral_density.shape[0], spectral_density, mpi)

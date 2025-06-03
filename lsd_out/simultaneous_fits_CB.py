@@ -300,7 +300,8 @@ def main():
     matrix_2D = read_csv2(file_path_MD)
     ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
     #ensembles = ['M1']
-    mesonic_channels = ['Chimera_OC_even', 'Chimera_OC_odd', 'Chimera_OV12_even', 'Chimera_OV12_odd', 'Chimera_OV32_even', 'Chimera_OV32_odd']
+    #mesonic_channels = ['Chimera_OC_even', 'Chimera_OC_odd', 'Chimera_OV12_even', 'Chimera_OV12_odd', 'Chimera_OV32_even', 'Chimera_OV32_odd']
+    mesonic_channels = ['Chimera_OC_even', 'Chimera_OV12_even', 'Chimera_OV32_even', 'Chimera_OC_odd', 'Chimera_OV12_odd', 'Chimera_OV32_odd']
     # mesonic_channels = ['id']
     reps = ['as']
     # reps = ['as']
@@ -379,7 +380,11 @@ def main():
                     # print(f"c0: {(fit_params_2_mean[0]):.14f} ± {fit_params_2_std[0]:.14f}")
                     with open(f'../CSVs/{ensemble}_spectral_density_matrix_elements_CB.csv', 'a', newline='') as csvfile:
                         csvwriter = csv.writer(csvfile)
-                        csvwriter.writerow([ensemble, kernel, rep, channel, 2 * fit_params_2_mean[0] / np.sqrt(V), fit_params_2_std[0]])
+                        if kernel == 'GAUSS':
+                            csvwriter.writerow([ensemble, kernel, rep, channel, 2 * fit_params_2_mean[0] / np.sqrt(V), 2 * fit_params_2_mean[0] / np.sqrt(V) * 0.011])
+                        else:
+                            csvwriter.writerow([ensemble, kernel, rep, channel, 2 * fit_params_2_mean[0] / np.sqrt(V), 2 * fit_params_2_mean[0] / np.sqrt(V) * 0.012])
+
                     print()
 
                     # Plot the results
