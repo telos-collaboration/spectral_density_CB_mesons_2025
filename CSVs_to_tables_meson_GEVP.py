@@ -48,7 +48,7 @@ def add_error(channel_E0, err):
 
         #print(err_str)
         if len(str(err_str)) == 1:
-            err_str = str(int(err_str)*10)
+            err_str = str(int(err_str)*30)
         # Determine the number of significant digits in the error
         err_significant_digits = len(err_str) + leading_zeros
 
@@ -122,6 +122,7 @@ for n in range(3):
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'average: {channel_E0}')
                     print(f'error: {err_channel_E0}')
                 except KeyError:
@@ -143,6 +144,7 @@ for n in range(3):
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'average: {channel_E0}')
                     print(f'error: {err_channel_E0}')
                 except KeyError:
@@ -163,6 +165,7 @@ for n in range(3):
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'average: {channel_E0}')
                     print(f'error: {err_channel_E0}')
                 except KeyError:
@@ -183,6 +186,7 @@ for n in range(3):
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'average: {channel_E0}')
                     print(f'error: {err_channel_E0}')
                 except KeyError:
@@ -203,6 +207,7 @@ for n in range(3):
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'average: {channel_E0}')
                     print(f'error: {err_channel_E0}')
                 except KeyError:
@@ -223,6 +228,7 @@ for n in range(3):
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'average: {channel_E0}')
                     print(f'error: {err_channel_E0}')
                 except KeyError:
@@ -242,6 +248,7 @@ for n in range(3):
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'average: {channel_E0}')
                     print(f'error: {err_channel_E0}')
                 except KeyError:
@@ -262,6 +269,7 @@ for n in range(3):
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'average: {channel_E0}')
                     print(f'error: {err_channel_E0}')
                 except KeyError:
@@ -283,6 +291,7 @@ for n in range(3):
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
                     print(f'average: {channel_E0}')
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'error: {err_channel_E0}')
                 except KeyError:
                     channel_E0 = '-'
@@ -302,6 +311,7 @@ for n in range(3):
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'average: {channel_E0}')
                     print(f'error: {err_channel_E0}')
                 except KeyError:
@@ -322,6 +332,7 @@ for n in range(3):
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'average: {channel_E0}')
                     print(f'error: {err_channel_E0}')
                 except KeyError:
@@ -342,6 +353,7 @@ for n in range(3):
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
+                    err_channel_E0 = 30.*err_channel_E0 
                     print(f'average: {channel_E0}')
                     print(f'error: {err_channel_E0}')
                 except KeyError:
@@ -406,7 +418,7 @@ for n in range(3):
                 cauchy_min_with_error = '-'
                 cauchy_max_with_error = '-'
                 channel_E0_with_error = '-'
-            
+             
             # Adding the formatted value to the LaTeX table
             latex_table += f"{CHANNEL2} & {k_peaks} & {n_source} & {n_sink} & {gauss_min_with_error} & {gauss_max_with_error} & {cauchy_min_with_error} & {cauchy_max_with_error} & {channel_E0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
 

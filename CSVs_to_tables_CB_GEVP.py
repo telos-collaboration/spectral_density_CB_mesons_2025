@@ -121,27 +121,7 @@ for n in range(3):
                         raise ValueError("Result contains NaN values")
                     print(f'average: {channel_E0}')
                     print(f'error: {err_channel_E0}')
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-                except ValueError as e:
-                    # Handle cases where the results are NaN
-                    print(f"ValueError: {e}")
-                    channel_E0 = 'NaN'
-                    err_channel_E0 = 'NaN'
-                    
-            elif channel == 'Chimera_OC_odd' and repr == 'as':
-                CHANNEL = 'lambda_odd'
-                CHANNEL2 = 'V'
-                try:
-                    file_path = f'./JSONs/{ENSEMBLE}/chimera_gevp_{CHANNEL}_samples.json'
-                    print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL, rep, n)
-                    # Check if the results are nan
-                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
-                        raise ValueError("Result contains NaN values")
-                    print(f'average: {channel_E0}')
-                    print(f'error: {err_channel_E0}')
+                    err_channel_E0 = 30.*err_channel_E0
                 except KeyError:
                     channel_E0 = '-'
                     err_channel_E0 = '-'
@@ -162,6 +142,7 @@ for n in range(3):
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
                     print(f'average: {channel_E0}')
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'error: {err_channel_E0}')
                 except KeyError:
                     channel_E0 = '-'
@@ -171,30 +152,12 @@ for n in range(3):
                     print(f"ValueError: {e}")
                     channel_E0 = 'NaN'
                     err_channel_E0 = 'NaN'
-                    
+            
+
+
                 # Add similar try-except blocks for other conditions
-            elif channel == 'Chimera_OV12_odd' and repr == 'as':
-                CHANNEL = 'sigma_odd'
-                CHANNEL2 = 'AV'
-                try:
-                    file_path = f'./JSONs/{ENSEMBLE}/chimera_gevp_{CHANNEL}_samples.json'
-                    print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL, rep, n)
-                    # Check if the results are nan
-                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
-                        raise ValueError("Result contains NaN values")
-                    print(f'average: {channel_E0}')
-                    print(f'error: {err_channel_E0}')
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-                except ValueError as e:
-                    # Handle cases where the results are NaN
-                    print(f"ValueError: {e}")
-                    channel_E0 = 'NaN'
-                    err_channel_E0 = 'NaN'
-                    
-                # Add similar try-except blocks for other conditions
+           
+
             elif channel == 'Chimera_OV32_even' and repr == 'as':
                 CHANNEL = 'sigmastar_even'
                 CHANNEL2 = 'AT'
@@ -206,6 +169,55 @@ for n in range(3):
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
                     print(f'average: {channel_E0}')
+                    err_channel_E0 = 30.*err_channel_E0
+                    print(f'error: {err_channel_E0}')
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                except ValueError as e:
+                    # Handle cases where the results are NaN
+                    print(f"ValueError: {e}")
+                    channel_E0 = 'NaN'
+                    err_channel_E0 = 'NaN'
+
+                # Add similar try-except blocks for other conditions
+
+            elif channel == 'Chimera_OC_odd' and repr == 'as':
+                CHANNEL = 'lambda_odd'
+                CHANNEL2 = 'V'
+                try:
+                    file_path = f'./JSONs/{ENSEMBLE}/chimera_gevp_{CHANNEL}_samples.json'
+                    print(file_path)
+                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL, rep, n)
+                    # Check if the results are nan
+                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
+                        raise ValueError("Result contains NaN values")
+                    print(f'average: {channel_E0}')
+                    err_channel_E0 = 30.*err_channel_E0
+                    print(f'error: {err_channel_E0}')
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                except ValueError as e:
+                    # Handle cases where the results are NaN
+                    print(f"ValueError: {e}")
+                    channel_E0 = 'NaN'
+                    err_channel_E0 = 'NaN'
+
+
+
+            elif channel == 'Chimera_OV12_odd' and repr == 'as':
+                CHANNEL = 'sigma_odd'
+                CHANNEL2 = 'AV'
+                try:
+                    file_path = f'./JSONs/{ENSEMBLE}/chimera_gevp_{CHANNEL}_samples.json'
+                    print(file_path)
+                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL, rep, n)
+                    # Check if the results are nan
+                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
+                        raise ValueError("Result contains NaN values")
+                    print(f'average: {channel_E0}')
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'error: {err_channel_E0}')
                 except KeyError:
                     channel_E0 = '-'
@@ -228,6 +240,7 @@ for n in range(3):
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
                     print(f'average: {channel_E0}')
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'error: {err_channel_E0}')
                 except KeyError:
                     channel_E0 = '-'
