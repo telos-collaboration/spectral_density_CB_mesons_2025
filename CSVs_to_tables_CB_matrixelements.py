@@ -33,7 +33,7 @@ def add_error(channel_E0, err):
 # Read metadata CSV
 metadata = pd.read_csv('./lsd_out/metadata/metadata_spectralDensity_chimerabaryons.csv')
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-
+#ensembles = ['M1']
 # Mapping for ensemble and channel names
 ensemble_map = {
     'M1': '48x20x20x20b6.5mf0.71mas1.01',
@@ -45,14 +45,15 @@ ensemble_map = {
 
 channel_map = {
     'Chimera_OC_even': 'b_Lambda_even',
-    'Chimera_OC_odd': 'b_Lambda_odd',
     'Chimera_OV12_even': 'b_Sigma_even',
-    'Chimera_OV12_odd': 'b_Sigma_odd',
     'Chimera_OV32_even': 'b_SigmaS_even',
+    'Chimera_OC_odd': 'b_Lambda_odd',
+    'Chimera_OV12_odd': 'b_Sigma_odd',
     'Chimera_OV32_odd': 'b_SigmaS_odd'
 }
 
-channel2 = ['lambda_even', 'lambda_odd', 'sigma_even', 'sigma_odd', 'sigmastar_even', 'sigmastar_odd']
+channel2 = ['lambda_even', 'sigma_even', 'sigmastar_even', 'lambda_odd', 'sigma_odd', 'sigmastar_odd']
+#channel2 = ['lambda_even', 'lambda_odd', 'sigma_even', 'sigma_odd', 'sigmastar_even', 'sigmastar_odd']
 
 prefix = ['Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20', 'Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20',
           'Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20', 'Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20',
@@ -63,7 +64,7 @@ for idx, ensemble in enumerate(ensembles):
     ensemble2 = prefix[idx]
     matrix_elements_path = f'./CSVs/{ensemble}_spectral_density_matrix_elements_CB.csv'
     matrix_elements = pd.read_csv(matrix_elements_path)
-    chunk_size = 4
+    chunk_size = 2
 
     # Initialize LaTeX table string
     latex_table = "\\begin{table}[ht]\n"
@@ -74,7 +75,7 @@ for idx, ensemble in enumerate(ensembles):
     latex_table += "\\hline\n"
     idx2 = 0
     # Read data for the current ensemble in chunks
-    for chunk in pd.read_csv(f'./CSVs/{ensemble}_chimerabaryons_spectral_density_spectrum.csv', chunksize=chunk_size):
+    for chunk in pd.read_csv(f'./CSVs/{ensemble}_spectral_density_matrix_elements_CB.csv', chunksize=chunk_size):
         unique_channels = chunk['channel'].unique()
 
         for channel in unique_channels:
@@ -123,7 +124,7 @@ for idx, ensemble in enumerate(ensembles):
                 cauchy_min_with_error = add_error(cauchy_min, err_cauchy_min)
             else:
                 cauchy_min_with_error = '-'
-
+            print(f'{channelone}_matrix_element')
             if f'{channelone}_matrix_element' in json_data:
                 samples = np.array(json_data[f'{channelone}_matrix_element'])
                 ac0_val = np.mean(samples)
