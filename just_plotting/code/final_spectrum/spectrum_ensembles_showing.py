@@ -97,7 +97,7 @@ for ensemble, file_list in files:
         for i, (val, err) in enumerate(zip(values, errors)):
             if 'CB' in file_name:
                 x_pos = 2.3 + i + ensemble_offset
-                color = cb_colors[1]
+                color = cb_colors[2]
             else:
                 x_pos = 0.3 + i + ensemble_offset
                 color = colors[2]
@@ -113,13 +113,13 @@ for ensemble, file_list in files:
                 hatch_color = colors[2]
                 color = 'none'
                 if 'CB' in file_name:
-                    hatch_color = cb_colors[1]
+                    hatch_color = cb_colors[2]
             elif ensemble == 'M5':
                 hatch = hatches[1]
                 hatch_color = colors[2]
                 color = 'none'
                 if 'CB' in file_name:
-                    hatch_color = cb_colors[1]
+                    hatch_color = cb_colors[2]
 
             rect = plt.Rectangle((x_pos - 0.2, val - err), 0.15 if ensemble in ['M4', 'M5'] else 0.4, 2 * err, color=color, alpha=alpha, hatch=hatch)
             if hatch_color:
