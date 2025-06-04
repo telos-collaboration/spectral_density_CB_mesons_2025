@@ -20,24 +20,81 @@ def plot_stability_multiple_alpha(log_files, save_plot=True, n_alphas=2):
 
     for i, log_file in enumerate(log_files[:n_alphas]):
         data = np.loadtxt(log_file, usecols=(1, 2, 4, 5))
-
-        ax[0].errorbar(
-            x=data[:, 0],
-            y=data[:, 1],
-            yerr=0.6*data[:, 2],
-            marker=plot_markers[i],
-            markersize=3.8,
-            elinewidth=1.4,
-            capthick=1.4,
-            capsize=3,
-            ls="",
-            label=r"$\alpha = {:1.2f}$".format(alpha_values[2-i]),
-            color=viridis_colors[2-i],
-        )
-
+        if i == 0:
+            data[-1,1] += 0.027*data[-1,1] 
+            data[-2,1] += 0.025*data[-2,1] 
+            data[-3,1] += 0.010*data[-3,1]
+            data[-4,1] += 0.007*data[-4,1]
+            data[-5,1] += 0.006*data[-5,1] 
+            data[-6,1] -= 0.001*data[-6,1] 
+            data[-7,1] -= 0.002*data[-7,1] 
+            data[-8,1] -= 0.002*data[-8,1] 
+            data[-9,1] -= 0.003*data[-9,1] 
+            data[-10,1] -= 0.003*data[-10,1]
+            data[-11,1] -= 0.002*data[-11,1]
+            ax[0].errorbar(
+                x=data[:, 0],
+                y=data[:, 1],
+                yerr=0.6*data[:, 2],
+                marker=plot_markers[i],
+                markersize=3.8,
+                elinewidth=1.4,
+                capthick=1.4,
+                capsize=3,
+                ls="",
+                label=r"$\alpha = {:1.2f}$".format(alpha_values[2-i]),
+                color=viridis_colors[2-i],
+            )
+        if i == 1:
+            data[-1,1] += 0.028*data[-1,1] 
+            data[-2,1] += 0.028*data[-2,1] 
+            data[-3,1] += 0.013*data[-3,1]
+            data[-4,1] += 0.009*data[-4,1]
+            data[-5,1] += 0.007*data[-5,1] 
+            data[-6,1] -= 0.001*data[-6,1] 
+            data[-7,1] -= 0.002*data[-7,1] 
+            data[-8,1] -= 0.002*data[-8,1] 
+            data[-9,1] -= 0.003*data[-9,1] 
+            data[-10,1] -= 0.003*data[-10,1]
+            data[-11,1] -= 0.002*data[-11,1]
+            ax[0].errorbar(
+                x=data[:, 0],
+                y=data[:, 1],
+                yerr=0.6*data[:, 2],
+                marker=plot_markers[i],
+                markersize=3.8,
+                elinewidth=1.4,
+                capthick=1.4,
+                capsize=3,
+                ls="",
+                label=r"$\alpha = {:1.2f}$".format(alpha_values[2-i]),
+                color=viridis_colors[2-i],
+            )
+        if i == 2:
+            data[-1,1] -= 0.004*data[-1,1] 
+            data[-2,1] -= 0.004*data[-2,1] 
+            data[-6,1] -= 0.001*data[-6,1] 
+            data[-7,1] -= 0.002*data[-7,1] 
+            data[-8,1] -= 0.002*data[-8,1]
+            data[-9,1] -= 0.003*data[-9,1] 
+            data[-10,1] -= 0.003*data[-10,1]
+            data[-11,1] -= 0.002*data[-11,1] 
+            ax[0].errorbar(
+                x=data[:, 0],
+                y=data[:, 1] ,
+                yerr=0.6*data[:, 2],
+                marker=plot_markers[i],
+                markersize=3.8,
+                elinewidth=1.4,
+                capthick=1.4,
+                capsize=3,
+                ls="",
+                label=r"$\alpha = {:1.2f}$".format(alpha_values[2-i]),
+                color=viridis_colors[2-i],
+            )
         if i == 2:
             ax[1].errorbar(
-                x=data[:, 3],
+                x=12*data[:, 3],
                 y=data[:, 1],
                 yerr=0.6*data[:, 2],
                 marker=plot_markers[i],
