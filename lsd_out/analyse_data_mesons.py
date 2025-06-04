@@ -122,9 +122,8 @@ def main():
 
         #   Prepare
         cNorm = mpf(str(corr.central[1] ** 2))
-        
+
         energies = np.linspace(par.emin, par.emax, par.Ne)
-        
 
         matrix_bundle = MatrixBundle(Bmatrix=corr.mpcov, bnorm=cNorm)
 
@@ -146,7 +145,7 @@ def main():
         )  # Lots of plots as it is
         HLT.plotResult()
         '''
-        #end()
+        # end()
 
     ####################### External data for make rho finding easier #######################
     categories = ['PS', 'V', 'T', 'AV', 'AT', 'S', 'ps', 'v', 't', 'av', 'at', 's']
@@ -166,8 +165,8 @@ def main():
     # Kernel in HLT
     kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
 
-    #kerneltype = ['CAUCHY']
-    
+    # kerneltype = ['CAUCHY']
+
     def process_channel(channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path):
         Nsource = matrix_4D[index][4][k]
         Nsink = matrix_4D[index][5][k]
@@ -196,7 +195,7 @@ def main():
                 print(dataset_path, file=file)
         if dataset is not None:
             translate.save_matrix_to_file2(dataset,
-                                          f'corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt')
+                                           f'corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt')
         mpi = matrix_4D[index][1][k]
         if kernel == 'HALFNORMGAUSS':
             if rep == 'fund':
@@ -246,13 +245,13 @@ def main():
                 print(f"The subdirectory '{outdir}' exists and its size is at least 0.115 MB.")
             else:
                 print(f"The subdirectory '{outdir}' does not exist or its size is less than 0.115 MB.")
-                findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi, hltParams)
+                findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,hltParams)
         else:
             print(f"The subdirectory '{outdir}' does not exist or its size is less than 0.115 MB.")
             directory_size = get_directory_size(subdirectory_path)
             size_in_megabytes = directory_size / (1024 * 1024)  # Convert bytes to megabytes
             print(f"Size of the subdirectory '{outdir}': {size_in_megabytes:.2f} MB")
-            findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi, hltParams)
+            findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,hltParams)
 
     for sources in range(2):
         # Initialize dictionaries to store the data
@@ -325,7 +324,7 @@ def main():
                         process.start()
             for process in processes:
                 process.join()
-        
+
         # Consider M1 for vector meson fundamental
         mpi = matrix_4D[0][1][1]
         channel = 'gi'
@@ -379,6 +378,49 @@ def main():
                 print(f"Copied {src_file} to {dest_file}")
             else:
                 print(f"File {src_file} does not exist and cannot be copied")
+
+            
+    import pandas as pd
+
+    # Input data
+    energy = np.linspace(0.30, 1.29, 7)
+
+    # Load the CSV file
+    df = pd.read_csv('./metadata/metadata_spectralDensity.csv', index_col=0)
+
+    # Define the columns and rows you're interested in
+    cols = ['af_a', 'af_b', 'af_c', 'af_d', 'af_e', 'af_f', 'af_g']
+
+    # Extract and scale the arrays
+    asd1 = df.loc['M1', cols].values * 1e-6
+    egf1 = df.loc['M2', cols].values * 1e-6
+    asd2 = df.loc['M3', cols].values * 1e-6
+    egf2 = df.loc['M4', cols].values * 1e-6
+
+
+    # Number of bootstraps
+    num_bootstrap = 300
+
+    # Output directories
+    os.makedirs("../input_fit/lsdensity_samples1", exist_ok=True)
+    os.makedirs("../input_fit/lsdensity_samples2", exist_ok=True)
+
+    # Helper function to generate and save
+    def g_s(avg_array, err_array, output_dir):
+        for i, E in enumerate(energy):
+            mean = avg_array[i]
+            std = err_array[i]
+            samples = np.random.normal(loc=mean, scale=std, size=num_bootstrap)
+            filename = f"lsdensitiesamplesE{E:.16f}sig{std:.16f}"
+            filepath = os.path.join(output_dir, filename)
+            with open(filepath, "w") as f:
+                for j, sample in enumerate(samples):
+                    f.write(f"{j} {sample}\n")
+
+    # Generate for both
+    g_s(asd1, egf1, "../input_fit/lsdensity_samples1")
+    g_s(asd2, egf2, "../input_fit/lsdensity_samples2")
+
 
 
 if __name__ == "__main__":
