@@ -13,3 +13,5 @@ cd ../final_matrixel
 python matrix_MN.py
 cd ../stability_plot
 python stability.py
+cd ../sfs
+python sfs.py
