@@ -482,4 +482,159 @@ for key, file_path in file_paths.items():
 
 
 
+import pandas as pd
+import os
+
+# Load renormalisation constants
+z_factors = pd.read_csv('./metadata/renormalise.csv')
+
+# Define the file paths for each M file
+file_paths = {
+    "M1": '../CSVs/M1_spectral_density_matrix_elements.csv',
+    "M2": '../CSVs/M2_spectral_density_matrix_elements.csv',
+    "M3": '../CSVs/M3_spectral_density_matrix_elements.csv',
+    "M4": '../CSVs/M4_spectral_density_matrix_elements.csv',
+    "M5": '../CSVs/M5_spectral_density_matrix_elements.csv'
+}
+
+# Define the order of channels and reps
+order = [
+    ("g5", "fund"),
+    ("gi", "fund"),
+    ("g5gi", "fund"),
+    ("g5", "as"),
+    ("gi", "as"),
+    ("g5gi", "as"),
+]
+
+# Mapping from (channel, rep) to Z-field
+z_field_map = {
+    ("g5", "fund"): "Z_PS_fund",
+    ("gi", "fund"): "Z_V_fund",
+    ("g5gi", "fund"): "Z_A_fund",
+    ("g5", "as"): "Z_PS_as",
+    ("gi", "as"): "Z_V_as",
+    ("g5gi", "as"): "Z_A_as",
+}
+
+# Output directory
+os.makedirs('../input_fit/final_matrixel', exist_ok=True)
+
+def process_spectrum(file_path, ensemble):
+    df = pd.read_csv(file_path)
+    results_aE_0 = {}
+    grouped = df.groupby(['channel', 'rep'])
+
+    for (channel, rep), group in grouped:
+        # Get renormalisation factor
+        z_field = z_field_map.get((channel, rep))
+        if z_field is None:
+            continue
+        ZA = z_factors.loc[z_factors['Ens'] == ensemble, z_field].values[0]
+
+        values = []
+        for i in range(2):
+            if i < len(group):
+                row = group.iloc[i]
+                aE_0 = row['c0'] * ZA
+                err = row['errorc0'] * ZA * 6. if row['errorc0'] != 0 else 0.001 * ZA
+                values.append(f"{aE_0} {err}")
+            else:
+                values.append("0 0")
+
+        results_aE_0[(channel, rep)] = ' '.join(values)
+
+    return results_aE_0
+
+# Process and write files
+for key, file_path in file_paths.items():
+    results_aE_0 = process_spectrum(file_path, ensemble=key)
+    output_file = f'../input_fit/final_matrixel/{key}_ground.txt'
+
+    with open(output_file, 'w') as f:
+        for channel, rep in order:
+            line = results_aE_0.get((channel, rep), "0 0 0 0 0 0 0 0")
+            f.write(line + '\n')
+
+    print(f"Wrote renormalised output to {output_file}")
+
+    
+
+
+
+import pandas as pd
+import os
+
+# Load renormalisation constants
+z_factors = pd.read_csv('./metadata/renormalise.csv')
+
+# Define the file paths for each M file
+file_paths = {
+    "M1": '../CSVs/M1_spectral_density_matrix_elements_CB.csv',
+    "M2": '../CSVs/M2_spectral_density_matrix_elements_CB.csv',
+    "M3": '../CSVs/M3_spectral_density_matrix_elements_CB.csv',
+    "M4": '../CSVs/M4_spectral_density_matrix_elements_CB.csv',
+    "M5": '../CSVs/M5_spectral_density_matrix_elements_CB.csv'
+}
+
+# Define the order of channels and reps
+order = [
+    ("Chimera_OC_even", "as"),
+    ("Chimera_OV12_even", "as"),
+    ("Chimera_OV32_even", "as"),
+    ("Chimera_OC_odd", "as"),
+    ("Chimera_OV12_odd", "as"),
+    ("Chimera_OV32_odd", "as"),
+]
+
+# Channel-to-Z-factor mapping
+z_field_map = {
+    "Chimera_OC_even": "Z_Lambda",
+    "Chimera_OC_odd": "Z_Lambda",
+    "Chimera_OV12_even": "Z_Sigma",
+    "Chimera_OV32_even": "Z_Sigma",
+    "Chimera_OV12_odd": "Z_Sigma",
+    "Chimera_OV32_odd": "Z_Sigma",
+}
+
+# Output directory
+os.makedirs('../input_fit/final_matrixel', exist_ok=True)
+
+def process_spectrum(file_path, ensemble):
+    df = pd.read_csv(file_path)
+    results_aE_0 = {}
+    grouped = df.groupby(['channel', 'rep'])
+
+    for (channel, rep), group in grouped:
+        z_field = z_field_map.get(channel)
+        if z_field is None:
+            continue
+
+        ZA = z_factors.loc[z_factors['Ens'] == ensemble, z_field].values[0]
+
+        values = []
+        for i in range(2):
+            if i < len(group):
+                row = group.iloc[i]
+                aE_0 = row['c0'] * ZA
+                err = row['errorc0'] * ZA * 6. if row['errorc0'] != 0 else 0.001 * ZA
+                values.append(f"{aE_0} {err}")
+            else:
+                values.append("0 0")
+
+        results_aE_0[(channel, rep)] = ' '.join(values)
+
+    return results_aE_0
+
+# Process and write outputs
+for key, file_path in file_paths.items():
+    results_aE_0 = process_spectrum(file_path, ensemble=key)
+    
+    output_file_path_ground = f'../input_fit/final_matrixel/CB_{key}_ground.txt'
+    with open(output_file_path_ground, 'w') as f_ground:
+        for channel, rep in order:
+            line = results_aE_0.get((channel, rep), "0 0 0 0 0 0 0 0")
+            f_ground.write(line + '\n')
+
+    print(f"Results for {key} written to {output_file_path_ground}")
 
