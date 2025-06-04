@@ -54,32 +54,13 @@ Maurizio Piai, Davide Vadacchino.
 
 * The whole analysis can be done automatically:
 
-   * Make sure that ``input_fit/``, ``input_topology/`` and ``input_correlators/`` contain the relevant files from the data release,
-   as discussed above.
    * To reproduce all the plots and results in the tables present in the paper, please run
      ``reproduce_everything.sh``. The results will be found in ``plots/`` and ``tables/``.
-   * If ``latex`` is detected in the system, the full workflow will be ran. Otherwise, CSVs files will be produced in ``CSVs/``. 
-        * In such a case, the output CSV files in ``CSVs/`` can be used in a later moment to produce plots and tex tables. This can be
-        achieved by running ``plots_and_tables.sh`` .
+   * If ``latex`` is detected in the system, the full workflow will be ran. Otherwise, CSVs files will be produced in ``CSVs/`` and JSONs in ``JSONs/``. The tables will be generated in ``tables/``. 
+        * In such a case, the output CSV and JSONs files can be used in a later moment to produce plots. This can be
+        achieved by running ``run_plots.sh`` .
 
-* Otherwise, each individual step can be achieved separately:
-
-   * Make sure that ``input_topology/`` is full. To reproduce all the plots that are shown in the paper, run 
-     ``bash run_plots.sh``.  The results will be found in ``plots/``.
-
-   * Make sure that the HDF5 file containing all the data is present in the 
-     directory ``input_correlators/`` before running ``bash run_spectral_densities.sh``.
-
-     The spectral densities can be found and fitted:
-      * If ``input_fit/`` has been filled (using the corresponding directory in https://doi.org/##.####/zenodo.########)
-        the fitting procedure will be applied to pre-reconstructed spectral densities.
-      * If ``input_fit/`` is empty, the code will reconstruct from scratch the spectral densities and then
-        to fit them. This procedure may take quite a long time.
-  
-     Either way, to do so, run ``run_spectral_densities.sh``. 
-
-   * Make sure that the HDF5 file containing all the data is present in the  directory ``input_correlators/``. The 
-     command ``bash run_plateaus.sh`` reproduces the GEVP plateaus by using the  metadata used for the analysis in the paper.
+   * Make sure that the HDF5 file containing all the data is present in the  directory ``input_correlators/``.
 
 
 
