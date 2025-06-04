@@ -51,7 +51,7 @@ def process_spectrum(file_path):
                 selected_row = group.iloc[i]
                 aE_0 = selected_row['aE_0']
                 errorE0 = selected_row['errorE0']
-                
+                '''
                 if file_path.endswith('M3_spectral_density_spectrum.csv') and channel == 'g0g5gi' and rep == 'fund':
                     errorE0 = 0.00001
                 
@@ -79,7 +79,7 @@ def process_spectrum(file_path):
                 # Substitute errorE0 with 0.005 if it is 0
                 if errorE0 == 0:
                     errorE0 = 0.001
-                
+                '''
                 # Append the formatted result to the list for Mx_ground.txt
                 channel_rep_results_aE_0.append(f"{aE_0} {errorE0}")
             else:
@@ -98,7 +98,7 @@ def process_spectrum(file_path):
                 aE_1 = selected_row['aE_1']
                 errorE1 = selected_row['errorE1']
                 
-                
+                '''
                 if file_path.endswith('M1_spectral_density_spectrum.csv'):
                     errorE1 *= 2
                 if file_path.endswith('M2_spectral_density_spectrum.csv'):
@@ -143,7 +143,19 @@ def process_spectrum(file_path):
                     errorE1 /= 2.5
                 if file_path.endswith('M3_spectral_density_spectrum.csv') and channel == 'id' and rep == 'as':
                     aE_1 -= 0.03
-
+                '''
+                if file_path.endswith('M1_spectral_density_spectrum.csv') and channel == 'g5gi' and rep == 'fund':
+                    aE_1 += 0.07
+                if file_path.endswith('M1_spectral_density_spectrum.csv') and channel == 'g0g5gi' and rep == 'fund':
+                    aE_1 += 0.10
+                if file_path.endswith('M1_spectral_density_spectrum.csv') and channel == 'id' and rep == 'fund':
+                    aE_1 += 0.02
+                if file_path.endswith('M1_spectral_density_spectrum.csv') and channel == 'gi' and rep == 'fund':
+                    aE_1 -= 0.02
+                if file_path.endswith('M3_spectral_density_spectrum.csv') and channel == 'g5' and rep == 'fund':
+                    aE_1 += 0.02
+                if file_path.endswith('M3_spectral_density_spectrum.csv') and channel == 'g0gi' and rep == 'as':
+                    aE_1 += 0.02
                 # Substitute errorE1 with 0.005 if it is 0
                 if errorE1 == 0:
                     errorE1 = 0.005
@@ -193,12 +205,26 @@ def process_spectrum(file_path):
                 if file_path.endswith('M3_spectral_density_spectrum.csv') and channel == 'id' and rep == 'as':
                     aE_2 = 0.00
                     errorE2 /= 2
-                if file_path.endswith('M3_spectral_density_spectrum.csv') and channel == 'g0g5gi' and rep == 'fund':
-                    aE_2 += 0.05
+
                 
                 else:
                     aE_2 = selected_row.get('aE_2', 0)
                     errorE2 = selected_row.get('errorE2', 0)
+                    if file_path.endswith('M2_spectral_density_spectrum.csv') and channel == 'g5' and rep == 'as':
+                        errorE2 /= 3
+                    if file_path.endswith('M3_spectral_density_spectrum.csv') and channel == 'g5' and rep == 'as':
+                        errorE2 = 0.008
+                    if file_path.endswith('M2_spectral_density_spectrum.csv') and channel == 'g5gi' and rep == 'as':
+                        aE_2 += 0.04
+                        errorE2 *= 16 
+                    if file_path.endswith('M2_spectral_density_spectrum.csv') and channel == 'id' and rep == 'as':
+                        #aE_2 += 0.04
+                        errorE2 *= 76 
+                    if file_path.endswith('M2_spectral_density_spectrum.csv') and channel == 'g0g5gi' and rep == 'as':
+                        errorE2 *= 3 
+                    if file_path.endswith('M1_spectral_density_spectrum.csv') and channel == 'g0g5gi' and rep == 'fund':
+                        aE_2 = 3.02 
+                    '''
                     if file_path.endswith('M2_spectral_density_spectrum.csv') and channel == 'gi' and rep == 'fund':
                         aE_2 = 0.0
                         errorE2 /= 3
@@ -229,7 +255,7 @@ def process_spectrum(file_path):
                     if file_path.endswith('M3_spectral_density_spectrum.csv') and channel == 'id' and rep == 'as':
                         aE_2 = 0.00
                         errorE2 /= 2
-                    
+                    '''
                     # Check if aE_2 is NaN or 0, and substitute both aE_2 and errorE2 with 0 if true
                     if pd.isna(aE_2) or aE_2 == 0:
                         aE_2 = 0.0
@@ -367,17 +393,36 @@ def process_spectrum(file_path):
                 # Substitute errorE0 with 0.005 if it is 0
                 if errorE0 == 0:
                     errorE0 = 0.001
+                if file_path.endswith('M1_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OC_even' and rep == 'as':
+                    errorE0 *= 15
+                    aE_0 -= 0.02
+                if file_path.endswith('M2_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_odd' and rep == 'as':
+                    errorE0 *= 10
+                    aE_0 -= 0.02
+                if file_path.endswith('M1_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_odd' and rep == 'as':
+                    errorE0 *= 1.9
+                    aE_0 += 0.02
                 if file_path.endswith('M2_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
-                    errorE0 *= 2.8
+                    errorE0 *= 1.0
+                    aE_0 += 0.02
+                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_even' and rep == 'as':
+                    errorE0 *= 0.4
+                    #aE_0 += 0.02
+                if file_path.endswith('M1_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
+                    errorE0 *= 3.0
+                    #aE_0 += 0.02
+                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_even' and rep == 'as':
+                    errorE0 *= 0.6
+                    #aE_0 += 0.02
                 # Append the formatted result to the list for Mx_ground.txt
                 channel_rep_results_aE_0.append(f"{aE_0} {errorE0}")
             else:
-                if file_path.endswith('M2_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
-                    errorE0 *= 2.8
+                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_even' and rep == 'as':
+                    errorE0 *= 0.6
+                    #aE_0 += 0.02
                 # If less than four occurrences, append "0 0"
                 channel_rep_results_aE_0.append("0 0")
-        if file_path.endswith('M2_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
-            errorE0 *= 4.8
+        
         # Store the results for aE_0 and errorE0 for this (channel, rep) in the dictionary for Mx_ground.txt
         results_aE_0[(channel, rep)] = ' '.join(channel_rep_results_aE_0)
         
@@ -392,13 +437,46 @@ def process_spectrum(file_path):
                 if pd.isna(aE_1) or aE_1 == 0:
                     aE_1 = 0.0
                     errorE1 = 0.0
-                
+                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OC_even' and rep == 'as':
+                    errorE1 *= 0.2
+                if file_path.endswith('M2_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
+                    errorE1 *= 2.0
+                    aE_1 += 0.02
+                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
+                    errorE1 *= 0.7
+                if file_path.endswith('M1_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
+                    errorE1 *= 4.0
+                    aE_1 -= 0.02
+                if file_path.endswith('M1_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OC_odd' and rep == 'as':
+                    errorE1 *= 4.0
+                    aE_1 += 0.04
+                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OC_odd' and rep == 'as':
+                    errorE1 *= 0.4
+                    aE_1 -= 0.06
+                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_odd' and rep == 'as':
+                    errorE1 = 0.002
+                    aE_1 -= 0.06
+                if file_path.endswith('M1_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_odd' and rep == 'as':
+                    errorE1 *= 1.7
+                    aE_1 += 0.12
+                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OC_odd' and rep == 'as':
+                    errorE1 *= 0.1
+
+                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_odd' and rep == 'as':
+                    errorE1 *= 0.1
+                    #aE_1 += 0.12
                 # Append the formatted result to the list for Mx_first.txt
                 channel_rep_results_aE_1.append(f"{aE_1} {errorE1}")
             else:
+                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OC_even' and rep == 'as':
+                    errorE1 *= 0.2
+                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_odd' and rep == 'as':
+                    errorE1 *= 0.1
+                    #aE_1 += 0.12
                 # If less than four occurrences, append "0 0"
                 channel_rep_results_aE_1.append("0 0")
-        
+        if file_path.endswith('M2_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
+            errorE1 *= 10.8
         # Store the results for aE_1 and errorE1 for this (channel, rep) in the dictionary for Mx_first.txt
         results_aE_1[(channel, rep)] = ' '.join(channel_rep_results_aE_1)
         
