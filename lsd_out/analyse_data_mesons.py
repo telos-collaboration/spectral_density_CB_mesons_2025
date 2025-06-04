@@ -122,20 +122,10 @@ def main():
 
         #   Prepare
         cNorm = mpf(str(corr.central[1] ** 2))
-        lambdaMax = 1e0
+        
         energies = np.linspace(par.emin, par.emax, par.Ne)
+        
 
-        hltParams = AlgorithmParameters(
-            alphaA=0,
-            alphaB=1 / 2,
-            alphaC=+1.99,
-            lambdaMax=lambdaMax,
-            lambdaStep=lambdaMax / 2,
-            lambdaScanCap=8,
-            kfactor=0.1,
-            lambdaMin=5e-2,
-            comparisonRatio=0.3,
-        )
         matrix_bundle = MatrixBundle(Bmatrix=corr.mpcov, bnorm=cNorm)
 
         HLT = InverseProblemWrapper(
@@ -177,7 +167,7 @@ def main():
     kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
 
     #kerneltype = ['CAUCHY']
-
+    
     def process_channel(channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path):
         Nsource = matrix_4D[index][4][k]
         Nsink = matrix_4D[index][5][k]
@@ -224,6 +214,18 @@ def main():
         decimal_as_int = int(decimal_part * 100)
         datapath = f'./corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt'
         outdir = f'./{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
+        lambdaMax = 1e0
+        hltParams = AlgorithmParameters(
+            alphaA=0,
+            alphaB=1 / 2,
+            alphaC=+1.99,
+            lambdaMax=lambdaMax,
+            lambdaStep=lambdaMax / 2,
+            lambdaScanCap=8,
+            kfactor=0.1,
+            lambdaMin=5e-2,
+            comparisonRatio=0.3,
+        )
         ne = 10
         emin = 0.3
         emax = 2.2
@@ -244,15 +246,13 @@ def main():
                 print(f"The subdirectory '{outdir}' exists and its size is at least 0.115 MB.")
             else:
                 print(f"The subdirectory '{outdir}' does not exist or its size is less than 0.115 MB.")
-                findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,
-                        hltParams)
+                findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi, hltParams)
         else:
             print(f"The subdirectory '{outdir}' does not exist or its size is less than 0.115 MB.")
             directory_size = get_directory_size(subdirectory_path)
             size_in_megabytes = directory_size / (1024 * 1024)  # Convert bytes to megabytes
             print(f"Size of the subdirectory '{outdir}': {size_in_megabytes:.2f} MB")
-            findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,
-                    hltParams)
+            findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi, hltParams)
 
     for sources in range(2):
         # Initialize dictionaries to store the data
@@ -296,18 +296,18 @@ def main():
             ]
             for ensemble in ensembles
         ]
-        lambdaMax = 1e3
+        lambdaMax2 = 3e3
 
-        hltParams = AlgorithmParameters(
+        hltParams2 = AlgorithmParameters(
             alphaA=0,
             alphaB=1 / 2,
             alphaC=+1.99,
-            lambdaMax=lambdaMax,
-            lambdaStep=lambdaMax / 2,
+            lambdaMax=lambdaMax2,
+            lambdaStep=lambdaMax2 / 2,
             lambdaScanCap=8,
             kfactor=0.1,
-            lambdaMin=5e-2,
-            comparisonRatio=0.3,
+            lambdaMin=7e-1,
+            comparisonRatio=0.001,
         )
         
         ################# Download and use lsdensities on correlators ########################
@@ -328,21 +328,21 @@ def main():
         
         # Consider M1 for vector meson fundamental
         mpi = matrix_4D[0][1][1]
-        channel = 'g5'
+        channel = 'gi'
         rep = 'fund'
         kernel = 'HALFNORMGAUSS'
         ensemble = 'M1'
-        tmp = mpi * 0.33
+        tmp = mpi * 0.70
         sigma = tmp
         decimal_part = tmp / mpi % 1
         decimal_as_int = int(decimal_part * 100)
         Nsource = 80
         Nsink = 80
         datapath = f'./corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt'
-        outdir = f'./stability_{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
+        outdir = f'./{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
         ne = 1
-        emin = 0.90
-        emax = 0.90
+        emin = 0.45
+        emax = 0.45
         periodicity = 'COSH'
         prec = 105
         nboot = 300
@@ -351,7 +351,7 @@ def main():
         A0cut = 0.1
 
         findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,
-                hltParams)
+                hltParams2)
 
         tmax = 24
 
