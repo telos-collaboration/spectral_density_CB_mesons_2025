@@ -16,10 +16,6 @@ Maurizio Piai, Davide Vadacchino.
 * Download this code
 * From the data release at https://doi.org/##.####/zenodo.########
   * Download ``chimera_data_reduced.hdf5``, and place it in ``input_correlators/``
-  * Download ``input_topology.zip``,
-    and extract its contents into    ``input_topology/``
-  * Download ``input_fit/``,
-    and extract its contents into ``input_fit/``.
 
 * To automate find gevp plateaus, a x86-64 version of Snakemake must be used. To set this up, create a new x86-64 Conda environment with Snakemake, using
       
