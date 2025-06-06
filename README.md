@@ -46,6 +46,13 @@ Maurizio Piai, Davide Vadacchino.
 
       conda install -c conda-forge julia
 
+* This code uses a submodule: 
+  Please, follow the instruction before using it, build the environment:
+  
+      conda env create --name wall_decay_constant --file=environment.yml
+
+
+
 ## Code usage
 
 * The whole analysis can be done automatically:
