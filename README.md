@@ -77,7 +77,7 @@ Maurizio Piai, Davide Vadacchino.
    * Make sure that the HDF5 file containing all the data is present in the  directory ``input_correlators/``.
 
 
-* The analysis takes ~24 hours on the ```Sunbird``` supercomputer, where the CPU specifics are:
+* The analysis takes ~24 hours on a single node of the ```Sunbird``` supercomputer, where the CPU specifics are:
   ```2x Intel(R) Xeon(R) Gold 6148 CPU @ 2.40GHz with 20 cores each```.
 
 ## Acknoledgement
