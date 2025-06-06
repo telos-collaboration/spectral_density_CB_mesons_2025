@@ -8,6 +8,17 @@ bash check_latex.sh
 #cd topologies
 #bash main.sh
 
+# Try to find conda.sh dynamically
+CONDA_SH=$(dirname "$(dirname "$(which conda)")")/etc/profile.d/conda.sh
+
+if [ -f "$CONDA_SH" ]; then
+    source "$CONDA_SH"
+    echo "Conda was found"
+else
+    echo "ERROR: conda.sh not found. Please check your conda installation." >&2
+    exit 1
+fi
+
 
 cd just_plotting/code
 cd final_spectrum

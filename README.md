@@ -74,7 +74,7 @@ Maurizio Piai, Davide Vadacchino.
         * In such a case, the output CSV and JSONs files can be used in a later moment to produce plots. This can be
         achieved by running ``run_plots.sh`` .
 
-   * Make sure that the HDF5 file containing all the data is present in the  directory ``input_correlators/``.
+   * Make sure that the HDF5 file containing all the data is present in the  directory ``input_correlators/`` and to put the directories ``metadata/`` and ``raw_data/`` into ``input_fit/``.
 
 
 * The analysis takes ~24 hours on a single node of the ```Sunbird``` supercomputer, where the CPU specifics are:
