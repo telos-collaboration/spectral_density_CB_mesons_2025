@@ -1,9 +1,0 @@
-prefix=/home/niccolo/work/data_releases/data_release_chimera2/spectral_density_CB_mesons_2024/plateaus/.snakemake/conda/360feae6f78bc665656b5b767427c26f_
-exec_prefix=${prefix}
-libdir=${exec_prefix}/lib
-includedir=${prefix}/include 
-
-Name: OpenSSL
-Description: Secure Sockets Layer and cryptography libraries and tools
-Version: 3.3.2
-Requires: libssl libcrypto
