@@ -10,6 +10,11 @@ Niccolò Forzano, Ho Hsiao, Fabian Zierler, Ed Bennett, Luigi Del Debbio, Ryan C
 Deog Ki Hong, Jong-Wan Lee, C.-J. David Lin, Biagio Lucini, Alessandro Lupo,
 Maurizio Piai, Davide Vadacchino.
 
+## Cloning the code
+
+* Clone the repo including all submodules:
+      git clone --recurse-submodules https://github.com/nickforce989/spectral_density_CB_mesons_2025.git
+
 
 ## Set up environments
 
@@ -46,10 +51,10 @@ Maurizio Piai, Davide Vadacchino.
 
       conda install -c conda-forge julia
 
-* This code uses a submodule: 
+* This code uses a submodule: ```CB_autocorrelation_decay_constant```.
   Please, follow the instruction before using it, build the environment:
   
-      conda env create --name wall_decay_constant --file=environment.yml
+      conda env create --name wall_decay_constant --file=CB_autocorrelation_decay_constant/environment.yml
 
 
 
