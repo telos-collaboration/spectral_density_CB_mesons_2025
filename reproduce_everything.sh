@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 # Check if LaTeX is installed
 if ! command -v latex > /dev/null 2>&1; then
     source activate

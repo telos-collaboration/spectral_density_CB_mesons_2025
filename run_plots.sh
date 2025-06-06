@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -eu
+
 bash check_latex.sh
 
 #cd just_plotting/code
