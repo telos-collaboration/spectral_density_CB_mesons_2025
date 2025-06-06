@@ -3,7 +3,7 @@ import read_hdf2
 import translate
 import numpy as np
 import csv
-import multiprocess
+import multiprocessing
 import lsdensities.utils.rhoUtils as u
 from lsdensities.utils.rhoUtils import (
     init_precision,
@@ -26,6 +26,7 @@ import shutil
 
 
 def main():
+    multiprocessing.set_start_method("fork")
     def get_directory_size(directory):
         total_size = 0
         for dirpath, dirnames, filenames in os.walk(directory):
@@ -318,7 +319,7 @@ def main():
                 for rep in reps:
 
                     for k, channel in enumerate(mesonic_channels):
-                        process = multiprocess.Process(target=process_channel, args=(
+                        process = multiprocessing.Process(target=process_channel, args=(
                             channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path))
                         processes.append(process)
                         process.start()
