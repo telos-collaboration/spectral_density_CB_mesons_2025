@@ -25,6 +25,7 @@ import random
 
 
 def main():
+    multiprocessing.set_start_method("fork")
     def get_directory_size(directory):
         total_size = 0
         for dirpath, dirnames, filenames in os.walk(directory):
