@@ -62,6 +62,7 @@ Maurizio Piai, Davide Vadacchino.
 * The whole analysis can be done automatically:
    * Before running, please locate your ``activate`` file, e.g. ``/home/niccolo/miniconda3/bin/activate``
    * Then, add it to ``PATH`` as:
+
               PATH=${PATH}:/home/niccolo/miniconda/bin 
    
    * Then, to reproduce all the plots and results in the tables present in the paper, please run
