@@ -60,9 +60,15 @@ Maurizio Piai, Davide Vadacchino.
 ## Code usage
 
 * The whole analysis can be done automatically:
+   * Before running, please locate your ``activate`` file, e.g. ``/home/niccolo/miniconda3/bin/activate``
+   * Then, add it to ``PATH`` as:
+              PATH=${PATH}:/home/niccolo/miniconda/bin 
+   
+   * Then, to reproduce all the plots and results in the tables present in the paper, please run
+       
+              reproduce_everything.sh
 
-   * To reproduce all the plots and results in the tables present in the paper, please run
-     ``reproduce_everything.sh``. The results will be found in ``plots/`` and ``tables/``.
+     The results will be found in ``plots/`` and ``tables/``.
    * If ``latex`` is detected in the system, the full workflow will be ran. Otherwise, CSVs files will be produced in ``CSVs/`` and JSONs in ``JSONs/``. The tables will be generated in ``tables/``. 
         * In such a case, the output CSV and JSONs files can be used in a later moment to produce plots. This can be
         achieved by running ``run_plots.sh`` .
