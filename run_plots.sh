@@ -38,3 +38,5 @@ bash main.sh
 cp -r assets/wall_comparison.pdf ../plots
 cp -r assets/local_smeared_decay_constants.tex ../tables
 cp -r assets/ensembles.tex ../tables
+cd ..
+python weinberg.py
