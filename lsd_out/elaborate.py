@@ -2,8 +2,9 @@ import shutil
 import os
 import json
 import numpy as np
+import csv
+import re
 
-# Optional: Copy relevant directories first
 def copy_directory(subdir_name):
     src_dir = os.path.join("..", "input_fit", subdir_name)
     dst_dir = os.path.join("..", "CB_autocorrelation_decay_constant", subdir_name)
@@ -17,16 +18,13 @@ def copy_directory(subdir_name):
     shutil.copytree(src_dir, dst_dir)
     print(f"Copied '{src_dir}' to '{dst_dir}'")
 
-# Step 1: Copy 'metadata' and 'raw_data'
 copy_directory("metadata")
 copy_directory("raw_data")
 
-# Step 2: Create 'external_data/smeared' directory
 base_dir = os.path.join("..", "CB_autocorrelation_decay_constant", "external_data", "smeared")
 os.makedirs(base_dir, exist_ok=True)
 print(f"Created directory: {base_dir}")
 
-# Step 3: Copy subdirectories from '../JSONs/' to 'smeared'
 jsons_src = os.path.join("..", "JSONs")
 
 if not os.path.exists(jsons_src):
@@ -39,56 +37,42 @@ for item in os.listdir(jsons_src):
         shutil.copytree(src_path, dst_path)
         print(f"Copied directory '{src_path}' to '{dst_path}'")
 
-# Step 4: Adjustments for specific (directory, observable) pairs
-adjustments = {
-    ("Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20", "f_ps"): -0.0004,
-    ("Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20", "f_v"): -0.004,
-    ("Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20", "f_v"): -0.002,
-    ("Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32", "f_v"): 0.003,
-    ("Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20", "as_ps"): 0.002,
-    ("Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20", "as_ps"): 0.002,
-    ("Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32", "as_ps"): 0.002,
-    ("Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20", "as_v"): 0.007,
-    ("Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20", "as_v"): 0.004,
-}
 
-# Bootstrap function
-def bootstrap_error(samples, n_resamples=10000):
-    resampled_means = [
-        np.mean(np.random.choice(samples, size=len(samples), replace=True))
-        for _ in range(n_resamples)
-    ]
-    return np.std(resampled_means)
 
-# Step 5: Apply adjustments and save to modified_ files
-for (directory, observable), adjustment in adjustments.items():
-    orig_file_path = os.path.join(base_dir, directory, f"meson_extraction_{observable}_samples.json")
 
-    # Load JSON
-    with open(orig_file_path, "r") as file:
-        data = json.load(file)
+# Load metadata
+plateau_data = {}
+with open('../input_fit/metadata_plateaus.csv', newline='') as csvfile:
+    reader = csv.DictReader(csvfile)
+    for row in reader:
+        key = (row['ensemble_name'].strip(), row['channel'].strip())
+        plateau_data[key] = (int(row['plateau_start']), int(row['plateau_end']))
 
-    samples_key = f"{observable}_matrix_element"
-    if samples_key not in data:
-        print(f"Warning: Key '{samples_key}' not found in {orig_file_path}")
-        continue
+# Read and update main.sh
+with open('../CB_autocorrelation_decay_constant/main.sh', 'r') as file:
+    lines = file.readlines()
 
-    # Apply adjustment
-    adjusted_samples = [x + adjustment for x in data[samples_key]]
-    data[samples_key] = adjusted_samples
+updated_lines = []
+pattern = re.compile(
+    r'^(python3\s+src_py/mass_wall\.py\s+--ensemble_name\s+)(\S+)\s+--plateau_start\s+\d+\s+--plateau_end\s+\d+(.*--channel\s+)(\S+)(\s+data_assets/wall_correlators\.hdf5.*)$'
+)
 
-    # Compute stats
-    average = np.mean(adjusted_samples)
-    error = bootstrap_error(adjusted_samples)
+for line in lines:
+    match = pattern.match(line)
+    if match:
+        pre, ensemble_name, mid, channel, post = match.groups()
+        key = (ensemble_name, channel)
+        if key in plateau_data:
+            start, end = plateau_data[key]
+            new_line = f"{pre}{ensemble_name} --plateau_start {start} --plateau_end {end}{mid}{channel}{post}\n"
+            updated_lines.append(new_line)
+        else:
+            print(f"Warning: No metadata found for {key}, keeping original line.")
+            updated_lines.append(line)
+    else:
+        updated_lines.append(line)
 
-    # Print summary
-    print(f"\nDirectory: {directory}, Observable: {observable}")
-    print(f"Adjusted average:        {average:.8f}")
-    print(f"Bootstrap error:         {error:.8f}")
 
-    # Save to new file in the same directory
-    modified_file_path = os.path.join(base_dir, directory, f"meson_extraction_{observable}_samples.json")
-    with open(modified_file_path, "w") as file:
-        json.dump(data, file, indent=2)
-    print(f"Saved modified file: {modified_file_path}")
+with open('../CB_autocorrelation_decay_constant/main.sh', 'w') as file:
+    file.writelines(updated_lines)
 
