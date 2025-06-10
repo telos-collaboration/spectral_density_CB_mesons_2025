@@ -3,7 +3,7 @@ import read_hdf2
 import translate
 import numpy as np
 import csv
-import multiprocessing
+import multiprocess
 import lsdensities.utils.rhoUtils as u
 from lsdensities.utils.rhoUtils import (
     init_precision,
@@ -26,7 +26,7 @@ import shutil
 
 
 def main():
-    multiprocessing.set_start_method("fork")
+    multiprocess.set_start_method("fork")
     def get_directory_size(directory):
         total_size = 0
         for dirpath, dirnames, filenames in os.walk(directory):
@@ -154,7 +154,7 @@ def main():
     mesonic_channels = ['g5', 'gi', 'g0gi', 'g5gi', 'g0g5gi', 'id']
     # Ensembles: M1, M2, M3, M4, M5
     ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    # ensembles = ['M1']
+    #ensembles = ['M1', 'M2']
     # Roots in HDF5 for each ensemble
     roots = ['chimera_out_48x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
              'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
@@ -163,10 +163,11 @@ def main():
              'chimera_out_64x32x32x32nc4nf2nas3b6.5mf0.72mas1.01_APE0.4N50_smf0.24as0.12_s1']
     # Representations considered
     reps = ['fund', 'anti']
+    #reps = ['fund']
     # Kernel in HLT
     kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
 
-    # kerneltype = ['CAUCHY']
+    #kerneltype = ['HALFNORMGAUSS']
 
     def process_channel(channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path):
         Nsource = matrix_4D[index][4][k]
@@ -254,6 +255,17 @@ def main():
             print(f"Size of the subdirectory '{outdir}': {size_in_megabytes:.2f} MB")
             findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,hltParams)
 
+    def get_cpu_count():
+        try:
+            return len(os.sched_getaffinity(0))  # Linux
+        except AttributeError:
+            return multiprocess.cpu_count()  # macOS or fallback
+
+    def wrapper(args):
+        # Unpack the arguments tuple
+        channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path = args
+        return process_channel(channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path)
+
     for sources in range(2):
         # Initialize dictionaries to store the data
         Nsource_C_values_MN = {}
@@ -313,72 +325,106 @@ def main():
         ################# Download and use lsdensities on correlators ########################
         # Replace 'your_file.h5' with the path to your HDF5 file
         file_path = '../input_correlators/chimera_data_reduced.hdf5'
+
         for kernel in kerneltype:
-            processes = []
             for index, ensemble in enumerate(ensembles):
                 for rep in reps:
-
                     for k, channel in enumerate(mesonic_channels):
-                        process = multiprocessing.Process(target=process_channel, args=(
-                            channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path))
-                        processes.append(process)
-                        process.start()
-            for process in processes:
-                process.join()
+                        Nsource = matrix_4D[index][4][k]
+                        Nsink = matrix_4D[index][5][k]
+                        group_prefixes = {
+                            'gi': ['g1', 'g2', 'g3'],
+                            'g0gi': ['g0g1', 'g0g2', 'g0g3'],
+                            'g5gi': ['g5g1', 'g5g2', 'g5g3'],
+                            'g0g5gi': ['g0g5g1', 'g0g5g2', 'g0g5g3']
+                        }
+                        prefix = group_prefixes.get(channel, [channel])
+                        datasets = []
+                        for g in prefix:
+                            dataset_path = f"{roots[index]}/source_N{Nsource}_sink_N{Nsink}/{rep} TRIPLET {g}"
+                            group1 = f"source_N{Nsource}_sink_N{Nsink}"
+                            group2 = f"{rep} TRIPLET {g}"
+                            datasets.append(read_hdf2.extract_dataset(file_path, group2, roots[index], group1))
+                            with open('paths.log', 'a') as file:
+                                print(dataset_path, file=file)
+                        dataset = sum(datasets) / len(datasets) if datasets else None
+                        if channel == 'id' or channel == 'g5':
+                            group2 = f"{rep} TRIPLET {channel}"
+                            dataset_path = f"{roots[index]}/{channel}/{rep} TRIPLET {channel}"
+                            group1 = f'source_N{Nsource}_sink_N{Nsink}'
+                            dataset = read_hdf2.extract_dataset(file_path, group2, roots[index], group1)
+                            with open('paths.log', 'a') as file:
+                                print(dataset_path, file=file)
+                        if dataset is not None:
+                            translate.save_matrix_to_file2(dataset,
+                                                           f'corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt')
 
-        # Consider M1 for vector meson fundamental
-        mpi = matrix_4D[0][1][1]
-        channel = 'gi'
-        rep = 'fund'
-        kernel = 'HALFNORMGAUSS'
-        ensemble = 'M1'
-        tmp = mpi * 0.70
-        sigma = tmp
-        decimal_part = tmp / mpi % 1
-        decimal_as_int = int(decimal_part * 100)
-        Nsource = 80
-        Nsink = 80
-        datapath = f'./corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt'
-        outdir = f'./{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
-        ne = 1
-        emin = 0.45
-        emax = 0.45
-        periodicity = 'COSH'
-        prec = 105
-        nboot = 300
-        e0 = 0.0
-        Na = 3
-        A0cut = 0.1
+        for kernel in kerneltype:
+            # Prepare argument list
+            task_args = [
+                (channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path)
+                for index, ensemble in enumerate(ensembles)
+                for rep in reps
+                for k, channel in enumerate(mesonic_channels)
+            ]
 
-        findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,
-                hltParams2)
+            num_workers = get_cpu_count()
+            with multiprocess.Pool(processes=num_workers) as pool:
+                pool.map(wrapper, task_args)
 
-        tmax = 24
+    # Consider M1 for vector meson fundamental
+    mpi = matrix_4D[0][1][1]
+    channel = 'gi'
+    rep = 'fund'
+    kernel = 'HALFNORMGAUSS'
+    ensemble = 'M1'
+    tmp = mpi * 0.70
+    sigma = tmp
+    decimal_part = tmp / mpi % 1
+    decimal_as_int = int(decimal_part * 100)
+    Nsource = 80
+    Nsink = 80
+    datapath = f'./corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt'
+    outdir = f'./{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
+    ne = 1
+    emin = 0.45
+    emax = 0.45
+    periodicity = 'COSH'
+    prec = 105
+    nboot = 300
+    e0 = 0.0
+    Na = 3
+    A0cut = 0.1
 
-        outdir2 = outdir + f'/tmax{tmax}sigma{sigma}Ne{ne}nboot{nboot}mNorm{mpi}prec{prec}Na{Na}KerType{kernel}/Logs/'
+    findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,
+            hltParams2)
 
-        # Define the log files to copy
-        log_files = [
-            'InverseProblemLOG_AlphaA.log',
-            'InverseProblemLOG_AlphaB.log',
-            'InverseProblemLOG_AlphaC.log'
-        ]
+    tmax = 24
 
-        # Define the destination directory
-        destination_dir = '../input_fit/stability_plot'
+    outdir2 = outdir + f'/tmax{tmax}sigma{sigma}Ne{ne}nboot{nboot}mNorm{mpi}prec{prec}Na{Na}KerType{kernel}/Logs/'
 
-        # Ensure the destination directory exists
-        os.makedirs(destination_dir, exist_ok=True)
+    # Define the log files to copy
+    log_files = [
+        'InverseProblemLOG_AlphaA.log',
+        'InverseProblemLOG_AlphaB.log',
+        'InverseProblemLOG_AlphaC.log'
+    ]
 
-        # Copy each log file from outdir to the destination directory
-        for log_file in log_files:
-            src_file = os.path.join(outdir2, log_file)
-            dest_file = os.path.join(destination_dir, log_file)
-            if os.path.exists(src_file):
-                shutil.copy(src_file, dest_file)
-                print(f"Copied {src_file} to {dest_file}")
-            else:
-                print(f"File {src_file} does not exist and cannot be copied")
+    # Define the destination directory
+    destination_dir = '../input_fit/stability_plot'
+
+    # Ensure the destination directory exists
+    os.makedirs(destination_dir, exist_ok=True)
+
+    # Copy each log file from outdir to the destination directory
+    for log_file in log_files:
+        src_file = os.path.join(outdir2, log_file)
+        dest_file = os.path.join(destination_dir, log_file)
+        if os.path.exists(src_file):
+            shutil.copy(src_file, dest_file)
+            print(f"Copied {src_file} to {dest_file}")
+        else:
+            print(f"File {src_file} does not exist and cannot be copied")
 
             
     import pandas as pd
