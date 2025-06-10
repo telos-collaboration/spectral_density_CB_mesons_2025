@@ -1,0 +1,33 @@
+include: "rules/gradient_flow.smk"
+include: "rules/package.smk"
+include: "rules/mass.smk"
+include: "rules/plaquette.smk"
+include: "rules/combined_plots.smk"
+include: "rules/spectrum_plots.smk"
+include: "rules/spectrum_tables.smk"
+include: "rules/extrapolation.smk"
+
+
+plot_styles = "styles/prd.mplstyle"
+plot_filetype = "pdf"
+
+plots = expand(
+    f"assets/plots/{{plot}}.{plot_filetype}",
+    plot=[
+        "wall_comparison"
+    ],
+)
+tables = expand(
+    f"assets/tables/{{table}}.tex",
+    table=[
+        "local_smeared_decay_constants",
+        "ensembles",
+    ],
+)
+
+
+rule all:
+    input:
+        h5_data=h5_data,
+        plots=plots,
+        tables=tables,
