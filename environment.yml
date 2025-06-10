@@ -1,4 +1,4 @@
-name: analysis-env4
+name: analysis-env6
 channels:
   - defaults
 dependencies:
@@ -102,3 +102,4 @@ dependencies:
     - uncertainties==3.1.7
     - vegas==6.1
     - virtualenv==20.25.1
+    - multiprocess==0.70.18

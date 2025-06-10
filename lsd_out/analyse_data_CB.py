@@ -3,7 +3,7 @@ import read_hdf2
 import translate
 import numpy as np
 import csv
-import multiprocessing
+import multiprocess
 import lsdensities.utils.rhoUtils as u
 from lsdensities.utils.rhoUtils import (
     init_precision,
@@ -25,7 +25,7 @@ import random
 
 
 def main():
-    multiprocessing.set_start_method("fork")
+    multiprocess.set_start_method("fork")
     def get_directory_size(directory):
         total_size = 0
         for dirpath, dirnames, filenames in os.walk(directory):
@@ -166,7 +166,7 @@ def main():
     # mesonic_channels = ['Chimera_OC_even']
     # Ensembles: M1, M2, M3, M4, M5
     ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    #ensembles = ['M1']
+    #ensembles = ['M1', 'M2']
     # Roots in HDF5 for each ensemble
     roots = ['chimera_out_48x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
              'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
@@ -287,22 +287,64 @@ def main():
             print(f"Size of the subdirectory '{outdir}': {size_in_megabytes:.2f} MB")
             findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi)
 
+    def get_cpu_count():
+        try:
+            return len(os.sched_getaffinity(0))  # Linux
+        except AttributeError:
+            return multiprocess.cpu_count()  # macOS or fallback
+
+    def wrapper(args):
+        # Unpack the arguments tuple
+        channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path = args
+        return process_channel(channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path)
+
     ################# Download and use lsdensities on correlators ########################
     # Replace 'your_file.h5' with the path to your HDF5 file
     file_path = '../input_correlators/chimera_data_reduced.hdf5'
     # rep = reps[0]
     for kernel in kerneltype:
-        processes = []
         for index, ensemble in enumerate(ensembles):
-            
             for rep in reps:
                 for k, channel in enumerate(mesonic_channels):
-                    process = multiprocessing.Process(target=process_channel, args=(
-                        channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path))
-                    processes.append(process)
-                    process.start()
-        for process in processes:
-            process.join()
+                    if rep == 'fund':
+                        Nsource = matrix_4D[index][4][k]
+                        Nsink = matrix_4D[index][5][k]
+                    else:
+                        Nsource = matrix_4D[index][4][k + 6]
+                        Nsink = matrix_4D[index][5][k + 6]
+                    group_prefixes = {
+                        'gi': ['g1', 'g2', 'g3'],
+                        'g0gi': ['g0g1', 'g0g2', 'g0g3'],
+                        'g5gi': ['g5g1', 'g5g2', 'g5g3'],
+                        'g0g5gi': ['g0g5g1', 'g0g5g2', 'g0g5g3']
+                    }
+                    prefix = group_prefixes.get(channel, [channel])
+                    datasets = []
+                    dataset_path = f"{roots[index]}/source_N{Nsource}_sink_N{Nsink}/{channel}_re"
+                    group1 = f"source_N{Nsource}_sink_N{Nsink}"
+                    group2 = f"{channel}_re"
+                    datasets.append(read_hdf2.extract_dataset(file_path, group2, roots[index], group1))
+                    with open('paths.log', 'a') as file:
+                        print(dataset_path, file=file)
+                    dataset = sum(datasets) / len(datasets) if datasets else None
+
+                    if dataset is not None:
+                        translate.save_matrix_to_file2(dataset, f'corr_to_analyse_{channel}_{rep}_{ensemble}.txt')
+
+
+    for kernel in kerneltype:
+        # Prepare argument list
+        task_args = [
+            (channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path)
+            for index, ensemble in enumerate(ensembles)
+            for rep in reps
+            for k, channel in enumerate(mesonic_channels)
+        ]
+
+        num_workers = get_cpu_count()
+        with multiprocess.Pool(processes=num_workers) as pool:
+            pool.map(wrapper, task_args)
+
 
 
 if __name__ == "__main__":
