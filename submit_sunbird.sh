@@ -13,7 +13,7 @@
 module load anaconda/2024.06
 source activate
 
-conda activate snakemake_x86
+conda activate my-new-env2
 
 bash reproduce_everything.sh
 

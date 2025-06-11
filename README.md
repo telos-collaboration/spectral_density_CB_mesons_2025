@@ -12,7 +12,9 @@ Maurizio Piai, Davide Vadacchino.
 
 ## Cloning the code
 
-* Clone the repo including all submodules: ```git clone --recurse-submodules https://github.com/nickforce989/spectral_density_CB_mesons_2025.git```
+* Clone the repo including all submodules: 
+    
+        git clone --recurse-submodules https://github.com/nickforce989/spectral_density_CB_mesons_2025.git
 
 
 ## Set up environments
@@ -20,41 +22,26 @@ Maurizio Piai, Davide Vadacchino.
 * Download this code
 * From the data release at https://doi.org/##.####/zenodo.########
   * Download ``chimera_data_reduced.hdf5``, and place it in ``input_correlators/``
+  * Then, download ``metadata/`` and ``raw_data/`` and the file ``metadata_plateaus.csv`` and place it in ``input_fit/``
 
-* To automate find gevp plateaus, a x86-64 version of Snakemake must be used. To set this up, create a new x86-64 Conda environment with Snakemake, using
+* First make sure that mamba is installed
       
-      conda create -n snakemake_x86 -c conda-forge -c bioconda snakemake
-  
-  and activate it
- 
-      conda activate snakemake_x86
- 
-  and then install Mamba
-  
       conda install -c conda-forge 'mamba<2.0.0'
-
-
-* Then, create the conda environment in terminal with conda installed:
-
-      conda env create -f environment.yml
+  
+  Then create the environment
+  
+      mamba env create -f my-new-env.yml
   
   with the caveat that if you're using an Apple silicon CPU then you need to use Conda 24.3 or later, and specify ```--platform osx-64```
-  in your ```conda env create``` call.
-
-
-* Once the environment is created, you can active the it:
-
-      conda activate analysis-env4
+  in your ```conda env create``` call.   
+      
+  and activate it
+ 
+      conda activate my-new-env2
 
 * Then, install ``julia`` using conda
 
       conda install -c conda-forge julia
-
-* This code uses a submodule: ```CB_autocorrelation_decay_constant```.
-  Please, follow the instruction before using it, build the environment:
-  
-      conda env create --name wall_decay_constant --file=CB_autocorrelation_decay_constant/environment.yml
-
 
 
 ## Code usage
@@ -63,7 +50,7 @@ Maurizio Piai, Davide Vadacchino.
    * Before running, please locate your ``activate`` file, e.g. ``/home/niccolo/miniconda3/bin/activate``
    * Then, add it to ``PATH`` as:
 
-              PATH=${PATH}:/home/niccolo/miniconda/bin 
+              PATH=${PATH}:/home/niccolo/miniconda3/bin 
    
    * Then, to reproduce all the plots and results in the tables present in the paper, please run
        
