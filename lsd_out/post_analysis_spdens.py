@@ -564,7 +564,7 @@ import pandas as pd
 import os
 
 # Load renormalisation constants
-z_factors = pd.read_csv('./metadata/renormalise.csv')
+z_factors = pd.read_csv('../input_fit/metadata/renormalise.csv')
 
 # Define the file paths for each M file
 file_paths = {
@@ -644,7 +644,7 @@ import pandas as pd
 import os
 
 # Load renormalisation constants
-z_factors = pd.read_csv('./metadata/renormalise.csv')
+z_factors = pd.read_csv('../input_fit/metadata/renormalise.csv')
 
 # Define the file paths for each M file
 file_paths = {

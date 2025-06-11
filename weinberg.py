@@ -13,7 +13,7 @@ ensemble_map = {
 }
 
 # Load renormalization factors
-renorm_df = pd.read_csv("./lsd_out/metadata/renormalise.csv")
+renorm_df = pd.read_csv("./input_fit/metadata/renormalise.csv")
 
 # Results will be stored here
 results = []

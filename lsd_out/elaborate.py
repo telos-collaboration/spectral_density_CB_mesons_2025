@@ -42,7 +42,7 @@ for item in os.listdir(jsons_src):
 
 # Load metadata
 plateau_data = {}
-with open('../input_fit/metadata_plateaus.csv', newline='') as csvfile:
+with open('../input_fit/metadata/metadata_plateaus.csv', newline='') as csvfile:
     reader = csv.DictReader(csvfile)
     for row in reader:
         key = (row['ensemble_name'].strip(), row['channel'].strip())

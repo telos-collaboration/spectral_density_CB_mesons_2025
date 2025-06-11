@@ -31,7 +31,7 @@ def add_error(channel_E0, err):
 
 
 # Read metadata CSV
-metadata = pd.read_csv('./lsd_out/metadata/metadata_spectralDensity_chimerabaryons.csv')
+metadata = pd.read_csv('./input_fit/metadata/metadata_spectralDensity_chimerabaryons.csv')
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 #ensembles = ['M1']
 # Mapping for ensemble and channel names
