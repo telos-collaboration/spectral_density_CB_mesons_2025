@@ -22,7 +22,7 @@ Maurizio Piai, Davide Vadacchino.
 * Download this code
 * From the data release at https://doi.org/10.5281/zenodo.15625280
   * Download ``chimera_data_reduced.hdf5``, and place it in ``input_correlators/``
-  * Then, download ``metadata/`` and ``raw_data/`` and the file ``metadata_plateaus.csv`` and place it in ``input_fit/``
+  * Then, download ``metadata/`` and ``raw_data/`` and place it in ``input_fit/``
 
 * Create the environment
   

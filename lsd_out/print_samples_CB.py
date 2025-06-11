@@ -248,7 +248,7 @@ def main():
     sigma1_over_mC_values_MN = {}
     sigma2_over_mC_values_MN = {}
     # Read data from CSV
-    with open('metadata/metadata_spectralDensity_chimerabaryons.csv', newline='') as csvfile:
+    with open('../input_fit/metadata/metadata_spectralDensity_chimerabaryons.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             ensemble = row['Ensemble']

@@ -1,6 +1,6 @@
 from functools import partial
 
-metadata = pd.read_csv("metadata/ensemble_metadata.csv")
+metadata = pd.read_csv("../input_fit/metadata/ensemble_metadata.csv")
 
 def all_samples(wildcards, observables):
     return [

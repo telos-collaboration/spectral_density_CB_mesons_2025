@@ -2,7 +2,7 @@ import pandas as pd
 from functools import partial
 
 
-all_metadata = pd.read_csv("metadata/ensemble_metadata.csv")
+all_metadata = pd.read_csv("../input_fit/metadata/ensemble_metadata.csv")
 
 metadata_query = "Nc == {Nc} & Nt == {Nt} & Ns == {Ns} & beta == {beta} & nF == {nF} & mF == {mF} & nAS == {nAS} & mAS == {mAS}"
 metadata_lookup = partial(lookup, within=all_metadata, query=metadata_query)
@@ -134,7 +134,7 @@ rule wall_mass_table:
         mass_data=wall_mass_data,
         mpcac_data=mpcac_data,
         decay_data=decay_constant_data,
-        metadata_csv="metadata/ensemble_metadata.csv",
+        metadata_csv="../input_fit/metadata/ensemble_metadata.csv",
         script="src/tables/wall_mass_table.py",
     output:
         table="assets/tables/table_VI.tex",
@@ -150,7 +150,7 @@ rule wall_mass_table2:
         mass_data=wall_mass_data,
         mpcac_data=mpcac_data,
         decay_data=decay_constant_data,
-        metadata_csv="metadata/ensemble_metadata.csv",
+        metadata_csv="../input_fit/metadata/ensemble_metadata.csv",
         script="src/tables/wall_mass_table2.py",
     output:
         table="assets/tables/table_VII.tex",

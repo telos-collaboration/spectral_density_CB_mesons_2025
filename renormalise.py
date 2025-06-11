@@ -3,7 +3,7 @@ import re
 import os
 
 # Path to the CSV file
-csv_file_path = './lsd_out/metadata/renormalise.csv'
+csv_file_path = './input_fit/metadata/renormalise.csv'
 
 # Ensembles and file mappings
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
