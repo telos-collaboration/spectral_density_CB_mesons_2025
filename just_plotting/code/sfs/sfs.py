@@ -185,7 +185,7 @@ def plot_with_errors_single(energy, avg_spectral_density1, avg_spectral_density2
     plt.ylabel('$\\rho_{80, 0} (E)$', fontsize=16)
     
     plt.tight_layout()
-    plt.savefig(f"../../../plots/spectral_density_corr_mpi{mpi}.pdf", format='pdf', bbox_inches='tight')
+    plt.savefig(f"../../../plots/spectral_density_single_gaussian.pdf", format='pdf', bbox_inches='tight')
     #plt.show()
 
 def main():
