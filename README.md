@@ -24,13 +24,9 @@ Maurizio Piai, Davide Vadacchino.
   * Download ``chimera_data_reduced.hdf5``, and place it in ``input_correlators/``
   * Then, download ``metadata/`` and ``raw_data/`` and the file ``metadata_plateaus.csv`` and place it in ``input_fit/``
 
-* First make sure that mamba is installed
-      
-      conda install -c conda-forge 'mamba<2.0.0'
+* Create the environment
   
-  Then create the environment
-  
-      mamba env create -f my-new-env.yml
+      conda env create -f my-new-env.yml
   
   with the caveat that if you're using an Apple silicon CPU then you need to use Conda 24.3 or later, and specify ```--platform osx-64```
   in your ```conda env create``` call.   
