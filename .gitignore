@@ -1,7 +1,15 @@
 __pycache__
-./plots/
+.snakemake
+assets
+data_assets
 input_correlators
 input_fit
 input_topology
-tables
+intermediary_data
+raw_data
 CSVs
+JSONs
+
+lsd_out/*.txt
+lsd_out/*/
+lsd_out/paths.log

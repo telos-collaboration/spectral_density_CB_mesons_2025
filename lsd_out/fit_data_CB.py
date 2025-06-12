@@ -317,8 +317,7 @@ def perform_fit(kernel,ensemble,rep,channel, ensemble_num, channel_num,path, fil
         plt.show()
 
     np.linalg.inv(cov_matrix)
-    # Activating text rendering by LaTeX
-    # plt.style.use("paperdraft.mplstyle")
+
     # Extract the required columns
     x = np.array(energies, dtype=float) / mpi
     rho_central = np.zeros(ne)
@@ -1455,3 +1454,14 @@ for index, ensemble in enumerate(ensembles):
 
                     perform_fit(kernel,ensemble,rep,channel,ensemble_num, channel_num, path, file_path_input, output_name, plot_min_lim, plot_max_lim, cauchy_fit, triple_fit, four_fit, print_cov_matrix,
                                     plot_cov_mat, plot_corr_mat, flag_chi2, matrix_4D, k_peaks[ensemble][channel_num], kernel, Nboot_fit[ensemble_num], fit_peaks_switch, matrix_2D)
+
+
+
+
+# Avoid needing to work out the full tangle of output files,
+# while still allowing a workflow dependency on completing this rule
+with open("fit_data_CB_complete", "w") as completion_tag_file:
+    print(
+        f"CB fitting complete at {datetime.datetime.now().astimezone('utc')}",
+        file=completion_tag_file,
+    )

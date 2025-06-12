@@ -1,3 +1,5 @@
+import argparse
+
 import os
 import re
 import numpy as np
@@ -6,7 +8,11 @@ from lmfit import Model, Parameters, Minimizer
 from scipy.special import erf
 from scipy.linalg import cholesky, cho_solve
 
-plt.style.use("paperdraft.mplstyle")
+parser = argparse.ArgumentParser()
+parser.add_argument("--plot_styles", default="paperdraft.mplstyle")
+args = parser.parse_args()
+
+plt.style.use(args.plot_styles)
 
 CB_color_cycle = ['#377eb8', '#ff7f00', '#4daf4a',
                   '#f781bf', '#a65628', '#984ea3',
@@ -185,13 +191,13 @@ def plot_with_errors_single(energy, avg_spectral_density1, avg_spectral_density2
     plt.ylabel('$\\rho_{80, 0} (E)$', fontsize=16)
     
     plt.tight_layout()
-    plt.savefig(f"../../../plots/spectral_density_single_gaussian.pdf", format='pdf', bbox_inches='tight')
+    plt.savefig(f"assets/plots/spectral_density_single_gaussian.pdf", format='pdf', bbox_inches='tight')
     #plt.show()
 
 def main():
     # Directories containing the data
-    dir1 = "../../../input_fit/lsdensity_samples1"
-    dir2 = "../../../input_fit/lsdensity_samples2"
+    dir1 = "input_fit/lsdensity_samples1"
+    dir2 = "input_fit/lsdensity_samples2"
     mpi = 0.366
     #dir1 = "/home/niccolo/work/tmp/chimera_baryons_fits/mesons/N80_N0/M3/g0g5_fund/GAUSS/g0g5_fund/Logs"
     #dir2 = "/home/niccolo/work/tmp/chimera_baryons_fits/mesons/N80_N80/M3/g0g5_fund/GAUSS/g0g5_fund/Logs"

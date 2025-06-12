@@ -180,7 +180,7 @@ for idx, ensemble in enumerate(ensembles):
     latex_table += "\\end{tabular}\n"
     #latex_table += "\\end{table}\n"
 
-    with open(f'./tables/{ensemble}_matrix_meson.tex', 'w') as file:
+    with open(f'./assets/tables/{ensemble}_matrix_meson.tex', 'w') as file:
         file.write(latex_table)
 
-    print(f"Table generated and saved in ./tables/{ensemble}_output_table_matrix_mesons.tex")
+    print(f"Table generated and saved in ./assets/tables/{ensemble}_matrix_mesons.tex")

@@ -1,3 +1,5 @@
+import datetime
+
 import lsdensities.utils.rhoUtils as u
 from lsdensities.utils.rhoUtils import (
     init_precision,
@@ -221,7 +223,7 @@ def printSamples(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, p
     #end()
 
 def main():
-    file_path = '../input_correlators/chimera_data_reduced.hdf5'
+    file_path = '../input_correlators/chimera_data_reduced.h5'
     ####################### External data for make rho finding easier #######################
     categories = ['PS', 'V', 'T', 'AV', 'AT', 'S', 'ps', 'v', 't', 'av', 'at', 's']
     # Mesonic channels
@@ -248,7 +250,7 @@ def main():
         sigma1_over_mC_values_MN = {}
         sigma2_over_mC_values_MN = {}
         # Read data from CSV
-        with open('../input_fit/metadata/metadata_spectralDensity.csv', newline='') as csvfile:
+        with open('../metadata/metadata_spectralDensity.csv', newline='') as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
                 ensemble = row['Ensemble']
@@ -364,6 +366,15 @@ def main():
 
 
                         printSamples(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi, spdens_outdir, part_outdir)
+
+
+    # Avoid needing to work out the full tangle of output files,
+    # while still allowing a workflow dependency on completing this rule
+    with open("print_samples_mesons_complete", "w") as completion_tag_file:
+        print(
+            f"Meson sample printing complete at {datetime.datetime.now().astimezone('utc')}",
+            file=completion_tag_file,
+        )
 
 
 if __name__ == "__main__":

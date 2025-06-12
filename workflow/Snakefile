@@ -1,3 +1,11 @@
+configfile: "workflow_config.yaml"
+
+plot_styles = config["plot_styles"]
+plot_filetype = config["plot_filetype"]
+
+ensembles = ["M1", "M2", "M3", "M4", "M5"]
+
+
 include: "rules/gradient_flow.smk"
 include: "rules/package.smk"
 include: "rules/mass.smk"
@@ -6,15 +14,26 @@ include: "rules/combined_plots.smk"
 include: "rules/spectrum_plots.smk"
 include: "rules/spectrum_tables.smk"
 include: "rules/extrapolation.smk"
+include: "rules/cb_autocorrelation_decay_const.smk"
+include: "rules/spectral_densities.smk"
 
 
-plot_styles = "styles/prd.mplstyle"
-plot_filetype = "pdf"
+h5_data = expand(
+    "data_assets/{data}.h5",
+    data=["wall_correlators"],
+)
 
 plots = expand(
     f"assets/plots/{{plot}}.{plot_filetype}",
     plot=[
-        "wall_comparison"
+        "wall_comparison",
+        "final_spectrum_MN3",
+        "final_spectrum_detail",
+        "matrixel_fundamental_antisymmetric",
+        "matrixel_chimera_baryons",
+        "LambdaScan",
+        "spectral_density_corr_mpi0.366",
+        # "spectral_density_single_gaussian",
     ],
 )
 tables = expand(
@@ -22,7 +41,18 @@ tables = expand(
     table=[
         "local_smeared_decay_constants",
         "ensembles",
-    ],
+    ] + expand(
+        "{ensemble}_output_table_aE{n}_meson",
+        ensemble=ensembles,
+        n=[0, 1, 2],
+    ) + expand(
+        "{ensemble}_output_table_CB_aE{n}",
+        ensemble=ensembles,
+        n=[0, 1, 2],
+    ) + expand(
+        "{ensemble}_output_table_matrix_CB",
+        ensemble=ensembles,
+    ),
 )
 
 

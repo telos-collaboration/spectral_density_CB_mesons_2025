@@ -1,3 +1,5 @@
+import datetime
+
 import sys
 import numpy as np
 import re
@@ -24,7 +26,7 @@ def read_csv():
     sigma2_over_mC_values_MN = {}
     k_peaks = {}    # kpeaks[ensemble][channel]
     Nboot_fit = []
-    with open('../input_fit/metadata/metadata_spectralDensity.csv', newline='') as csvfile:
+    with open('../metadata/metadata_spectralDensity.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             ensemble = row['Ensemble']
@@ -310,8 +312,7 @@ def perform_fit(kernel,ensemble,rep,channel, ensemble_num, channel_num,path, fil
         plt.show()
 
     np.linalg.inv(cov_matrix)
-    # Activating text rendering by LaTeX
-    # plt.style.use("paperdraft.mplstyle")
+
     # Extract the required columns
     x = np.array(energies, dtype=float) / mpi
     rho_central = np.zeros(ne)
@@ -1362,7 +1363,7 @@ if four_fit is True:
     triple_fit = True
 
 matrix_4D, k_peaks, Nboot_fit  = read_csv()
-file_path_MD = '../input_fit/metadata/ratioguesses_spectrum.csv'
+file_path_MD = '../metadata/ratioguesses_spectrum.csv'
 matrix_2D = read_csv2(file_path_MD)
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 #ensembles = ['M1']
@@ -1424,3 +1425,12 @@ for index, ensemble in enumerate(ensembles):
 
                     perform_fit(kernel,ensemble,rep,channel,ensemble_num, channel_num, path, file_path_input, output_name, plot_min_lim, plot_max_lim, cauchy_fit, triple_fit, four_fit, print_cov_matrix,
                                     plot_cov_mat, plot_corr_mat, flag_chi2, matrix_4D, k_peaks[ensemble][channel_num], kernel, Nboot_fit[ensemble_num], fit_peaks_switch, matrix_2D)
+
+
+# Avoid needing to work out the full tangle of output files,
+# while still allowing a workflow dependency on completing this rule
+with open("fit_data_mesons_complete", "w") as completion_tag_file:
+    print(
+        f"Meson fitting complete at {datetime.datetime.now().astimezone('utc')}",
+        file=completion_tag_file,
+    )
