@@ -96,10 +96,10 @@ for n in range(3):
     
     for index, ensemble in enumerate(ensembles):
         # Initialize LaTeX table string
-        latex_table = "\\begin{table}[ht]\n"
-        latex_table += "\\centering\n"
-        latex_table += "\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}\n"
-        latex_table += "\\hline\n"
+        #latex_table = "\\begin{table}[ht]\n"
+        #latex_table += "\\centering\n"
+        latex_table = "\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}\n"
+        latex_table += "\\hline \\hline\n"
         latex_table += "$C$ & $k$ & $N_{\\text{source}}$ & $N_{\\text{sink}}$ & "f"$aE_{n}$ $k$-G & $aE_{n}$ $(k+1)$-G & $aE_{n}$ $k$-C & $aE_{n}$ $(k+1)$-C$ & am_C & ""$\sigma_{G} / m_C$ & $\sigma_{C} / m_C$ \\\\\n"
         latex_table += "\\hline\n"
         for chunk in pd.read_csv(f'./CSVs/{ensemble}_chimerabaryons_spectral_density_spectrum.csv', chunksize=chunk_size):
@@ -343,15 +343,15 @@ for n in range(3):
             if key in table_rows:
                 latex_table += table_rows[key]
 
-        latex_table += "\\hline\n"
+        latex_table += "\\hline \\hline\n"
         latex_table += "\\end{tabular}\n"
 
         # latex_table += "\\caption{Your caption here.}\n"
         # latex_table += "\\label{table:my_table}\n"
-        latex_table += "\\end{table}\n"
+        #latex_table += "\\end{table}\n"
 
         # Write LaTeX table to a file for each chunk
-        with open(f'./tables/{ensemble}_output_table_CB_aE{n}.tex', 'w') as file:
+        with open(f'./tables/{ensemble}_aE{n}_CB.tex', 'w') as file:
             file.write(latex_table)
         # Reset LaTeX table for next chunk
         latex_table = ""

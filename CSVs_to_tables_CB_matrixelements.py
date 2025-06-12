@@ -67,11 +67,11 @@ for idx, ensemble in enumerate(ensembles):
     chunk_size = 2
 
     # Initialize LaTeX table string
-    latex_table = "\\begin{table}[ht]\n"
-    latex_table += "\\centering\n"
-    latex_table += "\\begin{tabular}{|c|c|c|c|c|c|}\n"
-    latex_table += "\\hline\n"
-    latex_table += "$C$ & $ac_{n}$ G & $ac_{n}$ C & $ac_{0} (GEVP)$ & $\\sigma_{G} / m_C$ & $\\sigma_{C} / m_C$ \\\\\n"
+    #latex_table = "\\begin{table}[ht]\n"
+    #latex_table += "\\centering\n"
+    latex_table = "\\begin{tabular}{|c|c|c|c|c|c|}\n"
+    latex_table += "\\hline \\hline\n"
+    latex_table += "$C$ & $a^{3/2}K_{B, 0}$-G & $a^{3/2}K_{B,0}$-C & $a^{3/2}K_{B,0} (\hbox{corr.})$ & $\sigma_{G} / m_C$ & $\sigma_{C} / m_C$ \\\\\n"
     latex_table += "\\hline\n"
     idx2 = 0
     # Read data for the current ensemble in chunks
@@ -138,11 +138,11 @@ for idx, ensemble in enumerate(ensembles):
             latex_table += f"{ch} & {gauss_min_with_error} & {cauchy_min_with_error} & {ac0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
 
     # Finalize LaTeX table and write to file
-    latex_table += "\\hline\n"
+    latex_table += "\\hline \\hline\n"
     latex_table += "\\end{tabular}\n"
-    latex_table += "\\end{table}\n"
+    #latex_table += "\\end{table}\n"
 
-    with open(f'./tables/{ensemble}_output_table_matrix_CB.tex', 'w') as file:
+    with open(f'./tables/{ensemble}_matrix_CB.tex', 'w') as file:
         file.write(latex_table)
 
     print(f"Table generated and saved in ./tables/{ensemble}_output_table_matrix_CB.tex")
