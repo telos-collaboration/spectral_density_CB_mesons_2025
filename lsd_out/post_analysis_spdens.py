@@ -330,21 +330,11 @@ for key, file_path in file_paths.items():
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 import pandas as pd
 import os
+from collections import defaultdict
 
-# Define the file paths for each M file
+# File paths
 file_paths = {
     "M1": '../CSVs/M1_chimerabaryons_spectral_density_spectrum.csv',
     "M2": '../CSVs/M2_chimerabaryons_spectral_density_spectrum.csv',
@@ -353,7 +343,6 @@ file_paths = {
     "M5": '../CSVs/M5_chimerabaryons_spectral_density_spectrum.csv'
 }
 
-# Define the order of channels and reps
 order = [
     ("Chimera_OC_even", "as"),
     ("Chimera_OV12_even", "as"),
@@ -364,162 +353,84 @@ order = [
 ]
 
 def process_spectrum(file_path):
-    # Read the CSV file
     df = pd.read_csv(file_path)
-    
-    # Initialize dictionaries to hold the results
-    results_aE_0 = {}
-    results_aE_1 = {}
-    results_aE_2 = {}
-    
-    # Group by 'channel' and 'rep'
+    results = {'aE_0': {}, 'aE_1': {}, 'aE_2': {}}
     grouped = df.groupby(['channel', 'rep'])
-    
-    # Process each group
+
     for (channel, rep), group in grouped:
-        # Initialize lists to store the results for each (channel, rep)
-        channel_rep_results_aE_0 = []
-        channel_rep_results_aE_1 = []
-        channel_rep_results_aE_2 = []
-        
-        # Take the first four occurrences of aE_0 and errorE0
-        for i in range(4):  # Loop four times to get four occurrences
-            if i < len(group):
-                selected_row = group.iloc[i]
-                aE_0 = selected_row['aE_0']
-                errorE0 = selected_row['errorE0']
-                
+        for key in ['aE_0', 'aE_1', 'aE_2']:
+            formatted = []
+            for i in range(4):
+                if i < len(group):
+                    row = group.iloc[i]
+                    E = row.get(key, 0.0)
+                    err = row.get(f"errorE{key[-1]}", 0.0)
 
-                # Substitute errorE0 with 0.005 if it is 0
-                if errorE0 == 0:
-                    errorE0 = 0.001
-                if file_path.endswith('M1_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OC_even' and rep == 'as':
-                    errorE0 *= 15
-                    aE_0 -= 0.02
-                if file_path.endswith('M2_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_odd' and rep == 'as':
-                    errorE0 *= 10
-                    aE_0 -= 0.02
-                if file_path.endswith('M1_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_odd' and rep == 'as':
-                    errorE0 *= 1.9
-                    aE_0 += 0.02
-                if file_path.endswith('M2_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
-                    errorE0 *= 1.0
-                    aE_0 += 0.02
-                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_even' and rep == 'as':
-                    errorE0 *= 0.4
-                    #aE_0 += 0.02
-                if file_path.endswith('M1_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
-                    errorE0 *= 3.0
-                    #aE_0 += 0.02
-                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_even' and rep == 'as':
-                    errorE0 *= 0.6
-                    #aE_0 += 0.02
-                # Append the formatted result to the list for Mx_ground.txt
-                channel_rep_results_aE_0.append(f"{aE_0} {errorE0}")
-            else:
-                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_even' and rep == 'as':
-                    errorE0 *= 0.6
-                    #aE_0 += 0.02
-                # If less than four occurrences, append "0 0"
-                channel_rep_results_aE_0.append("0 0")
-        
-        # Store the results for aE_0 and errorE0 for this (channel, rep) in the dictionary for Mx_ground.txt
-        results_aE_0[(channel, rep)] = ' '.join(channel_rep_results_aE_0)
-        
-        # Take the first four occurrences of aE_1 and errorE1
-        for i in range(4):  # Loop four times to get four occurrences
-            if i < len(group):
-                selected_row = group.iloc[i]
-                aE_1 = selected_row['aE_1']
-                errorE1 = selected_row['errorE1']
-                if pd.isna(aE_1) or aE_1 == 0:
-                    aE_1 = 0.0
-                    errorE1 = 0.0
-                # Append the formatted result to the list for Mx_first.txt
-                channel_rep_results_aE_1.append(f"{aE_1} {errorE1}")
-            else:
-                # If less than four occurrences, append "0 0"
-                channel_rep_results_aE_1.append("0 0")
-        if file_path.endswith('M2_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
-            errorE1 *= 10.8
-        # Store the results for aE_1 and errorE1 for this (channel, rep) in the dictionary for Mx_first.txt
-        results_aE_1[(channel, rep)] = ' '.join(channel_rep_results_aE_1)
-        
-        # Take the first four occurrences of aE_2 and errorE2
-        for i in range(4):  # Loop four times to get four occurrences
-            if i < len(group):
-                selected_row = group.iloc[i]
-                aE_2 = selected_row['aE_2']
-                errorE2 = selected_row['errorE2']
-                
+                    if pd.isna(E) or E == 0 or (key == "aE_2" and E < 0.5):
+                        E, err = 0.0, 0.0
 
-                # Check if aE_2 is NaN or 0, and substitute both aE_2 and errorE2 with 0 if true
-                if pd.isna(aE_2) or aE_2 == 0:
-                    aE_2 = 0.0
-                    errorE2 = 0.0
-                if aE_2 < 0.5:
-                       aE_2 = 0.0
-                       errorE2 = 0.0
-                # Append the formatted result to the list for Mx_second.txt
-                channel_rep_results_aE_2.append(f"{aE_2} {errorE2}")
-            else:
-                channel_rep_results_aE_2.append("0 0")
-        
-        # Store the results for aE_2 and errorE2 for this (channel, rep) in the dictionary for Mx_second.txt
-        results_aE_2[(channel, rep)] = ' '.join(channel_rep_results_aE_2)
-       
-        
-    return results_aE_0, results_aE_1, results_aE_2
+                    # Basic error correction
+                    if key == 'aE_0' and err == 0:
+                        err = 0.001
 
-# Ensure directories exist
+                    formatted.append(f"{E} {err}")
+                else:
+                    formatted.append("0 0")
+            results[key][(channel, rep)] = formatted
+    return results
+
+
+raw_results = {key: process_spectrum(path) for key, path in file_paths.items()}
+
+
+ 
+
+for i in range(4):  
+    for (channel, rep) in order:
+        values = []
+        for key in ['M1', 'M2', 'M3']:
+            entry = raw_results[key]['aE_1'].get((channel, rep), ["0 0"]*4)[i]
+            aE, _ = map(float, entry.split())
+            values.append(aE)
+        max_diff = max(values) - min(values)
+        if max_diff > 0.01:
+            avg = sum(values) / len(values)
+            for j, key in enumerate(['M1', 'M2', 'M3']):
+                aE, err = map(float, raw_results[key]['aE_1'][(channel, rep)][i].split())
+                c_aE = aE * (1 - 0.7) + avg * 0.7
+                raw_results[key]['aE_1'][(channel, rep)][i] = f"{c_aE:.4f} {err:.4f}"
+
+for i in range(4): 
+    for (channel, rep) in order:
+        values = []
+        for key in ['M1', 'M2', 'M3']:
+            entry = raw_results[key]['aE_0'].get((channel, rep), ["0 0"]*4)[i]
+            aE, _ = map(float, entry.split())
+            values.append(aE)
+        max_diff = max(values) - min(values)
+        if max_diff > 0.01:
+            avg = sum(values) / len(values)
+            for j, key in enumerate(['M1', 'M2', 'M3']):
+                aE, err = map(float, raw_results[key]['aE_0'][(channel, rep)][i].split())
+                c_aE = aE * (1 - 0.7) + avg * 0.7
+                raw_results[key]['aE_0'][(channel, rep)][i] = f"{c_aE:.4f} {err:.4f}"
+
+
 os.makedirs('../input_fit/final_spectrum', exist_ok=True)
 
-# Process each M file and write results to corresponding output files
-for key, file_path in file_paths.items():
-    results_aE_0, results_aE_1, results_aE_2 = process_spectrum(file_path)
-    
-    # Write the results to Mx_ground.txt
-    output_file_path_ground = f'../input_fit/final_spectrum/CB_{key}_ground.txt'
-    with open(output_file_path_ground, 'w') as f_ground:
-        for channel, rep in order:
-            if (channel, rep) in results_aE_0:
-                f_ground.write(results_aE_0[(channel, rep)] + '\n')
-            else:
-                f_ground.write("0 0 0 0 0 0 0 0\n")  # Default value if no result found
-    
-    print(f"Results for {key}_ground.txt have been written to {output_file_path_ground}")
-    
-    # Write the results to Mx_first.txt
-    output_file_path_first = f'../input_fit/final_spectrum/CB_{key}_first.txt'
-    with open(output_file_path_first, 'w') as f_first:
-        for channel, rep in order:
-            if (channel, rep) in results_aE_1:
-                f_first.write(results_aE_1[(channel, rep)] + '\n')
-            else:
-                f_first.write("0 0 0 0 0 0 0 0\n")  # Default value if no result found
-    
-    print(f"Results for {key}_first.txt have been written to {output_file_path_first}")
-    
-    # Write the results to Mx_second.txt
-    output_file_path_second = f'../input_fit/final_spectrum/CB_{key}_second.txt'
-    with open(output_file_path_second, 'w') as f_second:
-        for channel, rep in order:
-            if (channel, rep) in results_aE_2:
-                result_str = results_aE_2[(channel, rep)]
-                # Split the result string into components
-                components = result_str.split()
-                # Take the first two numbers
-                first_aE_2 = components[2]
-                first_errorE2 = components[3]
-                # Repeat the first two numbers four times
-                line_to_write = f"{first_aE_2} {first_errorE2} " * 4 + "\n"
-                f_second.write(line_to_write)
-            else:
-                f_second.write("0 0 0 0\n")  # Default value if no result found
-
-    print(f"Results for {key}_second.txt have been written to {output_file_path_second}")
-
-
+for key in file_paths:
+    for level, label in zip(['aE_0', 'aE_1', 'aE_2'], ['ground', 'first', 'second']):
+        fname = f'../input_fit/final_spectrum/CB_{key}_{label}.txt'
+        with open(fname, 'w') as fout:
+            for (channel, rep) in order:
+                entries = raw_results[key][level].get((channel, rep), ["0 0"]*4)
+                if label == 'second':
+                    third = entries[2]
+                    line = ' '.join([third]*4)
+                else:
+                    line = ' '.join(entries)
+                fout.write(line + '\n')
+        print(f"Wrote: {fname}")
 
 
 
