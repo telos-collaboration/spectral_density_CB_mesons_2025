@@ -8,11 +8,11 @@ csv_file_path = './input_fit/metadata/renormalise.csv'
 # Ensembles and file mappings
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 tex_files = {
-    'M1': './tables/M1_output_table_matrix_mesons.tex',
-    'M2': './tables/M2_output_table_matrix_mesons.tex',
-    'M3': './tables/M3_output_table_matrix_mesons.tex',
-    'M4': './tables/M4_output_table_matrix_mesons.tex',
-    'M5': './tables/M5_output_table_matrix_mesons.tex'
+    'M1': './tables/M1_matrix_meson.tex',
+    'M2': './tables/M2_matrix_meson.tex',
+    'M3': './tables/M3_matrix_meson.tex',
+    'M4': './tables/M4_matrix_meson.tex',
+    'M5': './tables/M5_matrix_meson.tex'
 }
 
 # Z values for each line in each file
@@ -88,7 +88,7 @@ for ens, tex_file in tex_files.items():
             updated_lines.append(line)
 
     # Save the updated lines back to a new .tex file
-    output_file = f'./tables/renormalised_{ens}_output_table_matrix_mesons.tex'
+    output_file = f'./tables/renormalised_{ens}_matrix_meson.tex'
     with open(output_file, 'w') as file:
         file.writelines(updated_lines)
 
@@ -101,8 +101,8 @@ ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 
 for ens in ensembles:
     z_values = df[df['Ens'] == ens].iloc[0]
-    cb_file = f'./tables/{ens}_output_table_matrix_CB.tex'
-    cb_output = f'./tables/renormalised_{ens}_output_table_matrix_CB.tex'
+    cb_file = f'./tables/{ens}_matrix_CB.tex'
+    cb_output = f'./tables/renormalised_{ens}_matrix_CB.tex'
 
     if not os.path.exists(cb_file):
         print(f"Missing: {cb_file}")
