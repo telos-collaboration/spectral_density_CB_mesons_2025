@@ -31,6 +31,12 @@ rule analysis_template:
     shell: "cd lsd_out && python ../{input.script}"
 
 
+rule analysis_template_with_plot:
+    threads: workflow.cores
+    conda: "../envs/spectral_densities.yml"
+    shell: "cd lsd_out && python ../{input.script} --plot_styles ../{input.plot_styles}"
+
+
 use rule analysis_template as analyse_data_mesons with:
     input:
         script="lsd_out/analyse_data_mesons.py",
@@ -71,7 +77,7 @@ use rule analysis_template as print_samples_mesons with:
     input:
         script="lsd_out/print_samples_mesons.py",
         metadata="metadata/metadata_spectralDensity.csv",
-        dependency_tag="lsd_out/analyse_data_mesons_complete"
+        dependency_tag="lsd_out/analyse_data_mesons_complete",
     output:
         completion_tag="lsd_out/print_samples_mesons_complete",
     log: "lsd_out/paths.log"
@@ -113,7 +119,7 @@ use rule analysis_template as fit_data_CB with:
         ),
 
 
-use rule analysis_template as simultaneous_fits_mesons with:
+use rule analysis_template_with_plot as simultaneous_fits_mesons with:
     input:
         metadata="metadata/metadata_spectralDensity.csv",
         dependency_tag="lsd_out/fit_data_mesons_complete",
@@ -124,17 +130,15 @@ use rule analysis_template as simultaneous_fits_mesons with:
             "CSVs/{ensemble}_spectral_density_matrix_elements_CB.csv",
             ensemble=ensembles,
         ),
-    shell: "cd lsd_out && python ../{input.script} --plot_styles ../{input.plot_styles}"
 
 
-use rule analysis_template as simultaneous_fits_CB with:
+use rule analysis_template_with_plot as simultaneous_fits_CB with:
     input:
         metadata="metadata/metadata_spectralDensity_chimerabaryons.csv",
         dependency_tag="lsd_out/fit_data_CB_complete",
         plot_styles=plot_styles,
     output:
         completion_tag="lsd_out/simultaneous_fit_CB_complete",
-    shell: "cd lsd_out && python ../{input.script} --plot_styles ../{input.plot_styles}"
 
 
 use rule analysis_template as post_analysis_spdens with:
