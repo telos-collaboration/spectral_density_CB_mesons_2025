@@ -69,11 +69,11 @@ for idx, ensemble in enumerate(ensembles):
     matrix_elements = pd.read_csv(matrix_elements_path)
     chunk_size = 4
 
-    latex_table = "\\begin{table}[ht]\n"
-    latex_table += "\\centering\n"
-    latex_table += "\\begin{tabular}{|c|c|c|c|c|c|}\n"
-    latex_table += "\\hline\n"
-    latex_table += "$C$ & $ac_{n}$ G & $ac_{n}$ C & $ac_{0} (GEVP)$ & $\\sigma_{G} / m_C$ & $\\sigma_{C} / m_C$ \\\\\n"
+    #latex_table = "\\begin{table}[ht]\n"
+    #latex_table += "\\centering\n"
+    latex_table = "\\begin{tabular}{|c|c|c|c|c|c|}\n"
+    latex_table += "\\hline \\hline\n"
+    latex_table += "$C$ & $a^{2}c_{M, 0}$-G & $a^{2}c_{M, 0}$-C & $a^{2}c_{M,0} (\hbox{corr.})$ & $\sigma_{G} / m_C$ & $\sigma_{C} / m_C$ \\\\\n"
     latex_table += "\\hline\n"
 
     row_count = 0
@@ -164,20 +164,23 @@ for idx, ensemble in enumerate(ensembles):
             ac0_with_error = add_error(ac0_val, ac0_err)
             if rep == 'fund':
                  # Skip unwanted channels
+                 
                  if ch in ['T', 'AT', 'S', 't', 'at', 's']:
                       continue
                  latex_table += f"{ch} & {gauss_min_with_error} & {cauchy_min_with_error} & {ac0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\ \n"
+                 if ch == 'AV':
+                      latex_table += '\\hline \n'
             else:
                  # Skip unwanted channels
                  if ch in ['T', 'AT', 'S', 't', 'at', 's']:
                       continue 
                  latex_table += f"{ch2} & {gauss_min_with_error} & {cauchy_min_with_error} & {ac0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\ \n"
 
-    latex_table += "\\hline\n"
+    latex_table += "\\hline \\hline\n"
     latex_table += "\\end{tabular}\n"
-    latex_table += "\\end{table}\n"
+    #latex_table += "\\end{table}\n"
 
-    with open(f'./tables/{ensemble}_output_table_matrix_mesons.tex', 'w') as file:
+    with open(f'./tables/{ensemble}_matrix_meson.tex', 'w') as file:
         file.write(latex_table)
 
     print(f"Table generated and saved in ./tables/{ensemble}_output_table_matrix_mesons.tex")

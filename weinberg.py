@@ -123,6 +123,11 @@ for rep in ["f", "as"]:
         
 # Write LaTeX table to file
 with open("./tables/s_parameters_table.tex", "w") as texfile:
+    texfile.write("\\begin{tabular}{ |c|c|c|c|c| }\n")
+    texfile.write("    \\hline\\hline\n")
+    texfile.write("    Meson  & Ensemble & $s_0$ & $s_1$ & $s_2$ \\\\\n")
+    texfile.write("    \\hline\n")
+
     for rep in ["f", "as"]:
         for ens in ["M1", "M2", "M3", "M4", "M5"]:
             row = results_df[(results_df["representation"] == rep) & (results_df["Ens"] == ens)]
@@ -131,7 +136,10 @@ with open("./tables/s_parameters_table.tex", "w") as texfile:
             r = row.iloc[0]
             def fmt(val, err):
                 return f"{val:.3f}({int(round(err * 1000)):d})"
-            texfile.write(f"$({{{rep}}})$-type     & {ens} & {fmt(r['s_0'], r['s_0_err'])} & {fmt(r['s_1'], r['s_1_err'])} & {fmt(r['s_2'], r['s_2_err'])} \\\\\n")
+            texfile.write(f"$({{\\rm {rep}}})$-type     & {ens} & {fmt(r['s_0'], r['s_0_err'])} & {fmt(r['s_1'], r['s_1_err'])} & {fmt(r['s_2'], r['s_2_err'])} \\\\\n")
         if rep == "f":
-            texfile.write("        \\hline\n")
+            texfile.write("    \\hline\n")
+
+    texfile.write("    \\hline  \\hline\n")
+    texfile.write("\\end{tabular}\n")
 

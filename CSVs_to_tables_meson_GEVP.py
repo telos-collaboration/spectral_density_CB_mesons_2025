@@ -96,10 +96,10 @@ for n in range(3):
 
     for index, ensemble in enumerate(ensembles):
         # Initialize LaTeX table string
-        latex_table = "\\begin{table}[ht]\n"
-        latex_table += "\\centering\n"
-        latex_table += "\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}\n"
-        latex_table += "\\hline\n"
+        #latex_table = "\\begin{table}[ht]\n"
+        #latex_table += "\\centering\n"
+        latex_table = "\\begin{tabular}{|c|c|c|c|c|c|c|c|c|c|}\n"
+        latex_table += "\\hline \\hline\n"
         latex_table += "$C$ & $k$ & $N_{\\text{source}}$ & $N_{\\text{sink}}$ & "f"$aE_{n}$ $k$-G & $aE_{n}$ $(k+1)$-G & $aE_{n}$ $k$-C & $aE_{n}$ $(k+1)$-C$ & am_C & ""$\sigma_{G} / m_C$ & $\sigma_{C} / m_C$ \\\\\n"
         latex_table += "\\hline\n"
         for chunk in pd.read_csv(f'./CSVs/{ensemble}_spectral_density_spectrum.csv', chunksize=chunk_size):
@@ -115,6 +115,7 @@ for n in range(3):
             CHANNEL2 = 'ciao' 
             if channel == 'g5' and repr == 'fund':
                 CHANNEL2 = 'ps'
+                CHANNEL3 = 'PS'
                 try:
                     file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
                     print(file_path)
@@ -137,6 +138,7 @@ for n in range(3):
             # Add similar try-except blocks for other conditions
             elif channel == 'g5' and repr == 'as':
                 CHANNEL2 = 'ps'
+                CHANNEL3 = CHANNEL2
                 try:
                     file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
                     print(file_path)
@@ -158,6 +160,7 @@ for n in range(3):
                 # Add similar try-except blocks for other conditions
             elif channel == 'gi' and repr == 'fund':
                 CHANNEL2 = 'v'
+                CHANNEL3 = 'V'
                 try:
                     file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
                     print(file_path)
@@ -179,6 +182,7 @@ for n in range(3):
                 # Add similar try-except blocks for other conditions
             elif channel == 'gi' and repr == 'as':
                 CHANNEL2 = 'v'
+                CHANNEL3 = CHANNEL2
                 try:
                     file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
                     print(file_path)
@@ -200,6 +204,7 @@ for n in range(3):
                 # Add similar try-except blocks for other conditions
             elif channel == 'g0gi' and repr == 'fund':
                 CHANNEL2 = 't'
+                CHANNEL3 = 'T'
                 try:
                     file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
                     print(file_path)
@@ -221,6 +226,7 @@ for n in range(3):
                 # Add similar try-except blocks for other conditions
             elif channel == 'g0gi' and repr == 'as':
                 CHANNEL2 = 't'
+                CHANNEL3 = CHANNEL2
                 try:
                     file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
                     print(file_path)
@@ -241,6 +247,7 @@ for n in range(3):
                     err_channel_E0 = 'NaN'
             elif channel == 'g5gi' and repr == 'fund':
                 CHANNEL2 = 'av'
+                CHANNEL3 = 'AV'
                 try:
                     file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
                     print(file_path)
@@ -262,6 +269,7 @@ for n in range(3):
                 # Add similar try-except blocks for other conditions
             elif channel == 'g5gi' and repr == 'as':
                 CHANNEL2 = 'av'
+                CHANNEL3 = CHANNEL2
                 try:
                     file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
                     print(file_path)
@@ -283,6 +291,7 @@ for n in range(3):
                 # Add similar try-except blocks for other conditions
             elif channel == 'g0g5gi' and repr == 'fund':
                 CHANNEL2 = 'at'
+                CHANNEL3 = 'AT'
                 try:
                     file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
                     print(file_path)
@@ -304,6 +313,7 @@ for n in range(3):
                 # Add similar try-except blocks for other conditions
             elif channel == 'g0g5gi' and repr == 'as':
                 CHANNEL2 = 'at'
+                CHANNEL3 = CHANNEL2
                 try:
                     file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
                     print(file_path)
@@ -325,6 +335,7 @@ for n in range(3):
                 # Add similar try-except blocks for other conditions
             elif channel == 'id' and repr == 'fund':
                 CHANNEL2 = 's'
+                CHANNEL3 = 'S'
                 try:
                     file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
                     print(file_path)
@@ -346,6 +357,7 @@ for n in range(3):
                 # Add similar try-except blocks for other conditions
             elif channel == 'id' and repr == 'as':
                 CHANNEL2 = 's'
+                CHANNEL3 = CHANNEL2
                 try:
                     file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
                     print(file_path)
@@ -431,17 +443,19 @@ for n in range(3):
                 channel_E0_with_error = '-'
              
             # Adding the formatted value to the LaTeX table
-            latex_table += f"{CHANNEL2} & {k_peaks} & {n_source} & {n_sink} & {gauss_min_with_error} & {gauss_max_with_error} & {cauchy_min_with_error} & {cauchy_max_with_error} & {channel_E0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
+            latex_table += f"{CHANNEL3} & {k_peaks} & {n_source} & {n_sink} & {gauss_min_with_error} & {gauss_max_with_error} & {cauchy_min_with_error} & {cauchy_max_with_error} & {channel_E0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
+            if CHANNEL2 == 's':
+                latex_table += "\\hline \n"
 
         # Close LaTeX table for each chunk
-        latex_table += "\\hline\n"
+        latex_table += "\\hline \\hline\n"
         latex_table += "\\end{tabular}\n"
         # latex_table += "\\caption{Your caption here.}\n"
         # latex_table += "\\label{table:my_table}\n"
-        latex_table += "\\end{table}\n"
+        #latex_table += "\\end{table}\n"
 
         # Write LaTeX table to a file for each chunk
-        with open(f'./tables/{ensemble}_output_table_aE{n}_meson.tex', 'w') as file:
+        with open(f'./tables/{ensemble}_aE{n}_meson.tex', 'w') as file:
             file.write(latex_table)
         # Reset LaTeX table for next chunk
         latex_table = ""
