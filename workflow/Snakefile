@@ -32,8 +32,7 @@ plots = expand(
         "matrixel_fundamental_antisymmetric",
         "matrixel_chimera_baryons",
         "LambdaScan",
-        "spectral_density_corr_mpi0.366",
-        # "spectral_density_single_gaussian",
+        "spectral_density_single_gaussian",
     ],
 )
 tables = expand(
