@@ -1,3 +1,5 @@
+import argparse
+
 import math
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -5,6 +7,11 @@ import numpy as np
 from matplotlib.legend_handler import HandlerTuple
 import matplotlib.patches as mpatches
 import h5py
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--plot_styles", default="paperdraft.mplstyle")
+parser.add_argument("--topology_h5", required=True)
+args = parser.parse_args()
 
 def read_specific_dataset(filename, dataset_path):
     with h5py.File(filename, 'r') as file:
@@ -15,29 +22,29 @@ def read_specific_dataset(filename, dataset_path):
 
 # List of ensembles
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-filename = '../../../CB_autocorrelation_decay_constant/data_assets/topology.hdf5'
 
 # Build dictionary
 w0_values = {
-    ens: read_specific_dataset(filename, f"{ens}/w0_val")
+    ens: read_specific_dataset(args.topology_h5, f"{ens}/w0_val")
     for ens in ensembles
 }
+
 files = [
-    ('M1', ['../../../input_fit/final_spectrum/M1_ground.txt', '../../../input_fit/final_spectrum/M1_first.txt']),
-    ('M2', ['../../../input_fit/final_spectrum/M2_ground.txt', '../../../input_fit/final_spectrum/M2_first.txt', '../../../input_fit/final_spectrum/M2_second.txt']),
-    ('M3', ['../../../input_fit/final_spectrum/M3_ground.txt', '../../../input_fit/final_spectrum/M3_first.txt', '../../../input_fit/final_spectrum/M3_second.txt']),
-    ('M4', ['../../../input_fit/final_spectrum/M4_ground.txt', '../../../input_fit/final_spectrum/M4_first.txt', '../../../input_fit/final_spectrum/M4_second.txt']),
-    ('M5', ['../../../input_fit/final_spectrum/M5_ground.txt', '../../../input_fit/final_spectrum/M5_first.txt', '../../../input_fit/final_spectrum/M5_second.txt']),
+    ('M1', ['input_fit/final_spectrum/M1_ground.txt', 'input_fit/final_spectrum/M1_first.txt']),
+    ('M2', ['input_fit/final_spectrum/M2_ground.txt', 'input_fit/final_spectrum/M2_first.txt', 'input_fit/final_spectrum/M2_second.txt']),
+    ('M3', ['input_fit/final_spectrum/M3_ground.txt', 'input_fit/final_spectrum/M3_first.txt', 'input_fit/final_spectrum/M3_second.txt']),
+    ('M4', ['input_fit/final_spectrum/M4_ground.txt', 'input_fit/final_spectrum/M4_first.txt', 'input_fit/final_spectrum/M4_second.txt']),
+    ('M5', ['input_fit/final_spectrum/M5_ground.txt', 'input_fit/final_spectrum/M5_first.txt', 'input_fit/final_spectrum/M5_second.txt']),
     # CB channels
-    ('M1', ['../../../input_fit/final_spectrum/CB_M1_ground.txt', '../../../input_fit/final_spectrum/CB_M1_first.txt', '../../../input_fit/final_spectrum/CB_M1_second.txt']),
-    ('M2', ['../../../input_fit/final_spectrum/CB_M2_ground.txt', '../../../input_fit/final_spectrum/CB_M2_first.txt', '../../../input_fit/final_spectrum/CB_M2_second.txt']),
-    ('M3', ['../../../input_fit/final_spectrum/CB_M3_ground.txt', '../../../input_fit/final_spectrum/CB_M3_first.txt', '../../../input_fit/final_spectrum/CB_M3_second.txt']),
-    ('M4', ['../../../input_fit/final_spectrum/CB_M4_ground.txt', '../../../input_fit/final_spectrum/CB_M4_first.txt', '../../../input_fit/final_spectrum/CB_M4_second.txt']),
-    ('M5', ['../../../input_fit/final_spectrum/CB_M5_ground.txt', '../../../input_fit/final_spectrum/CB_M5_first.txt', '../../../input_fit/final_spectrum/CB_M5_second.txt'])
+    ('M1', ['input_fit/final_spectrum/CB_M1_ground.txt', 'input_fit/final_spectrum/CB_M1_first.txt', 'input_fit/final_spectrum/CB_M1_second.txt']),
+    ('M2', ['input_fit/final_spectrum/CB_M2_ground.txt', 'input_fit/final_spectrum/CB_M2_first.txt', 'input_fit/final_spectrum/CB_M2_second.txt']),
+    ('M3', ['input_fit/final_spectrum/CB_M3_ground.txt', 'input_fit/final_spectrum/CB_M3_first.txt', 'input_fit/final_spectrum/CB_M3_second.txt']),
+    ('M4', ['input_fit/final_spectrum/CB_M4_ground.txt', 'input_fit/final_spectrum/CB_M4_first.txt', 'input_fit/final_spectrum/CB_M4_second.txt']),
+    ('M5', ['input_fit/final_spectrum/CB_M5_ground.txt', 'input_fit/final_spectrum/CB_M5_first.txt', 'input_fit/final_spectrum/CB_M5_second.txt'])
 ]
 
-plt.style.use("paperdraft.mplstyle")
-output_file = '../../../plots/final_spectrum_detail.pdf'
+plt.style.use(args.plot_styles)
+output_file = 'assets/plots/final_spectrum_detail.pdf'
 spacing = 0.
 colors = [cm.tab10(i) for i in np.linspace(0, 0.5, 6)]
 

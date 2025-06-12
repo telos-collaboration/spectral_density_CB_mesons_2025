@@ -1,3 +1,6 @@
+import argparse
+import datetime
+
 import os
 import re
 import numpy as np
@@ -7,7 +10,17 @@ from scipy.special import erf
 from scipy.linalg import cholesky, cho_solve
 import csv
 
-plt.style.use("paperdraft.mplstyle")
+parser = argparse.ArgumentParser()
+parser.add_argument("--plot_styles", default="paperdraft.mplstyle")
+args = parser.parse_args()
+
+plt.style.use(args.plot_styles)
+
+if not any(
+    (pathlib.Path(dirname) / "latex").exists()
+    for dirname in os.environ["PATH"].split(":")
+):
+    plt.rcParams["text.usetex"] = False
 
 CB_color_cycle = ['#377eb8', '#ff7f00', '#4daf4a',
                   '#f781bf', '#a65628', '#984ea3',
@@ -23,7 +36,7 @@ def read_csv():
     sigma2_over_mC_values_MN = {}
     k_peaks = {}  # kpeaks[ensemble][channel]
     Nboot_fit = []
-    with open('../input_fit/metadata/metadata_spectralDensity_chimerabaryons.csv', newline='') as csvfile:
+    with open('../metadata/metadata_spectralDensity_chimerabaryons.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             ensemble = row['Ensemble']
@@ -389,6 +402,14 @@ def main():
 
                     # Plot the results
                     #plot_with_errors_single(kernel, sigma, energy, avg_spectral_density1, avg_spectral_density2, fit_params_1, fit_params_2, spectral_density.shape[0], spectral_density, mpi)
+
+    # Avoid needing to work out the full tangle of output files,
+    # while still allowing a workflow dependency on completing this rule
+    with open("simultaneous_fits_CB_complete", "w") as completion_tag_file:
+        print(
+            f"CB simultaneous fits complete at {datetime.datetime.now().astimezone('utc')}",
+            file=completion_tag_file,
+        )
 
 
 if __name__ == "__main__":

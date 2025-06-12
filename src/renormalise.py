@@ -55,11 +55,11 @@ print(computed_z)
 # Ensembles and file mappings
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 tex_files = {
-    'M1': './tables/M1_matrix_meson.tex',
-    'M2': './tables/M2_matrix_meson.tex',
-    'M3': './tables/M3_matrix_meson.tex',
-    'M4': './tables/M4_matrix_meson.tex',
-    'M5': './tables/M5_matrix_meson.tex'
+    'M1': './assets/tables/M1_matrix_meson.tex',
+    'M2': './assets/tables/M2_matrix_meson.tex',
+    'M3': './assets/tables/M3_matrix_meson.tex',
+    'M4': './assets/tables/M4_matrix_meson.tex',
+    'M5': './assets/tables/M5_matrix_meson.tex'
 }
 
 
@@ -128,7 +128,7 @@ for ens, tex_file in tex_files.items():
             updated_lines.append(line)
 
     # Save the updated lines back to a new .tex file
-    output_file = f'./tables/renormalised_{ens}_matrix_meson.tex'
+    output_file = f'./assets/tables/renormalised_{ens}_matrix_meson.tex'
     with open(output_file, 'w') as file:
         file.writelines(updated_lines)
 
@@ -140,8 +140,8 @@ ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 
 for ens in ensembles:
     z_values = computed_z[ens]
-    cb_file = f'./tables/{ens}_matrix_CB.tex'
-    cb_output = f'./tables/renormalised_{ens}_matrix_CB.tex'
+    cb_file = f'./assets/tables/{ens}_matrix_CB.tex'
+    cb_output = f'./assets/tables/renormalised_{ens}_matrix_CB.tex'
 
     if not os.path.exists(cb_file):
         print(f"Missing: {cb_file}")

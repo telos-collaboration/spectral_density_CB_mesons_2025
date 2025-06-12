@@ -1,3 +1,4 @@
+import argparse
 import math
 import matplotlib.pyplot as plt
 import matplotlib.cm as cm
@@ -5,6 +6,11 @@ import numpy as np
 from matplotlib.legend_handler import HandlerTuple
 import matplotlib.patches as mpatches
 import h5py
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--plot_styles", default="paperdraft.mplstyle")
+parser.add_argument("--topology_h5", required=True)
+args = parser.parse_args()
 
 def read_specific_dataset(filename, dataset_path):
     with h5py.File(filename, 'r') as file:
@@ -15,27 +21,27 @@ def read_specific_dataset(filename, dataset_path):
 
 # List of ensembles
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-filename = '../../../CB_autocorrelation_decay_constant/data_assets/topology.hdf5'
 
 # Build dictionary
 w0_values = {
-    ens: read_specific_dataset(filename, f"{ens}/w0_val")
+    ens: read_specific_dataset(args.topology_h5, f"{ens}/w0_val")
     for ens in ensembles
 }
+
 files = [
-    ('M1', ['../../../input_fit/final_matrixel/M1_ground.txt']),
-    ('M2', ['../../../input_fit/final_matrixel/M2_ground.txt']),
-    ('M3', ['../../../input_fit/final_matrixel/M3_ground.txt']),
-    ('M4', ['../../../input_fit/final_matrixel/M4_ground.txt']),
-    ('M5', ['../../../input_fit/final_matrixel/M5_ground.txt']),
-    ('M1', ['../../../input_fit/final_matrixel/CB_M1_ground.txt']),
-    ('M2', ['../../../input_fit/final_matrixel/CB_M2_ground.txt']),
-    ('M3', ['../../../input_fit/final_matrixel/CB_M3_ground.txt']),
-    ('M4', ['../../../input_fit/final_matrixel/CB_M4_ground.txt']),
-    ('M5', ['../../../input_fit/final_matrixel/CB_M5_ground.txt'])
+    ('M1', ['input_fit/final_matrixel/M1_ground.txt']),
+    ('M2', ['input_fit/final_matrixel/M2_ground.txt']),
+    ('M3', ['input_fit/final_matrixel/M3_ground.txt']),
+    ('M4', ['input_fit/final_matrixel/M4_ground.txt']),
+    ('M5', ['input_fit/final_matrixel/M5_ground.txt']),
+    ('M1', ['input_fit/final_matrixel/CB_M1_ground.txt']),
+    ('M2', ['input_fit/final_matrixel/CB_M2_ground.txt']),
+    ('M3', ['input_fit/final_matrixel/CB_M3_ground.txt']),
+    ('M4', ['input_fit/final_matrixel/CB_M4_ground.txt']),
+    ('M5', ['input_fit/final_matrixel/CB_M5_ground.txt'])
 ]
 
-plt.style.use("paperdraft.mplstyle")
+plt.style.use(args.plot_styles)
 spacing = 0.
 colors = [cm.tab10(i) for i in np.linspace(0, 0.5, 6)]
 cb_colors = [cm.RdBu(i) for i in np.linspace(0, 0.3, 6)]
@@ -170,7 +176,7 @@ ax1.legend(
 
 
 plt.tight_layout()
-plt.savefig('../../../plots/matrixel_fundamental_antisymmetric.pdf')
+plt.savefig('assets/plots/matrixel_fundamental_antisymmetric.pdf')
 # plt.show()
 
 
@@ -254,4 +260,4 @@ ax2.set_ylim(0.0, 0.1)
 ax2.set_xlim(6.8, 13.0)
 plt.tight_layout()
 #plt.legend()
-plt.savefig('../../../plots/matrixel_chimera_baryons.pdf')
+plt.savefig('assets/plots/matrixel_chimera_baryons.pdf')

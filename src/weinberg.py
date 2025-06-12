@@ -170,7 +170,7 @@ for rep in ["f", "as"]:
         
         
 # Write LaTeX table to file
-with open("./tables/s_parameters_table.tex", "w") as texfile:
+with open("./assets/tables/s_parameters_table.tex", "w") as texfile:
     texfile.write("\\begin{tabular}{ |c|c|c|c|c| }\n")
     texfile.write("    \\hline\\hline\n")
     texfile.write("    Meson  & Ensemble & $s_0$ & $s_1$ & $s_2$ \\\\\n")

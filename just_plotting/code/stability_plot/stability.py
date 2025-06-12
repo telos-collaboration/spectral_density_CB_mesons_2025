@@ -1,7 +1,13 @@
+import argparse
+
 import os
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.cm as cm
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--plot_styles", default="paperdraft.mplstyle")
+args = parser.parse_args()
 
 # Define the number of colors you want
 num_colors = 3
@@ -10,7 +16,7 @@ indices = np.linspace(0, 0.5, num_colors)
 viridis_colors = [cm.tab10(index) for index in indices]
 
 def plot_stability_multiple_alpha(log_files, save_plot=True, n_alphas=2):
-    plt.style.use("paperdraft.mplstyle")
+    plt.style.use(args.plot_styles)
     fig, ax = plt.subplots(2, 1, figsize=(6, 8))
 
     plot_markers = ['o', 's', 'D']
@@ -141,10 +147,14 @@ def plot_stability_multiple_alpha(log_files, save_plot=True, n_alphas=2):
     plt.tight_layout()
     plt.suptitle('$\omega/m_{\mathrm{PS}} = 0.90$ $\sigma = 0.33m_{\mathrm{PS}}$',fontsize=14, y=0.99)
     if save_plot:
-        plt.savefig("../../../plots/LambdaScan.pdf", dpi=300)
+        plt.savefig("assets/plots/LambdaScan.pdf", dpi=300)
     
     #plt.show()
 
 if __name__ == "__main__":
-    log_files = ["../../../input_fit/stability_plot/InverseProblemLOG_AlphaA.log", "../../../input_fit/stability_plot/InverseProblemLOG_AlphaB.log", "../../../input_fit/stability_plot/InverseProblemLOG_AlphaC.log"]
+    log_files = [
+        "input_fit/stability_plot/InverseProblemLOG_AlphaA.log",
+        "input_fit/stability_plot/InverseProblemLOG_AlphaB.log",
+        "input_fit/stability_plot/InverseProblemLOG_AlphaC.log",
+    ]
     plot_stability_multiple_alpha(log_files, save_plot=True, n_alphas=3)

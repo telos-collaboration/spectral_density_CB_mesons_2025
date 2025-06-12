@@ -21,7 +21,7 @@ rule gevp_chimera_baryon_mass:
         E2_plateau_start=lambda wildcards: metadata_lookup(cols=f"{wildcards.channel}_E2_plateau_start"),
         E2_plateau_end=lambda wildcards: metadata_lookup(cols=f"{wildcards.channel}_E2_plateau_end"),
     input:
-        data="input_correlators/chimera_data_reduced.hdf5",
+        data="input_correlators/chimera_data_reduced.h5",
         script="plateaus/mass_gevp_chimera.py",
     output:
         samples=f"JSONs/{dir_template}/chimera_gevp_{{channel}}_samples.json",
@@ -45,7 +45,7 @@ rule chimera_matrix_element:
         plateau_start=lambda wildcards: metadata_lookup(cols=f"{wildcards.channel}_matrix_element_plateau_start"),
         plateau_end=lambda wildcards: metadata_lookup(cols=f"{wildcards.channel}_matrix_element_plateau_end"),
     input:
-        data="input_correlators/chimera_data_reduced.hdf5",
+        data="input_correlators/chimera_data_reduced.h5",
         script="plateaus/matrix_element_chimera.py",
     output:
         samples=f"JSONs/{dir_template}/chimera_extraction_{{channel}}_samples.json",
@@ -69,7 +69,7 @@ rule gevp_meson_mass:
         E2_plateau_start=lambda wildcards: metadata_lookup(cols=f"{wildcards.channel}_E2_plateau_start"),
         E2_plateau_end=lambda wildcards: metadata_lookup(cols=f"{wildcards.channel}_E2_plateau_end"),
     input:
-        data="input_correlators/chimera_data_reduced.hdf5",
+        data="input_correlators/chimera_data_reduced.h5",
         script="plateaus/mass_gevp_meson.py",
     output:
         samples=f"JSONs/{dir_template}/meson_gevp_{{channel}}_samples.json",
@@ -93,7 +93,7 @@ rule meson_matrix_element:
         plateau_start=lambda wildcards: metadata_lookup(cols=f"{wildcards.channel}_matrix_element_plateau_start"),
         plateau_end=lambda wildcards: metadata_lookup(cols=f"{wildcards.channel}_matrix_element_plateau_end"),
     input:
-        data="input_correlators/chimera_data_reduced.hdf5",
+        data="input_correlators/chimera_data_reduced.h5",
         script="plateaus/matrix_element_meson.py",
     output:
         samples=f"JSONs/{dir_template}/meson_extraction_{{channel}}_samples.json",

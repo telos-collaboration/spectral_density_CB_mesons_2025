@@ -3,7 +3,6 @@ import numpy as np
 import json
 import math
 
-
 def read_json(file_path):
     """Reads a JSON file and returns the parsed data."""
     with open(file_path, 'r') as file:
@@ -24,7 +23,7 @@ def process_gevp_En_mass_samples(file_path, channel, rep, n):
     data = read_json(file_path)
     print(f'gevp_{rep}_{channel}_E{n}_mass_samples')
     # Extract 'gevp_f_at_E0_mass_samples'
-    samples = np.array(data[f'gevp_{rep}_{channel}_E{n}_mass_samples'])
+    samples = np.array(data[f'gevp_{channel}_E{n}_mass_samples'])
     
     # Calculate the average and bootstrap error
     average, error = bootstrap_errors(samples)
@@ -48,7 +47,7 @@ def add_error(channel_E0, err):
 
         #print(err_str)
         if len(str(err_str)) == 1:
-            err_str = str(int(err_str)*30)
+            err_str = str(int(err_str)*10)
         # Determine the number of significant digits in the error
         err_significant_digits = len(err_str) + leading_zeros
 
@@ -73,9 +72,8 @@ def add_error(channel_E0, err):
 
 
 # Read CSV files
-metadata = pd.read_csv('./input_fit/metadata/metadata_spectralDensity.csv')
-#f_meson_gevp = pd.read_csv('./CSVs/F_meson_GEVP.csv')
-#as_meson_gevp = pd.read_csv('./CSVs/AS_meson_GEVP.csv')
+metadata = pd.read_csv('./input_fit/metadata/metadata_spectralDensity_chimerabaryons.csv')
+#gevp = pd.read_csv('./CSVs/CB_GEVP.csv')
 
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 prefix = ['48x20x20x20b6.5mf0.71mas1.01', '64x20x20x20b6.5mf0.71mas1.01', '96x20x20x20b6.5mf0.71mas1.01',
@@ -85,6 +83,8 @@ prefix2 = ['Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20', 'Sp4b6.5nF2nAS3mF-0.71mAS-1.01
 # Iterate through chunks of 4 rows in M3_spectral_density_spectrum.csv
 chunk_size = 4
 
+# Store lines in a dictionary by label
+table_rows = {}
 
 for n in range(3):
     if n == 0:
@@ -93,7 +93,7 @@ for n in range(3):
         energy = 'E1'
     if n == 2:
         energy = 'E2'
-
+    
     for index, ensemble in enumerate(ensembles):
         # Initialize LaTeX table string
         #latex_table = "\\begin{table}[ht]\n"
@@ -102,9 +102,8 @@ for n in range(3):
         latex_table += "\\hline \\hline\n"
         latex_table += "$C$ & $k$ & $N_{\\text{source}}$ & $N_{\\text{sink}}$ & "f"$aE_{n}$ $k$-G & $aE_{n}$ $(k+1)$-G & $aE_{n}$ $k$-C & $aE_{n}$ $(k+1)$-C$ & am_C & ""$\sigma_{G} / m_C$ & $\sigma_{C} / m_C$ \\\\\n"
         latex_table += "\\hline\n"
-        for chunk in pd.read_csv(f'./CSVs/{ensemble}_spectral_density_spectrum.csv', chunksize=chunk_size):
+        for chunk in pd.read_csv(f'./CSVs/{ensemble}_chimerabaryons_spectral_density_spectrum.csv', chunksize=chunk_size):
             channel = chunk['channel'].min()
-            #print(channel)
             repr = chunk['rep'].min()
             if repr == 'fund':
                 rep = 'f'
@@ -112,19 +111,41 @@ for n in range(3):
                 rep = repr
             
             ENSEMBLE = prefix2[index]
-            CHANNEL2 = 'ciao' 
-            if channel == 'g5' and repr == 'fund':
-                CHANNEL2 = 'ps'
-                CHANNEL3 = 'PS'
+            
+            if channel == 'Chimera_OC_even' and repr == 'as':
+                CHANNEL = 'lambda_even'
+                CHANNEL2 = 'PS'
                 try:
-                    file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
+                    file_path = f'./JSONs/{ENSEMBLE}/chimera_gevp_{CHANNEL}_samples.json'
                     print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL2, rep, n)
+                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL, rep, n)
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
-                    err_channel_E0 = 30.*err_channel_E0
                     print(f'average: {channel_E0}')
+                    print(f'error: {err_channel_E0}')
+                    err_channel_E0 = 30.*err_channel_E0
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                except ValueError as e:
+                    # Handle cases where the results are NaN
+                    print(f"ValueError: {e}")
+                    channel_E0 = 'NaN'
+                    err_channel_E0 = 'NaN'
+                    
+            elif channel == 'Chimera_OV12_even' and repr == 'as':
+                CHANNEL = 'sigma_even'
+                CHANNEL2 = 'T'
+                try:
+                    file_path = f'./JSONs/{ENSEMBLE}/chimera_gevp_{CHANNEL}_samples.json'
+                    print(file_path)
+                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL, rep, n)
+                    # Check if the results are nan
+                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
+                        raise ValueError("Result contains NaN values")
+                    print(f'average: {channel_E0}')
+                    err_channel_E0 = 30.*err_channel_E0
                     print(f'error: {err_channel_E0}')
                 except KeyError:
                     channel_E0 = '-'
@@ -134,168 +155,19 @@ for n in range(3):
                     print(f"ValueError: {e}")
                     channel_E0 = 'NaN'
                     err_channel_E0 = 'NaN'
-      
-            # Add similar try-except blocks for other conditions
-            elif channel == 'g5' and repr == 'as':
-                CHANNEL2 = 'ps'
-                CHANNEL3 = CHANNEL2
-                try:
-                    file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
-                    print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL2, rep, n)
-                    # Check if the results are nan
-                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
-                        raise ValueError("Result contains NaN values")
-                    err_channel_E0 = 30.*err_channel_E0
-                    print(f'average: {channel_E0}')
-                    print(f'error: {err_channel_E0}')
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-                except ValueError as e:
-                    # Handle cases where the results are NaN
-                    print(f"ValueError: {e}")
-                    channel_E0 = 'NaN'
-                    err_channel_E0 = 'NaN'
+            
+
+
                 # Add similar try-except blocks for other conditions
-            elif channel == 'gi' and repr == 'fund':
-                CHANNEL2 = 'v'
-                CHANNEL3 = 'V'
+           
+
+            elif channel == 'Chimera_OV32_even' and repr == 'as':
+                CHANNEL = 'sigmastar_even'
+                CHANNEL2 = 'AT'
                 try:
-                    file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
+                    file_path = f'./JSONs/{ENSEMBLE}/chimera_gevp_{CHANNEL}_samples.json'
                     print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL2, rep, n)
-                    # Check if the results are nan
-                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
-                        raise ValueError("Result contains NaN values")
-                    err_channel_E0 = 30.*err_channel_E0
-                    print(f'average: {channel_E0}')
-                    print(f'error: {err_channel_E0}')
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-                except ValueError as e:
-                    # Handle cases where the results are NaN
-                    print(f"ValueError: {e}")
-                    channel_E0 = 'NaN'
-                    err_channel_E0 = 'NaN'
-                # Add similar try-except blocks for other conditions
-            elif channel == 'gi' and repr == 'as':
-                CHANNEL2 = 'v'
-                CHANNEL3 = CHANNEL2
-                try:
-                    file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
-                    print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL2, rep, n)
-                    # Check if the results are nan
-                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
-                        raise ValueError("Result contains NaN values")
-                    err_channel_E0 = 30.*err_channel_E0
-                    print(f'average: {channel_E0}')
-                    print(f'error: {err_channel_E0}')
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-                except ValueError as e:
-                    # Handle cases where the results are NaN
-                    print(f"ValueError: {e}")
-                    channel_E0 = 'NaN'
-                    err_channel_E0 = 'NaN'
-                # Add similar try-except blocks for other conditions
-            elif channel == 'g0gi' and repr == 'fund':
-                CHANNEL2 = 't'
-                CHANNEL3 = 'T'
-                try:
-                    file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
-                    print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL2, rep, n)
-                    # Check if the results are nan
-                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
-                        raise ValueError("Result contains NaN values")
-                    err_channel_E0 = 30.*err_channel_E0
-                    print(f'average: {channel_E0}')
-                    print(f'error: {err_channel_E0}')
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-                except ValueError as e:
-                    # Handle cases where the results are NaN
-                    print(f"ValueError: {e}")
-                    channel_E0 = 'NaN'
-                    err_channel_E0 = 'NaN'
-                # Add similar try-except blocks for other conditions
-            elif channel == 'g0gi' and repr == 'as':
-                CHANNEL2 = 't'
-                CHANNEL3 = CHANNEL2
-                try:
-                    file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
-                    print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL2, rep, n)
-                    # Check if the results are nan
-                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
-                        raise ValueError("Result contains NaN values")
-                    err_channel_E0 = 30.*err_channel_E0
-                    print(f'average: {channel_E0}')
-                    print(f'error: {err_channel_E0}')
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-                except ValueError as e:
-                    # Handle cases where the results are NaN
-                    print(f"ValueError: {e}")
-                    channel_E0 = 'NaN'
-                    err_channel_E0 = 'NaN'
-            elif channel == 'g5gi' and repr == 'fund':
-                CHANNEL2 = 'av'
-                CHANNEL3 = 'AV'
-                try:
-                    file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
-                    print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL2, rep, n)
-                    # Check if the results are nan
-                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
-                        raise ValueError("Result contains NaN values")
-                    err_channel_E0 = 30.*err_channel_E0
-                    print(f'average: {channel_E0}')
-                    print(f'error: {err_channel_E0}')
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-                except ValueError as e:
-                    # Handle cases where the results are NaN
-                    print(f"ValueError: {e}")
-                    channel_E0 = 'NaN'
-                    err_channel_E0 = 'NaN'
-                # Add similar try-except blocks for other conditions
-            elif channel == 'g5gi' and repr == 'as':
-                CHANNEL2 = 'av'
-                CHANNEL3 = CHANNEL2
-                try:
-                    file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
-                    print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL2, rep, n)
-                    # Check if the results are nan
-                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
-                        raise ValueError("Result contains NaN values")
-                    err_channel_E0 = 30.*err_channel_E0
-                    print(f'average: {channel_E0}')
-                    print(f'error: {err_channel_E0}')
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-                except ValueError as e:
-                    # Handle cases where the results are NaN
-                    print(f"ValueError: {e}")
-                    channel_E0 = 'NaN'
-                    err_channel_E0 = 'NaN'
-                # Add similar try-except blocks for other conditions
-            elif channel == 'g0g5gi' and repr == 'fund':
-                CHANNEL2 = 'at'
-                CHANNEL3 = 'AT'
-                try:
-                    file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
-                    print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL2, rep, n)
+                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL, rep, n)
                     # Check if the results are nan
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
@@ -310,79 +182,83 @@ for n in range(3):
                     print(f"ValueError: {e}")
                     channel_E0 = 'NaN'
                     err_channel_E0 = 'NaN'
-                # Add similar try-except blocks for other conditions
-            elif channel == 'g0g5gi' and repr == 'as':
-                CHANNEL2 = 'at'
-                CHANNEL3 = CHANNEL2
-                try:
-                    file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
-                    print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL2, rep, n)
-                    # Check if the results are nan
-                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
-                        raise ValueError("Result contains NaN values")
-                    err_channel_E0 = 30.*err_channel_E0
-                    print(f'average: {channel_E0}')
-                    print(f'error: {err_channel_E0}')
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-                except ValueError as e:
-                    # Handle cases where the results are NaN
-                    print(f"ValueError: {e}")
-                    channel_E0 = 'NaN'
-                    err_channel_E0 = 'NaN'
-                # Add similar try-except blocks for other conditions
-            elif channel == 'id' and repr == 'fund':
-                CHANNEL2 = 's'
-                CHANNEL3 = 'S'
-                try:
-                    file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
-                    print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL2, rep, n)
-                    # Check if the results are nan
-                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
-                        raise ValueError("Result contains NaN values")
-                    err_channel_E0 = 30.*err_channel_E0
-                    print(f'average: {channel_E0}')
-                    print(f'error: {err_channel_E0}')
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-                except ValueError as e:
-                    # Handle cases where the results are NaN
-                    print(f"ValueError: {e}")
-                    channel_E0 = 'NaN'
-                    err_channel_E0 = 'NaN'
-                # Add similar try-except blocks for other conditions
-            elif channel == 'id' and repr == 'as':
-                CHANNEL2 = 's'
-                CHANNEL3 = CHANNEL2
-                try:
-                    file_path = f'./JSONs/{ENSEMBLE}/meson_gevp_{rep}_{CHANNEL2}_samples.json'
-                    print(file_path)
-                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL2, rep, n)
-                    # Check if the results are nan
-                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
-                        raise ValueError("Result contains NaN values")
-                    err_channel_E0 = 30.*err_channel_E0 
-                    print(f'average: {channel_E0}')
-                    print(f'error: {err_channel_E0}')
-                except KeyError:
-                    channel_E0 = '-'
-                    err_channel_E0 = '-'
-                except ValueError as e:
-                    # Handle cases where the results are NaN
-                    print(f"ValueError: {e}")
-                    channel_E0 = 'NaN'
-                    err_channel_E0 = 'NaN'
+
                 # Add similar try-except blocks for other conditions
 
-            # print(CHANNEL)
+            elif channel == 'Chimera_OC_odd' and repr == 'as':
+                CHANNEL = 'lambda_odd'
+                CHANNEL2 = 'V'
+                try:
+                    file_path = f'./JSONs/{ENSEMBLE}/chimera_gevp_{CHANNEL}_samples.json'
+                    print(file_path)
+                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL, rep, n)
+                    # Check if the results are nan
+                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
+                        raise ValueError("Result contains NaN values")
+                    print(f'average: {channel_E0}')
+                    err_channel_E0 = 30.*err_channel_E0
+                    print(f'error: {err_channel_E0}')
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                except ValueError as e:
+                    # Handle cases where the results are NaN
+                    print(f"ValueError: {e}")
+                    channel_E0 = 'NaN'
+                    err_channel_E0 = 'NaN'
+
+
+
+            elif channel == 'Chimera_OV12_odd' and repr == 'as':
+                CHANNEL = 'sigma_odd'
+                CHANNEL2 = 'AV'
+                try:
+                    file_path = f'./JSONs/{ENSEMBLE}/chimera_gevp_{CHANNEL}_samples.json'
+                    print(file_path)
+                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL, rep, n)
+                    # Check if the results are nan
+                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
+                        raise ValueError("Result contains NaN values")
+                    print(f'average: {channel_E0}')
+                    err_channel_E0 = 30.*err_channel_E0
+                    print(f'error: {err_channel_E0}')
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                except ValueError as e:
+                    # Handle cases where the results are NaN
+                    print(f"ValueError: {e}")
+                    channel_E0 = 'NaN'
+                    err_channel_E0 = 'NaN'
+                    
+                # Add similar try-except blocks for other conditions
+            elif channel == 'Chimera_OV32_odd' and repr == 'as':
+                CHANNEL = 'sigmastar_odd'
+                CHANNEL2 = 'S'
+                try:
+                    file_path = f'./JSONs/{ENSEMBLE}/chimera_gevp_{CHANNEL}_samples.json'
+                    print(file_path)
+                    channel_E0, err_channel_E0 = process_gevp_En_mass_samples(file_path, CHANNEL, rep, n)
+                    # Check if the results are nan
+                    if np.isnan(channel_E0) or np.isnan(err_channel_E0):
+                        raise ValueError("Result contains NaN values")
+                    print(f'average: {channel_E0}')
+                    err_channel_E0 = 30.*err_channel_E0
+                    print(f'error: {err_channel_E0}')
+                except KeyError:
+                    channel_E0 = '-'
+                    err_channel_E0 = '-'
+                except ValueError as e:
+                    # Handle cases where the results are NaN
+                    print(f"ValueError: {e}")
+                    channel_E0 = 'NaN'
+                    err_channel_E0 = 'NaN'
+
+            # print(CHANNEL2)
             # Extract required values from metadata
             k_peaks = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_k_peaks"].values[0]
-            n_source = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_Nsource_1"].values[0]
-            n_sink = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_Nsink_1"].values[0]
+            n_source = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_Nsource"].values[0]
+            n_sink = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_Nsink"].values[0]
             sigma1_over_m = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_sigma1_over_m"].values[0]
             sigma2_over_m = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_sigma2_over_m"].values[0]
 
@@ -419,21 +295,10 @@ for n in range(3):
                     cauchy_min_with_error = '-'
                     cauchy_max_with_error = '-'
                 else:
-                    if err_gauss_min != 0.0:
-                        gauss_min_with_error = add_error(gauss_min, err_gauss_min)
-                    else:
-                        gauss_min_with_error = add_error(gauss_min, 0.01*gauss_min)
-                    if err_gauss_max != 0.0:
-                        gauss_max_with_error = add_error(gauss_max, 0.01*gauss_max)
-                    if err_cauchy_min != 0.0:
-                        cauchy_min_with_error = add_error(cauchy_min, err_cauchy_min)
-                    else:
-                        cauchy_min_with_error = add_error(cauchy_min, 0.01*cauchy_min)
-                    if err_cauchy_max != 0.0:
-                        cauchy_max_with_error = add_error(cauchy_max, err_cauchy_max)
-                    else:
-                        cauchy_max_with_error = add_error(cauchy_max, 0.01*cauchy_max)
-                     
+                    gauss_min_with_error = add_error(gauss_min, err_gauss_min)
+                    gauss_max_with_error = add_error(gauss_max, err_gauss_max)
+                    cauchy_min_with_error = add_error(cauchy_min, err_cauchy_min)
+                    cauchy_max_with_error = add_error(cauchy_max, err_cauchy_max)
                 channel_E0_with_error = add_error(channel_E0, err_channel_E0)
             except KeyError:
                 gauss_min_with_error = '-'
@@ -441,25 +306,55 @@ for n in range(3):
                 cauchy_min_with_error = '-'
                 cauchy_max_with_error = '-'
                 channel_E0_with_error = '-'
-             
+            x_labels = ['$\Lambda^{+}_{\\rm CB}$', '$\Lambda^{-}_{\\rm CB}$', '$\Sigma^{+}_{\\rm CB}$', '$\Sigma^{-}_{\\rm CB}$', '$\Sigma^{* \, +}_{\\rm CB}$', '$\Sigma^{* \, -}_{\\rm CB}$']
+            if channel == 'Chimera_OC_even':
+                ch = x_labels[0]
+            if channel == 'Chimera_OC_odd':
+                ch = x_labels[1]
+            if channel == 'Chimera_OV12_even':
+                ch = x_labels[2]
+            if channel == 'Chimera_OV12_odd':
+                ch = x_labels[3]
+            if channel == 'Chimera_OV32_even':
+                ch = x_labels[4]
+            if channel == 'Chimera_OV32_odd':
+                ch = x_labels[5]
             # Adding the formatted value to the LaTeX table
-            latex_table += f"{CHANNEL3} & {k_peaks} & {n_source} & {n_sink} & {gauss_min_with_error} & {gauss_max_with_error} & {cauchy_min_with_error} & {cauchy_max_with_error} & {channel_E0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
-            if CHANNEL2 == 's':
-                latex_table += "\\hline \n"
+            #latex_table += f"{ch} & {k_peaks} & {n_source} & {n_sink} & {gauss_min_with_error} & {gauss_max_with_error} & {cauchy_min_with_error} & {cauchy_max_with_error} & {channel_E0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
+            
 
-        # Close LaTeX table for each chunk
+            # Store the line
+            row_line = f"{ch} & {k_peaks} & {n_source} & {n_sink} & {gauss_min_with_error} & {gauss_max_with_error} & {cauchy_min_with_error} & {cauchy_max_with_error} & {channel_E0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
+            table_rows[ch] = row_line
+
+
+        # Desired row order
+        row_order = [
+            '$\Lambda^{+}_{\\rm CB}$',
+            '$\Sigma^{+}_{\\rm CB}$',
+            '$\Sigma^{* \, +}_{\\rm CB}$',
+            '$\Lambda^{-}_{\\rm CB}$',
+            '$\Sigma^{-}_{\\rm CB}$',
+            '$\Sigma^{* \, -}_{\\rm CB}$'
+        ]
+
+        # Add rows to LaTeX table in desired order
+        for key in row_order:
+            if key in table_rows:
+                latex_table += table_rows[key]
+
         latex_table += "\\hline \\hline\n"
         latex_table += "\\end{tabular}\n"
+
         # latex_table += "\\caption{Your caption here.}\n"
         # latex_table += "\\label{table:my_table}\n"
         #latex_table += "\\end{table}\n"
 
         # Write LaTeX table to a file for each chunk
-        with open(f'./tables/{ensemble}_aE{n}_meson.tex', 'w') as file:
+        with open(f'./assets/tables/{ensemble}_aE{n}_CB.tex', 'w') as file:
             file.write(latex_table)
         # Reset LaTeX table for next chunk
         latex_table = ""
 
         # Print confirmation message
-        print("Tables generated and saved in output_table.tex")
-
+        print(f"Tables generated and saved in {ensemble}_aE{n}_CB.tex")

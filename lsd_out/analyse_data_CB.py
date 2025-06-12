@@ -1,3 +1,5 @@
+import datetime
+
 import read_hdf
 import read_hdf2
 import translate
@@ -300,7 +302,7 @@ def main():
 
     ################# Download and use lsdensities on correlators ########################
     # Replace 'your_file.h5' with the path to your HDF5 file
-    file_path = '../input_correlators/chimera_data_reduced.hdf5'
+    file_path = '../input_correlators/chimera_data_reduced.h5'
     # rep = reps[0]
     for kernel in kerneltype:
         for index, ensemble in enumerate(ensembles):
@@ -345,6 +347,14 @@ def main():
         with multiprocess.Pool(processes=num_workers) as pool:
             pool.map(wrapper, task_args)
 
+
+    # Avoid needing to work out the full tangle of output files,
+    # while still allowing a workflow dependency on completing this rule
+    with open("analyse_data_CB_complete", "w") as completion_tag_file:
+        print(
+            f"CB analysis complete at {datetime.datetime.now().astimezone('utc')}",
+            file=completion_tag_file,
+        )
 
 
 if __name__ == "__main__":

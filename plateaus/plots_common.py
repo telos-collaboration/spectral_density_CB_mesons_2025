@@ -83,7 +83,7 @@ def get_standard_plot_args(fit_results=False, external_data=False):
     )
     parser.add_argument(
         "--plot_styles",
-        #default="styles/paperdraft.mplstyle",
+        default="styles/paperdraft.mplstyle",
         help="Stylesheet to use for plots",
     )
     return parser.parse_args()
@@ -91,7 +91,7 @@ def get_standard_plot_args(fit_results=False, external_data=False):
 
 def standard_plot_main(plot_function, **args_options):
     args = get_standard_plot_args(**args_options)
-    #plt.style.use(args.plot_styles)
+    plt.style.use(args.plot_styles)
     data = read_sample_files(args.data_filenames)
 
     external_data = (
