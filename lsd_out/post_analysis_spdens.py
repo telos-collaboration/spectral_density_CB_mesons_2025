@@ -432,47 +432,12 @@ def process_spectrum(file_path):
                 selected_row = group.iloc[i]
                 aE_1 = selected_row['aE_1']
                 errorE1 = selected_row['errorE1']
-                
-                
                 if pd.isna(aE_1) or aE_1 == 0:
                     aE_1 = 0.0
                     errorE1 = 0.0
-                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OC_even' and rep == 'as':
-                    errorE1 *= 0.2
-                if file_path.endswith('M2_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
-                    errorE1 *= 2.0
-                    aE_1 += 0.02
-                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
-                    errorE1 *= 0.7
-                if file_path.endswith('M1_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
-                    errorE1 *= 4.0
-                    aE_1 -= 0.02
-                if file_path.endswith('M1_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OC_odd' and rep == 'as':
-                    errorE1 *= 4.0
-                    aE_1 += 0.04
-                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OC_odd' and rep == 'as':
-                    errorE1 *= 0.4
-                    aE_1 -= 0.06
-                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_odd' and rep == 'as':
-                    errorE1 = 0.002
-                    aE_1 -= 0.06
-                if file_path.endswith('M1_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_odd' and rep == 'as':
-                    errorE1 *= 1.7
-                    aE_1 += 0.12
-                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OC_odd' and rep == 'as':
-                    errorE1 *= 0.1
-
-                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_odd' and rep == 'as':
-                    errorE1 *= 0.1
-                    #aE_1 += 0.12
                 # Append the formatted result to the list for Mx_first.txt
                 channel_rep_results_aE_1.append(f"{aE_1} {errorE1}")
             else:
-                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OC_even' and rep == 'as':
-                    errorE1 *= 0.2
-                if file_path.endswith('M3_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV12_odd' and rep == 'as':
-                    errorE1 *= 0.1
-                    #aE_1 += 0.12
                 # If less than four occurrences, append "0 0"
                 channel_rep_results_aE_1.append("0 0")
         if file_path.endswith('M2_chimerabaryons_spectral_density_spectrum.csv') and channel == 'Chimera_OV32_even' and rep == 'as':
