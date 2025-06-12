@@ -73,7 +73,7 @@ def add_error(channel_E0, err):
 
 
 # Read CSV files
-metadata = pd.read_csv('./input_fit/metadata/metadata_spectralDensity.csv')
+metadata = pd.read_csv('./metadata/metadata_spectralDensity.csv')
 #f_meson_gevp = pd.read_csv('./CSVs/F_meson_GEVP.csv')
 #as_meson_gevp = pd.read_csv('./CSVs/AS_meson_GEVP.csv')
 

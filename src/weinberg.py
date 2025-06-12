@@ -63,6 +63,12 @@ ensemble_map = {
     "./JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32": "M5",
 }
 
+<<<<<<< HEAD
+=======
+# Load renormalization factors
+renorm_df = pd.read_csv("./metadata/renormalise.csv")
+
+>>>>>>> tidying up snakemakification process
 # Results will be stored here
 results = []
 

@@ -490,6 +490,8 @@ for key in file_paths:
 import pandas as pd
 import os
 
+# Load renormalisation constants
+z_factors = pd.read_csv('../metadata/renormalise.csv')
 
 # Define the file paths for each M file
 file_paths = {
@@ -568,11 +570,8 @@ for key, file_path in file_paths.items():
 import pandas as pd
 import os
 
-<<<<<<< HEAD
-=======
 # Load renormalisation constants
 z_factors = pd.read_csv('../metadata/renormalise.csv')
->>>>>>> first draft of snakemake everything
 
 # Define the file paths for each M file
 file_paths = {

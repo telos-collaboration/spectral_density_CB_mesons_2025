@@ -434,7 +434,7 @@ def main():
     energy = np.linspace(0.30, 1.29, 7)
 
     # Load the CSV file
-    df = pd.read_csv('../input_fit/metadata/metadata_spectralDensity.csv', index_col=0)
+    df = pd.read_csv('../metadata/metadata_spectralDensity.csv', index_col=0)
 
     # Define the columns and rows you're interested in
     cols = ['af_a', 'af_b', 'af_c', 'af_d', 'af_e', 'af_f', 'af_g']

@@ -25,7 +25,7 @@ def read_csv():
     sigma2_over_mC_values_MN = {}
     k_peaks = {}    # kpeaks[ensemble][channel]
     Nboot_fit = []
-    with open('../input_fit/metadata/metadata_spectralDensity_chimerabaryons.csv', newline='') as csvfile:
+    with open('../metadata/metadata_spectralDensity_chimerabaryons.csv', newline='') as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
             ensemble = row['Ensemble']
@@ -1392,7 +1392,7 @@ if four_fit is True:
     triple_fit = True
 
 matrix_4D, k_peaks, Nboot_fit  = read_csv()
-file_path_MD = '../input_fit/metadata/ratioguesses_chimerabaryons_spectrum.csv'
+file_path_MD = '../metadata/ratioguesses_chimerabaryons_spectrum.csv'
 matrix_2D = read_csv2(file_path_MD)
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 #ensembles = ['M1']
