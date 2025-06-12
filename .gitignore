@@ -6,6 +6,7 @@ input_correlators
 input_fit
 input_topology
 intermediary_data
+metadata
 raw_data
 CSVs
 JSONs

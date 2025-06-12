@@ -51,6 +51,8 @@ with h5py.File(h5_file, 'r') as f:
         
 print(computed_z)
 
+# Path to the CSV file
+csv_file_path = './metadata/renormalise.csv'
 
 # Ensembles and file mappings
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']

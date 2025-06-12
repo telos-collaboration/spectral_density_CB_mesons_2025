@@ -1,6 +1,6 @@
 import pandas as pd
 
-metadata = pd.read_csv("../input_fit/metadata/ensemble_metadata.csv")
+metadata = pd.read_csv("../metadata/ensemble_metadata.csv")
 metadata_query = "Nc == {Nc} & Nt == {Nt} & Ns == {Ns} & beta == {beta} & nF == {nF} & mF == {mF} & nAS == {nAS} & mAS == {mAS}"
 
 

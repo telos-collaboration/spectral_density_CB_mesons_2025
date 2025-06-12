@@ -29,7 +29,7 @@ def add_error(channel_E0, err):
 
 
 # Read metadata CSV file
-metadata = pd.read_csv('./input_fit/metadata/metadata_spectralDensity.csv')
+metadata = pd.read_csv('./metadata/metadata_spectralDensity.csv')
 
 ensemble_map = {
     'M1': '48x20x20x20b6.5mf0.71mas1.01',

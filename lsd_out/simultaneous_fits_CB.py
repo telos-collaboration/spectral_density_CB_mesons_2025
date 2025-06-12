@@ -309,7 +309,7 @@ def plot_with_errors_single(kernel, sigma, energy, avg_spectral_density1, avg_sp
 
 def main():
     matrix_4D, k_peaks, Nboot_fit = read_csv()
-    file_path_MD = '../input_fit/metadata/metadata_spectralDensity_chimerabaryons.csv'
+    file_path_MD = '../metadata/metadata_spectralDensity_chimerabaryons.csv'
     matrix_2D = read_csv2(file_path_MD)
     ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
     #ensembles = ['M1']
