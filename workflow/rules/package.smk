@@ -12,10 +12,29 @@ topology_dirs = {
     "Lt64Ls32beta6.5mf0.72mas1.01FUN": "M5",
 }
 
+wall_dirs = {
+    **{f"raw_data/wall/{key}/out/out_spectrum_wall": f"{value}FUN" for key, value in topology_dirs.items()},
+    **{f"raw_data/wall/{key[:-3]}AS/out/out_spectrum_wall": f"{value}AS" for key, value in topology_dirs.items()},
+}
+
+
+rule wall_package_list:
+    params:
+        content="\n".join(f"{subdir},{name}" for subdir, name in wall_dirs.items())
+    output:
+        listing="intermediary_data/wall_listing.csv",
+    shell:
+        (
+            "cat > {output.listing} <<EOF\n"
+            "{params.content}\n"
+            "EOF\n"
+        )
+
+
 rule package_wall:
     input:
-        metadata="metadata/ensemble_metadata.csv",
-#         logs=...,
+        metadata="intermediary_data/wall_listing.csv",
+        logs=wall_dirs.keys(),
         instantiate_julia="intermediary_data/cb_julia_instantiated",
         script=f"{wall_parsing_base}/parse.jl",
     output:
