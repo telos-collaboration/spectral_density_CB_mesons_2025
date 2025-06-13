@@ -4,9 +4,24 @@ import matplotlib.cm as cm
 import numpy as np
 from matplotlib.legend_handler import HandlerTuple
 import matplotlib.patches as mpatches
+import h5py
 
-# Define constants and configuration
-w0_values = {'M1': 2.5210, 'M2': 2.5290, 'M3': 2.5237, 'M4': 2.3664, 'M5': 2.6927}
+def read_specific_dataset(filename, dataset_path):
+    with h5py.File(filename, 'r') as file:
+        if dataset_path in file:
+            return file[dataset_path][()]  # Read the full dataset
+        else:
+            raise KeyError(f"Dataset '{dataset_path}' not found in file '{filename}'")
+
+# List of ensembles
+ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
+filename = '../../../CB_autocorrelation_decay_constant/data_assets/topology.hdf5'
+
+# Build dictionary
+w0_values = {
+    ens: read_specific_dataset(filename, f"{ens}/w0_val")
+    for ens in ensembles
+}
 files = [
     ('M1', ['../../../input_fit/final_spectrum/M1_ground.txt', '../../../input_fit/final_spectrum/M1_first.txt']),
     ('M2', ['../../../input_fit/final_spectrum/M2_ground.txt', '../../../input_fit/final_spectrum/M2_first.txt', '../../../input_fit/final_spectrum/M2_second.txt']),
