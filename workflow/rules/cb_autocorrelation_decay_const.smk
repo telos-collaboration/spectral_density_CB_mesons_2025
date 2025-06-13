@@ -7,7 +7,7 @@ rule instantiate_julia:
     output:
         marker="intermediary_data/cb_julia_instantiated"
     conda: "../envs/CB_autocorrelation_decay_constant.yml"
-    shell: "julia {input.script} && touch {output.marker}"
+    shell: f"cd {cb_julia_source}/.. && julia ../{{input.script}} && cd .. && touch {{output.marker}}"
 
 
 rule analyse_flows:
