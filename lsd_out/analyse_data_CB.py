@@ -352,7 +352,7 @@ def main():
     # while still allowing a workflow dependency on completing this rule
     with open("analyse_data_CB_complete", "w") as completion_tag_file:
         print(
-            f"CB analysis complete at {datetime.datetime.now().astimezone('utc')}",
+            f"CB analysis complete at {datetime.datetime.now().astimezone()}",
             file=completion_tag_file,
         )
 
