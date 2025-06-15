@@ -355,7 +355,7 @@ def main():
     # while still allowing a workflow dependency on completing this rule
     with open("print_samples_CB_complete", "w") as completion_tag_file:
         print(
-            f"CB sample printing complete at {datetime.datetime.now().astimezone('utc')}",
+            f"CB sample printing complete at {datetime.datetime.now().astimezone()}",
             file=completion_tag_file,
         )
 

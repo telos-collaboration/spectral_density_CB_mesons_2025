@@ -473,7 +473,7 @@ def main():
     # while still allowing a workflow dependency on completing this rule
     with open("analyse_data_mesons_complete", "w") as completion_tag_file:
         print(
-            f"Meson analysis complete at {datetime.datetime.now().astimezone('utc')}",
+            f"Meson analysis complete at {datetime.datetime.now().astimezone()}",
             file=completion_tag_file,
         )
 

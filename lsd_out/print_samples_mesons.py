@@ -372,7 +372,7 @@ def main():
     # while still allowing a workflow dependency on completing this rule
     with open("print_samples_mesons_complete", "w") as completion_tag_file:
         print(
-            f"Meson sample printing complete at {datetime.datetime.now().astimezone('utc')}",
+            f"Meson sample printing complete at {datetime.datetime.now().astimezone()}",
             file=completion_tag_file,
         )
 
