@@ -318,7 +318,7 @@ def perform_fit(kernel,ensemble,rep,channel, ensemble_num, channel_num,path, fil
     rho_central = np.zeros(ne)
     drho_central = np.zeros(ne)
     # Create a new figure with a specific size (width, height) in inches
-    plt.figure(figsize=(7, 4.5))  # Width: 8 inches, Height: 6 inches
+    fig = plt.figure(figsize=(7, 4.5))  # Width: 8 inches, Height: 6 inches
     for ei in range(ne):
         rho_central[ei] = rho_T[ei].mean()
     drho_central = np.sqrt(cov_matrix.diagonal())
@@ -1347,6 +1347,7 @@ def perform_fit(kernel,ensemble,rep,channel, ensemble_num, channel_num,path, fil
     '''
     # Display the plot
     #plt.show()
+    plt.close(fig)
     return None
 
 ########################### Preferences ################################
