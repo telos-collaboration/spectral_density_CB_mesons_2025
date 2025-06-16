@@ -73,8 +73,8 @@ def process_file2(file_name, w0):
             min_err_idx = errors_data.index(min(errors_data))
             stat = errors_data[min_err_idx]
             sys = max(abs(measurements[i] - measurements[j]) for i in range(len(measurements)) for j in range(i+1, len(measurements)))
-            value = measurements[min_err_idx] * w0**(3/2)
-            total_err = math.sqrt(stat**2 + sys**2) * w0**(3/2)
+            value = measurements[min_err_idx] * w0**(3)
+            total_err = math.sqrt(stat**2 + sys**2) * w0**(3)
             values.append(value)
             errors.append(total_err)
     return values, errors
@@ -203,7 +203,7 @@ for ensemble, file_list in files:
             ax2.add_patch(rect)
 
 # Label
-ax2.text(9.8, 2.25, 'Chimera baryons', fontsize=16, ha='center')
+ax2.text(9.8, 10.05, 'Chimera baryons', fontsize=16, ha='center')
 
 import matplotlib.patches as mpatches
 
@@ -239,7 +239,7 @@ ax2.legend(
 ax2.set_xticks([x + 0.3 for x in ciao[6:]])
 ax2.set_xticklabels(x_labels[6:], ha='right', fontsize=14, rotation=45)
 ax2.set_ylabel('$\hat{K}_{B, 0}$', fontsize=16)
-ax2.set_ylim(0.0, 2.4)
+ax2.set_ylim(0.0, 10.8)
 ax2.set_xlim(6.8, 13.0)
 plt.tight_layout()
 #plt.legend()
