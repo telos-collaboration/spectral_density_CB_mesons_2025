@@ -1,3 +1,5 @@
+import argparse
+
 import pandas as pd
 import re
 import os
@@ -7,15 +9,18 @@ import math
 
 # Constants
 PI2 = math.pi ** 2
-h5_file = './CB_autocorrelation_decay_constant/data_assets/topology.hdf5'
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--topology_h5", required=True)
+args = parser.parse_args()
 
 # Read the renormalise.csv file
-df = pd.read_csv('./input_fit/metadata/renormalise.csv')
+df = pd.read_csv('./metadata/renormalise.csv')
 
 # Compute Z values dynamically using CSV and HDF5 plaquette data
 computed_z = {}
 
-with h5py.File(h5_file, 'r') as f:
+with h5py.File(args.topology_h5, 'r') as f:
     for _, row in df.iterrows():
         ens = row['Ens']
         beta = row['beta']
@@ -30,7 +35,7 @@ with h5py.File(h5_file, 'r') as f:
         # Load and average plaquette
         plaq_path = f"{ens}/plaquette"
         if plaq_path not in f:
-            raise KeyError(f"Missing {plaq_path} in {h5_file}")
+            raise KeyError(f"Missing {plaq_path} in {args.topology_h5}")
         plaq_values = f[plaq_path][()]
         plaq_avg = np.mean(plaq_values)
 

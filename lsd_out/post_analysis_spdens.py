@@ -11,7 +11,7 @@ PI2 = math.pi ** 2
 h5_file = '../CB_autocorrelation_decay_constant/data_assets/topology.hdf5'
 
 # Read the renormalise.csv file
-df = pd.read_csv('../input_fit/metadata/renormalise.csv')
+df = pd.read_csv('../metadata/renormalise.csv')
 
 # Compute Z values dynamically using CSV and HDF5 plaquette data
 computed_z = {}
