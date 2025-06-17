@@ -1,5 +1,56 @@
 import pandas as pd
 import os
+import json
+import numpy as np
+import re
+import h5py
+import math
+
+# Constants
+PI2 = math.pi ** 2
+h5_file = '../CB_autocorrelation_decay_constant/data_assets/topology.hdf5'
+
+# Read the renormalise.csv file
+df = pd.read_csv('../input_fit/metadata/renormalise.csv')
+
+# Compute Z values dynamically using CSV and HDF5 plaquette data
+computed_z = {}
+
+with h5py.File(h5_file, 'r') as f:
+    for _, row in df.iterrows():
+        ens = row['Ens']
+        beta = row['beta']
+        C_fund = row['C_fund']
+        C_as = row['C_as']
+        Delta_Sigma1 = row['Delta_Sigma1']
+        Delta_R1 = row['Delta_R1']
+        Delta_R2 = row['Delta_R2']
+        Delta_Lambda = row['Delta_Lambda']
+        Delta_Sigma = row['Delta_Sigma']
+        
+        # Load and average plaquette
+        plaq_path = f"{ens}/plaquette"
+        if plaq_path not in f:
+            raise KeyError(f"Missing {plaq_path} in {h5_file}")
+        plaq_values = f[plaq_path][()]
+        plaq_avg = np.mean(plaq_values)
+
+        # Compute Zs
+        factor_fund = 8 * C_fund / (16 * PI2 * beta * plaq_avg)
+        factor_as   = 8 * C_as / (16 * PI2 * beta * plaq_avg)
+
+        computed_z[ens] = {
+            'Z_PS_fund': 1 + factor_fund * (Delta_Sigma1 + Delta_R1),
+            'Z_V_fund': 1 + factor_fund * (Delta_Sigma1 + Delta_R2),
+            'Z_A_fund': 1 + factor_fund * (Delta_Sigma1 + Delta_R1),
+            'Z_PS_as': 1 + factor_as * (Delta_Sigma1 + Delta_R1),
+            'Z_V_as': 1 + factor_as * (Delta_Sigma1 + Delta_R2),
+            'Z_A_as': 1 + factor_as * (Delta_Sigma1 + Delta_R1),
+            'Z_Lambda': 1 + (factor_fund/C_fund) * ((C_fund + 1/2*C_as) * Delta_Sigma1 + Delta_Lambda),
+            'Z_Sigma': 1 + (factor_fund/C_fund) * ((C_fund + 1/2*C_as) * Delta_Sigma1 + Delta_Sigma),
+        }
+        
+print(computed_z)
 
 # Define the file paths for each M file
 file_paths = {
@@ -439,8 +490,6 @@ for key in file_paths:
 import pandas as pd
 import os
 
-# Load renormalisation constants
-z_factors = pd.read_csv('../input_fit/metadata/renormalise.csv')
 
 # Define the file paths for each M file
 file_paths = {
@@ -484,8 +533,8 @@ def process_spectrum(file_path, ensemble):
         z_field = z_field_map.get((channel, rep))
         if z_field is None:
             continue
-        ZA = z_factors.loc[z_factors['Ens'] == ensemble, z_field].values[0]
-
+        ZA = computed_z[ensemble][z_field]
+        #ZA = z_factors.loc[z_factors['Ens'] == ensemble, z_field].values[0]
         values = []
         for i in range(2):
             if i < len(group):
@@ -519,8 +568,6 @@ for key, file_path in file_paths.items():
 import pandas as pd
 import os
 
-# Load renormalisation constants
-z_factors = pd.read_csv('../input_fit/metadata/renormalise.csv')
 
 # Define the file paths for each M file
 file_paths = {
@@ -564,8 +611,8 @@ def process_spectrum(file_path, ensemble):
         if z_field is None:
             continue
 
-        ZA = z_factors.loc[z_factors['Ens'] == ensemble, z_field].values[0]
-
+        #ZA = z_factors.loc[z_factors['Ens'] == ensemble, z_field].values[0]
+        ZA = computed_z[ensemble][z_field]
         values = []
         for i in range(2):
             if i < len(group):
