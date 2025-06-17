@@ -249,7 +249,7 @@ use rule output_template as CSVs_to_tables_CB_matrixelements with:
         ),
 
 
-use rule output_template as renormalise with:
+rule renormalise:
     input:
         script="src/renormalise.py",
         data="metadata/renormalise.csv",
@@ -261,6 +261,7 @@ use rule output_template as renormalise with:
             "assets/tables/{ensemble}_matrix_CB.tex",
             ensemble=ensembles,
         ),
+        topology="data_assets/flows.h5",
     output:
         mesons_tex=expand(
             "assets/tables/renormalised_{ensemble}_matrix_mesons.tex",
@@ -270,6 +271,8 @@ use rule output_template as renormalise with:
             "assets/tables/renormalised_{ensemble}_matrix_CB.tex",
             ensemble=ensembles,
         ),
+    conda: "../envs/spectral_densities.yml"
+    shell: "python {input.script} --topology_h5 {input.topology}"
 
 
 rule output_template_with_topology:
@@ -295,7 +298,7 @@ use rule output_template_with_topology as spectrum_MN_plot with:
             ensemble=ensembles,
         ),
         plot_styles=plot_styles,
-        topology="data_assets/topology.h5",
+        topology="data_assets/flows.h5",
     output:
         "assets/plots/final_spectrum_MN3.pdf",
 
@@ -318,7 +321,7 @@ use rule output_template_with_topology as spectrum_ensembles_showing_plot with:
             ensemble=ensembles,
         ),
         plot_styles=plot_styles,
-        topology="data_assets/topology.h5",
+        topology="data_assets/flows.h5",
     output:
         "assets/plots/final_spectrum_detail.pdf",
 
@@ -332,7 +335,7 @@ use rule output_template_with_topology as matrix_MN_plot with:
             ensemble=ensembles,
         ),
         plot_styles=plot_styles,
-        topology="data_assets/topology.h5",
+        topology="data_assets/flows.h5",
     output:
         "assets/plots/matrixel_fundamental_antisymmetric.pdf",
         "assets/plots/matrixel_chimera_baryons.pdf",
@@ -369,6 +372,9 @@ rule weinberg:
             representation=["f", "as"],
             channel=["ps", "av", "v"],
         ),
+        topology="data_assets/flows.h5",
     output:
         tex="assets/tables/s_parameters_table.tex",
-        csv="CSVs/s_parameter_summary.csv",
+        csv="CSVs/s_parameters_summary.csv",
+    conda: "../envs/spectral_densities.yml"
+    shell: "python {input.script} --topology_h5 {input.topology}"
