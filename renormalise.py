@@ -1,9 +1,56 @@
 import pandas as pd
 import re
 import os
+import numpy as np
+import h5py
+import math
 
-# Path to the CSV file
-csv_file_path = './input_fit/metadata/renormalise.csv'
+# Constants
+PI2 = math.pi ** 2
+h5_file = './CB_autocorrelation_decay_constant/data_assets/topology.hdf5'
+
+# Read the renormalise.csv file
+df = pd.read_csv('./input_fit/metadata/renormalise.csv')
+
+# Compute Z values dynamically using CSV and HDF5 plaquette data
+computed_z = {}
+
+with h5py.File(h5_file, 'r') as f:
+    for _, row in df.iterrows():
+        ens = row['Ens']
+        beta = row['beta']
+        C_fund = row['C_fund']
+        C_as = row['C_as']
+        Delta_Sigma1 = row['Delta_Sigma1']
+        Delta_R1 = row['Delta_R1']
+        Delta_R2 = row['Delta_R2']
+        Delta_Lambda = row['Delta_Lambda']
+        Delta_Sigma = row['Delta_Sigma']
+        
+        # Load and average plaquette
+        plaq_path = f"{ens}/plaquette"
+        if plaq_path not in f:
+            raise KeyError(f"Missing {plaq_path} in {h5_file}")
+        plaq_values = f[plaq_path][()]
+        plaq_avg = np.mean(plaq_values)
+
+        # Compute Zs
+        factor_fund = 8 * C_fund / (16 * PI2 * beta * plaq_avg)
+        factor_as   = 8 * C_as / (16 * PI2 * beta * plaq_avg)
+
+        computed_z[ens] = {
+            'Z_PS_fund': 1 + factor_fund * (Delta_Sigma1 + Delta_R1),
+            'Z_V_fund': 1 + factor_fund * (Delta_Sigma1 + Delta_R2),
+            'Z_A_fund': 1 + factor_fund * (Delta_Sigma1 + Delta_R1),
+            'Z_PS_as': 1 + factor_as * (Delta_Sigma1 + Delta_R1),
+            'Z_V_as': 1 + factor_as * (Delta_Sigma1 + Delta_R2),
+            'Z_A_as': 1 + factor_as * (Delta_Sigma1 + Delta_R1),
+            'Z_Lambda': 1 + (factor_fund/C_fund) * ((C_fund + 1/2*C_as) * Delta_Sigma1 + Delta_Lambda),
+            'Z_Sigma': 1 + (factor_fund/C_fund) * ((C_fund + 1/2*C_as) * Delta_Sigma1 + Delta_Sigma),
+        }
+        
+print(computed_z)
+
 
 # Ensembles and file mappings
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
@@ -15,11 +62,7 @@ tex_files = {
     'M5': './tables/M5_matrix_meson.tex'
 }
 
-# Z values for each line in each file
-z_fields = [
-    'Z_PS_fund', 'Z_V_fund', 'Z_A_fund',
-    'Z_PS_as', 'Z_V_as', 'Z_A_as'
-]
+
 
 # Mapping of table row names to CSV columns
 label_to_z_field = {
@@ -27,14 +70,11 @@ label_to_z_field = {
     'ps': 'Z_PS_as', 'v': 'Z_V_as', 'av': 'Z_A_as'
 }
 
-# Load the CSV file with Z values
-df = pd.read_csv(csv_file_path)
 
 # Loop over each ensemble and associated file
 for ens, tex_file in tex_files.items():
     # Get the row for the current ensemble
-    z_values = df[df['Ens'] == ens].iloc[0]
-    
+    z_values = computed_z[ens]
     # Read the .tex file line by line
     with open(tex_file, 'r') as file:
         lines = file.readlines()
@@ -95,12 +135,11 @@ for ens, tex_file in tex_files.items():
     print(f"Updated {tex_file} and saved as {output_file}")
     
     
-df = pd.read_csv(csv_file_path)
 
 ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
 
 for ens in ensembles:
-    z_values = df[df['Ens'] == ens].iloc[0]
+    z_values = computed_z[ens]
     cb_file = f'./tables/{ens}_matrix_CB.tex'
     cb_output = f'./tables/renormalised_{ens}_matrix_CB.tex'
 

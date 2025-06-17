@@ -2,6 +2,57 @@ import json
 import numpy as np
 import pandas as pd
 import os
+import re
+import h5py
+import math
+
+# Constants
+PI2 = math.pi ** 2
+h5_file = './CB_autocorrelation_decay_constant/data_assets/topology.hdf5'
+
+# Read the renormalise.csv file
+df = pd.read_csv('./input_fit/metadata/renormalise.csv')
+
+# Compute Z values dynamically using CSV and HDF5 plaquette data
+computed_z = {}
+
+with h5py.File(h5_file, 'r') as f:
+    for _, row in df.iterrows():
+        ens = row['Ens']
+        beta = row['beta']
+        C_fund = row['C_fund']
+        C_as = row['C_as']
+        Delta_Sigma1 = row['Delta_Sigma1']
+        Delta_R1 = row['Delta_R1']
+        Delta_R2 = row['Delta_R2']
+        Delta_Lambda = row['Delta_Lambda']
+        Delta_Sigma = row['Delta_Sigma']
+        
+        # Load and average plaquette
+        plaq_path = f"{ens}/plaquette"
+        if plaq_path not in f:
+            raise KeyError(f"Missing {plaq_path} in {h5_file}")
+        plaq_values = f[plaq_path][()]
+        plaq_avg = np.mean(plaq_values)
+
+        # Compute Zs
+        factor_fund = 8 * C_fund / (16 * PI2 * beta * plaq_avg)
+        factor_as   = 8 * C_as / (16 * PI2 * beta * plaq_avg)
+
+        computed_z[ens] = {
+            'Z_PS_fund': 1 + factor_fund * (Delta_Sigma1 + Delta_R1),
+            'Z_V_fund': 1 + factor_fund * (Delta_Sigma1 + Delta_R2),
+            'Z_A_fund': 1 + factor_fund * (Delta_Sigma1 + Delta_R1),
+            'Z_PS_as': 1 + factor_as * (Delta_Sigma1 + Delta_R1),
+            'Z_V_as': 1 + factor_as * (Delta_Sigma1 + Delta_R2),
+            'Z_A_as': 1 + factor_as * (Delta_Sigma1 + Delta_R1),
+            'Z_Lambda': 1 + (factor_fund/C_fund) * ((C_fund + 1/2*C_as) * Delta_Sigma1 + Delta_Lambda),
+            'Z_Sigma': 1 + (factor_fund/C_fund) * ((C_fund + 1/2*C_as) * Delta_Sigma1 + Delta_Sigma),
+        }
+        
+print(computed_z)
+
+
 
 # Ensemble directory to renormalisation key mapping
 ensemble_map = {
@@ -11,9 +62,6 @@ ensemble_map = {
     "./JSONs/Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20":   "M4",
     "./JSONs/Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32": "M5",
 }
-
-# Load renormalization factors
-renorm_df = pd.read_csv("./input_fit/metadata/renormalise.csv")
 
 # Results will be stored here
 results = []
@@ -43,7 +91,7 @@ for ensemble_dir, ens_key in ensemble_map.items():
         continue
 
     try:
-        renorm_row = renorm_df[renorm_df["Ens"] == ens_key].iloc[0]
+        renorm_row = computed_z[ens]
     except IndexError:
         print(f"No renormalization data for Ens = {ens_key}")
         continue
