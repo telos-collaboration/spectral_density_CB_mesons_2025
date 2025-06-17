@@ -95,6 +95,7 @@ use rule analysis_template as print_samples_CB with:
 
 use rule analysis_template as fit_data_mesons with:
     input:
+        script="lsd_out/fit_data_mesons.py",
         metadata_spectral_density="metadata/metadata_spectralDensity.csv",
         metadata_ratio_guesses="metadata/ratioguesses_spectrum.csv",
         dependency_tag="lsd_out/print_samples_mesons_complete",
@@ -108,6 +109,7 @@ use rule analysis_template as fit_data_mesons with:
 
 use rule analysis_template as fit_data_CB with:
     input:
+        script="lsd_out/fit_data_CB.py",
         metadata_spectral_density="metadata/metadata_spectralDensity.csv",
         metadata_ratio_guesses="metadata/ratioguesses_spectrum.csv",
         dependency_tag="lsd_out/print_samples_CB_complete",
@@ -121,6 +123,7 @@ use rule analysis_template as fit_data_CB with:
 
 use rule analysis_template_with_plot as simultaneous_fits_mesons with:
     input:
+        script="lsd_out/simultaneous_fits_mesons.py",
         metadata="metadata/metadata_spectralDensity.csv",
         dependency_tag="lsd_out/fit_data_mesons_complete",
         plot_styles=plot_styles,
@@ -134,6 +137,7 @@ use rule analysis_template_with_plot as simultaneous_fits_mesons with:
 
 use rule analysis_template_with_plot as simultaneous_fits_CB with:
     input:
+        script="lsd_out/simultaneous_fits_CB.py",
         metadata="metadata/metadata_spectralDensity_chimerabaryons.csv",
         dependency_tag="lsd_out/fit_data_CB_complete",
         plot_styles=plot_styles,
@@ -163,7 +167,7 @@ use rule analysis_template as post_analysis_spdens with:
 
 rule output_template:
     conda: "../envs/spectral_densities.yml"
-    shell: "python {input.script} --plot_styles {wildcards.plot_styles}"
+    shell: "python {input.script} --plot_styles {input.plot_styles}"
 
 
 use rule output_template as CSVs_to_tables_meson_GEVP with:
