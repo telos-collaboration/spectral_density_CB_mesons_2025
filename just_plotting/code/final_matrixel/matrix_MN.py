@@ -57,7 +57,11 @@ def process_file(file_name, w0):
             min_err_idx = errors_data.index(min(errors_data))
             stat = errors_data[min_err_idx]
             sys = max(abs(measurements[i] - measurements[j]) for i in range(len(measurements)) for j in range(i+1, len(measurements)))
+            #print('ensemble: ', ensemble)
+            #print('measurement: ', measurements[min_err_idx])
+            #print('w0: ', w0)
             value = measurements[min_err_idx] * w0**2
+            #print('value: ', value)
             total_err = math.sqrt(stat**2 + sys**2) * w0**2
             values.append(value)
             errors.append(total_err)
@@ -73,7 +77,11 @@ def process_file2(file_name, w0):
             min_err_idx = errors_data.index(min(errors_data))
             stat = errors_data[min_err_idx]
             sys = max(abs(measurements[i] - measurements[j]) for i in range(len(measurements)) for j in range(i+1, len(measurements)))
+            #print('ensemble: ', ensemble)
+            #print('measurement: ', measurements[min_err_idx])
+            #print('w0: ', w0)
             value = measurements[min_err_idx] * w0**(3)
+            #print('value: ', value)
             total_err = math.sqrt(stat**2 + sys**2) * w0**(3)
             values.append(value)
             errors.append(total_err)
@@ -98,7 +106,8 @@ for ensemble, file_list in files:
                 x_pos += 0.4
             if x_pos > 6.4:
                 continue
-
+            #print('Ensemble: ', ensemble)
+            #print('val: ', val)   
             color = colors[i % 3]
             hatch = None
             hatch_color = None
@@ -139,7 +148,7 @@ legend_handles = [
     mpatches.Patch(color='black', alpha=0.7, fill=False),
 ]
 
-hatches = [r'//////', '++++']
+hatches = [r'++++', '//////',]
 for i, hatch in enumerate(hatches):
     legend_handles[-(i+1)].set_hatch(hatch)
 
@@ -177,6 +186,8 @@ for ensemble, file_list in files:
 
         values, errors = process_file2(file_name, w0)
         for i, (val, err) in enumerate(zip(values, errors)):
+            print('ensemble: ', ensemble)
+            print('val: ', val)
             x_base = ciao[6 + i]
             x_pos = 0.3+ x_base + ensemble_offset
 
@@ -186,11 +197,11 @@ for ensemble, file_list in files:
             alpha = alpha_values.get(ensemble, 0.6)
 
             if ensemble == 'M4':
-                hatch = hatches[0]
+                hatch = hatches[1]
                 hatch_color = cb_colors[i % 6]
                 color = 'none'
             elif ensemble == 'M5':
-                hatch = hatches[1]
+                hatch = hatches[0]
                 hatch_color = cb_colors[i % 6]
                 color = 'none'
 
@@ -203,7 +214,7 @@ for ensemble, file_list in files:
             ax2.add_patch(rect)
 
 # Label
-ax2.text(9.8, 10.05, 'Chimera baryons', fontsize=16, ha='center')
+ax2.text(9.8, 0.09, 'Chimera baryons', fontsize=16, ha='center')
 
 import matplotlib.patches as mpatches
 
@@ -216,7 +227,7 @@ legend_handles = [
     mpatches.Patch(color='black', alpha=0.7, fill=False),
 ]
 
-hatches = [r'//////', '++++']
+hatches = [r'++++', '//////']
 for i, hatch in enumerate(hatches):
     legend_handles[-(i+1)].set_hatch(hatch)
 
@@ -239,7 +250,7 @@ ax2.legend(
 ax2.set_xticks([x + 0.3 for x in ciao[6:]])
 ax2.set_xticklabels(x_labels[6:], ha='right', fontsize=14, rotation=45)
 ax2.set_ylabel('$\hat{K}_{B, 0}$', fontsize=16)
-ax2.set_ylim(0.0, 10.8)
+ax2.set_ylim(0.0, 0.1)
 ax2.set_xlim(6.8, 13.0)
 plt.tight_layout()
 #plt.legend()
