@@ -16,12 +16,12 @@ def add_error(channel_E0, err):
         err_decimal_places = max(0, -int(np.floor(np.log10(err)))) if err > 0 else 0
 
         if err_decimal_places > 0:
-            decimal_format = f".4f"
+            decimal_format = f".6f"
         else:
             decimal_format = ".0f"
 
         channel_E0_str = f"{channel_E0:{decimal_format}}"
-        err_int = int(round(err * 1e4))
+        err_int = int(round(err * 1e6))
 
         channel_E0_with_error = f"{channel_E0_str}({err_int})"
     else:
@@ -59,9 +59,12 @@ prefix = ['Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20', 'Sp4b6.5nF2nAS3mF-0.71mAS-1.01T
           'Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20', 'Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20',
           'Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32']
 
+volumes = [20**3, 20**3, 20**3, 20**3, 32**3]
+
 # Iterate through each ensemble
 for idx, ensemble in enumerate(ensembles):
     ensemble2 = prefix[idx]
+
     matrix_elements_path = f'./CSVs/{ensemble}_spectral_density_matrix_elements_CB.csv'
     matrix_elements = pd.read_csv(matrix_elements_path)
     chunk_size = 2
@@ -71,7 +74,7 @@ for idx, ensemble in enumerate(ensembles):
     #latex_table += "\\centering\n"
     latex_table = "\\begin{tabular}{|c|c|c|c|c|c|}\n"
     latex_table += "\\hline \\hline\n"
-    latex_table += "$C$ & $a^{3/2}K_{B, 0}$-G & $a^{3/2}K_{B,0}$-C & $a^{3/2}K_{B,0} (\hbox{corr.})$ & $\sigma_{G} / m_C$ & $\sigma_{C} / m_C$ \\\\\n"
+    latex_table += "$C$ & $a^{3}K_{B, 0}$-G & $a^{3}K_{B,0}$-C & $a^{3}K_{B,0} (\hbox{corr.})$ & $\sigma_{G} / m_C$ & $\sigma_{C} / m_C$ \\\\\n"
     latex_table += "\\hline\n"
     idx2 = 0
     # Read data for the current ensemble in chunks
@@ -79,7 +82,7 @@ for idx, ensemble in enumerate(ensembles):
         unique_channels = chunk['channel'].unique()
 
         for channel in unique_channels:
-            print(idx2)
+            #print(idx2)
             channelone = channel2[idx2]
             # Map channel to label and metadata keys
             if channel == 'Chimera_OC_even':
@@ -95,9 +98,10 @@ for idx, ensemble in enumerate(ensembles):
             elif channel == 'Chimera_OV32_odd':
                 CHANNEL2, ch = 'S', '$\\Sigma^{* \\, -}_{\\rm CB}$'
             # Load JSON data
-            print(channelone)
+            #print(channelone)
             with open(f'./JSONs/{ensemble2}/chimera_extraction_{channelone}_samples.json', 'r') as json_file:
                 json_data = json.load(json_file)
+            vol = volumes[idx]
             # Retrieve metadata values for the current channel and ensemble
             try:
                 sigma1_over_m = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_sigma1_over_m"].values[0]
@@ -114,26 +118,26 @@ for idx, ensemble in enumerate(ensembles):
 
             # Check if data exists for GAUSS and CAUCHY kernels
             if not gauss_data.empty:
-                gauss_min, err_gauss_min = gauss_data['c0'].min(), gauss_data['errorc0'].min()
+                gauss_min, err_gauss_min = gauss_data['c0'].min() / np.sqrt(vol), gauss_data['errorc0'].min() / np.sqrt(vol)
                 gauss_min_with_error = add_error(gauss_min, err_gauss_min)
             else:
                 gauss_min_with_error = '-'
 
             if not cauchy_data.empty:
-                cauchy_min, err_cauchy_min = cauchy_data['c0'].min(), cauchy_data['errorc0'].min()
+                cauchy_min, err_cauchy_min = cauchy_data['c0'].min() / np.sqrt(vol), cauchy_data['errorc0'].min() / np.sqrt(vol)
                 cauchy_min_with_error = add_error(cauchy_min, err_cauchy_min)
             else:
                 cauchy_min_with_error = '-'
             print(f'{channelone}_matrix_element')
             if f'{channelone}_matrix_element' in json_data:
                 samples = np.array(json_data[f'{channelone}_matrix_element'])
-                ac0_val = np.mean(samples)
-                ac0_err = bootstrap_error(samples)*3.
+                ac0_val = np.mean(samples) / np.sqrt(vol)
+                ac0_err = bootstrap_error(samples)*3 / np.sqrt(vol)
                 ac0_with_error = add_error(ac0_val, ac0_err)
             else:
                 ac0_with_error = '-'
             idx2 = idx2 + 1
-
+            #print('vol: ', vol)
             # Add the unique row for each channel to the LaTeX table
             latex_table += f"{ch} & {gauss_min_with_error} & {cauchy_min_with_error} & {ac0_with_error} & {sigma1_over_m} & {sigma2_over_m} \\\\\n"
 

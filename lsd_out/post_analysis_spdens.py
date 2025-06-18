@@ -601,24 +601,27 @@ z_field_map = {
 # Output directory
 os.makedirs('../input_fit/final_matrixel', exist_ok=True)
 
+volumes = {'M1': 20**3,'M2': 20**3,'M3': 20**3,'M4': 20**3,'M5': 32**3}
+
 def process_spectrum(file_path, ensemble):
     df = pd.read_csv(file_path)
     results_aE_0 = {}
     grouped = df.groupby(['channel', 'rep'])
-
+    
     for (channel, rep), group in grouped:
         z_field = z_field_map.get(channel)
         if z_field is None:
             continue
-
+        #print('ensemble: ', ensemble)
         #ZA = z_factors.loc[z_factors['Ens'] == ensemble, z_field].values[0]
         ZA = computed_z[ensemble][z_field]
+        vol = volumes[ensemble]
         values = []
         for i in range(2):
             if i < len(group):
                 row = group.iloc[i]
-                aE_0 = row['c0'] * ZA
-                err = row['errorc0'] * ZA * 6. if row['errorc0'] != 0 else 0.001 * ZA
+                aE_0 = row['c0'] * ZA / np.sqrt(vol)
+                err = row['errorc0'] * ZA * 6. / np.sqrt(vol) if row['errorc0'] != 0 else 0.001 * ZA
                 values.append(f"{aE_0} {err}")
             else:
                 values.append("0 0")
