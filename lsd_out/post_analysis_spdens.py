@@ -601,7 +601,17 @@ z_field_map = {
 # Output directory
 os.makedirs('../input_fit/final_matrixel', exist_ok=True)
 
-volumes = {'M1': 20**3,'M2': 20**3,'M3': 20**3,'M4': 20**3,'M5': 32**3}
+#volumes = {'M1': 20**3,'M2': 20**3,'M3': 20**3,'M4': 20**3,'M5': 32**3}
+# Load the metadata
+df = pd.read_csv("../input_fit/metadata/ensemble_metadata.csv")
+
+# Compute volume dictionary for ensembles M1–M5
+volumes = {
+    row["ensemble_name"]: int(row["Ns"])**3
+    for _, row in df.iterrows()
+    if row["ensemble_name"] in ["M1", "M2", "M3", "M4", "M5"]
+}
+
 
 def process_spectrum(file_path, ensemble):
     df = pd.read_csv(file_path)

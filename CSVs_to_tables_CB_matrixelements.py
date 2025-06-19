@@ -59,7 +59,24 @@ prefix = ['Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20', 'Sp4b6.5nF2nAS3mF-0.71mAS-1.01T
           'Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20', 'Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20',
           'Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32']
 
-volumes = [20**3, 20**3, 20**3, 20**3, 32**3]
+
+
+#volumes = [20**3, 20**3, 20**3, 20**3, 32**3]
+
+
+
+# Load the metadata
+df = pd.read_csv("./input_fit/metadata/ensemble_metadata.csv")
+
+# Compute volume dictionary for ensembles M1–M5
+volumes = {
+    row["ensemble_name"]: int(row["Ns"])**3
+    for _, row in df.iterrows()
+    if row["ensemble_name"] in ["M1", "M2", "M3", "M4", "M5"]
+}
+
+
+
 
 # Iterate through each ensemble
 for idx, ensemble in enumerate(ensembles):
@@ -101,7 +118,7 @@ for idx, ensemble in enumerate(ensembles):
             #print(channelone)
             with open(f'./JSONs/{ensemble2}/chimera_extraction_{channelone}_samples.json', 'r') as json_file:
                 json_data = json.load(json_file)
-            vol = volumes[idx]
+            vol = volumes[ensemble]
             # Retrieve metadata values for the current channel and ensemble
             try:
                 sigma1_over_m = metadata.loc[metadata['Ensemble'] == ensemble, f"{CHANNEL2}_sigma1_over_m"].values[0]
