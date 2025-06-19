@@ -93,32 +93,30 @@ use rule analysis_template as print_samples_CB with:
     log: "lsd_out/paths.log"
 
 
-use rule analysis_template as fit_data_mesons with:
+rule fit_data_mesons:
+    threads: 20
     input:
         script="lsd_out/fit_data_mesons.py",
         metadata_spectral_density="metadata/metadata_spectralDensity.csv",
         metadata_ratio_guesses="metadata/ratioguesses_spectrum.csv",
         dependency_tag="lsd_out/print_samples_mesons_complete",
     output:
-        completion_tag="lsd_out/fit_data_mesons_complete",
-        spectra=expand(
-            "CSVs/{ensemble}_spectral_density_spectrum.csv",
-            ensemble=ensembles,
-        ),
+        spectrum="CSVs/{ensemble,M[0-9]}_spectral_density_spectrum.csv",
+    conda: "../envs/spectral_densities.yml"
+    shell: "cd lsd_out && python ../{input.script} --ensembles {wildcards.ensemble}"
 
 
-use rule analysis_template as fit_data_CB with:
+rule fit_data_CB:
+    threads: 20
     input:
         script="lsd_out/fit_data_CB.py",
         metadata_spectral_density="metadata/metadata_spectralDensity.csv",
         metadata_ratio_guesses="metadata/ratioguesses_spectrum.csv",
         dependency_tag="lsd_out/print_samples_CB_complete",
     output:
-        completion_tag="lsd_out/fit_data_CB_complete",
-        spectra=expand(
-            "CSVs/{ensemble}_chimerabaryons_spectral_density_spectrum.csv",
-            ensemble=ensembles,
-        ),
+        spectrum="CSVs/{ensemble}_chimerabaryons_spectral_density_spectrum.csv",
+    conda: "../envs/spectral_densities.yml"
+    shell: "cd lsd_out && python ../{input.script} --ensembles {wildcards.ensemble}"
 
 
 use rule analysis_template_with_plot as simultaneous_fits_mesons with:
