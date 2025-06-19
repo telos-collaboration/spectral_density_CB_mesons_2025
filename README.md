@@ -30,7 +30,7 @@ Maurizio Piai, Davide Vadacchino.
   
   If you are using an Apple silicon CPU, ensure that you are running Conda 24.3 or later, and use the command 
   
-    conda env create -p osx-64 -f my-new-env.yml
+      conda env create -p osx-64 -f my-new-env.yml
       
   You can activate the environment using
  
