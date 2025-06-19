@@ -46,17 +46,16 @@ tables = expand(
     table=[
         "local_smeared_decay_constants",
         "ensembles",
+        "s_parameters_table",
     ] + expand(
-        "{ensemble}_output_table_aE{n}_meson",
+        "{ensemble}_aE{n}_{category}",
         ensemble=ensembles,
         n=[0, 1, 2],
+	category=["meson", "CB"],
     ) + expand(
-        "{ensemble}_output_table_CB_aE{n}",
+        "renormalised_{ensemble}_matrix_{category}",
         ensemble=ensembles,
-        n=[0, 1, 2],
-    ) + expand(
-        "{ensemble}_output_table_matrix_CB",
-        ensemble=ensembles,
+        category=["meson", "CB"],
     ),
 )
 
