@@ -40,7 +40,7 @@ rule package_wall:
     output:
         h5="data_assets/wall_correlators.h5",
     conda: "../envs/CB_autocorrelation_decay_constant.yml"
-    shell: f"julia --project {wall_parsing_base} {{input.script}} --ensemble_metadata {{input.metadata}} --output_hdf5 {{output.h5}}"
+    shell: f"julia --project={wall_parsing_base} {{input.script}} --ensemble_metadata {{input.metadata}} --output_hdf5 {{output.h5}}"
 
 
 rule package_smeared:
