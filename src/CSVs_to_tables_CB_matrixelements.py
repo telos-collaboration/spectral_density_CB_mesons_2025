@@ -66,7 +66,7 @@ prefix = ['Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20', 'Sp4b6.5nF2nAS3mF-0.71mAS-1.01T
 
 
 # Load the metadata
-df = pd.read_csv("./input_fit/metadata/ensemble_metadata.csv")
+df = pd.read_csv("./metadata/ensemble_metadata.csv")
 
 # Compute volume dictionary for ensembles M1–M5
 volumes = {

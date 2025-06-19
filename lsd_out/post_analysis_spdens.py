@@ -612,7 +612,7 @@ os.makedirs('../input_fit/final_matrixel', exist_ok=True)
 
 #volumes = {'M1': 20**3,'M2': 20**3,'M3': 20**3,'M4': 20**3,'M5': 32**3}
 # Load the metadata
-df = pd.read_csv("../input_fit/metadata/ensemble_metadata.csv")
+df = pd.read_csv("../metadata/ensemble_metadata.csv")
 
 # Compute volume dictionary for ensembles M1–M5
 volumes = {
