@@ -38,7 +38,7 @@ rule package_wall:
         instantiate_julia="intermediary_data/cb_julia_instantiated",
         script=f"{wall_parsing_base}/parse.jl",
     output:
-        h5=protected("data_assets/wall_correlators.h5"),
+        h5="data_assets/wall_correlators.h5",
     conda: "../envs/CB_autocorrelation_decay_constant.yml"
     shell: f"julia --project {wall_parsing_base} {{input.script}} --ensemble_metadata {{input.metadata}} --output_hdf5 {{output.h5}}"
 
@@ -51,7 +51,7 @@ rule package_smeared:
         files=glob("raw_data/corr/{smearing}/*"),
         script=f"{parsing_base}/scripts/write_meson_{{smearing}}.jl",
     output:
-        h5=protected("data_assets/correlators_{smearing}.h5"),
+        h5="data_assets/correlators_{smearing}.h5",
     conda:
         "../envs/hirep_parsing.yml"
     # Start packaging early,
@@ -84,7 +84,7 @@ rule concatenate_gflow_hdf5:
         ),
         script="src/hdf5_concatenate.py",
     output:
-        h5=protected("data_assets/flows.h5"),
+        h5="data_assets/flows.h5",
     conda:
         "../envs/flow_analysis.yml"
     shell:
