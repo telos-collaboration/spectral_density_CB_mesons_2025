@@ -17,10 +17,7 @@ from .read_hdf5 import get_ensemble
 from .plots_common import plot_baryon_gevp_energy_states
 
 
-
-
 def baryon_extraction(ensemble, args):
-
     corr_e_ss, corr_o_ss = get_baryon_corr(ensemble, args, 80, 80, args.channel)
     corr_e_sp, corr_o_sp = get_baryon_corr(ensemble, args, 80, 0, args.channel)
 
@@ -38,7 +35,7 @@ def baryon_extraction(ensemble, args):
         args.E0_plateau_start,
         args.E0_plateau_end,
     )
-    result_samples= matrix_element.samples *np.sqrt(2*mass.samples)
+    result_samples = matrix_element.samples * np.sqrt(2 * mass.samples)
     return mass, result_samples, chi2
 
 
@@ -46,7 +43,7 @@ def main():
     args = get_args()
 
     data = h5py.File(args.h5file, "r")
-    ensemble, = get_ensemble(
+    (ensemble,) = get_ensemble(
         data,
         beta=args.beta,
         mF=args.mF,
@@ -55,9 +52,9 @@ def main():
         Ns=args.Ns,
         epsilon=args.epsilon,
     )
-    
+
     mass, matrix_element, chisquare = baryon_extraction(ensemble, args)
-    
+
     metadata = {
         "ensemble_name": args.ensemble_name,
         "beta": args.beta,
@@ -73,7 +70,7 @@ def main():
         data_to_save[f"{args.channel}_mass"] = mass
         data_to_save[f"{args.channel}_matrix_element"] = matrix_element
 
-        dump_samples(data_to_save,args.output_file_samples)
+        dump_samples(data_to_save, args.output_file_samples)
 
 
 if __name__ == "__main__":

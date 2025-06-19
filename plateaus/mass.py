@@ -62,7 +62,10 @@ def get_args():
         help="Time slice at which plateau starts",
     )
     parser.add_argument(
-        "--E0_plateau_end", type=int, default=None, help="Time slice at which plateau ends"
+        "--E0_plateau_end",
+        type=int,
+        default=None,
+        help="Time slice at which plateau ends",
     )
     parser.add_argument(
         "--E1_plateau_start",
@@ -71,7 +74,10 @@ def get_args():
         help="Time slice at which plateau starts",
     )
     parser.add_argument(
-        "--E1_plateau_end", type=int, default=None, help="Time slice at which plateau ends"
+        "--E1_plateau_end",
+        type=int,
+        default=None,
+        help="Time slice at which plateau ends",
     )
     parser.add_argument(
         "--E2_plateau_start",
@@ -80,7 +86,10 @@ def get_args():
         help="Time slice at which plateau starts",
     )
     parser.add_argument(
-        "--E2_plateau_end", type=int, default=None, help="Time slice at which plateau ends"
+        "--E2_plateau_end",
+        type=int,
+        default=None,
+        help="Time slice at which plateau ends",
     )
     parser.add_argument(
         "--min_trajectory",
@@ -124,10 +133,26 @@ def get_args():
     )
     parser.add_argument(
         "--channel",
-        choices=["f_ps", "f_v", "f_t", "f_av", "f_at", "f_s",
-                 "as_ps", "as_v", "as_t", "as_av", "as_at", "as_s",
-                 "lambda_even", "sigma_even", "sigmastar_even",
-                 "lambda_odd", "sigma_odd", "sigmastar_odd"],
+        choices=[
+            "f_ps",
+            "f_v",
+            "f_t",
+            "f_av",
+            "f_at",
+            "f_s",
+            "as_ps",
+            "as_v",
+            "as_t",
+            "as_av",
+            "as_at",
+            "as_s",
+            "lambda_even",
+            "sigma_even",
+            "sigmastar_even",
+            "lambda_odd",
+            "sigma_odd",
+            "sigmastar_odd",
+        ],
         default=None,
         help="Measuring channel",
     )
@@ -167,12 +192,15 @@ def get_correlator_samples(
     max_trajectory=None,
     trajectory_step=1,
 ):
-    filtered_indices = filter_configurations(ensemble, min_trajectory, max_trajectory, trajectory_step)
+    filtered_indices = filter_configurations(
+        ensemble, min_trajectory, max_trajectory, trajectory_step
+    )
 
-    #C = ensemble[measurement][:, filtered_indices]
-    C = ensemble[measurement][:, :] # TO DO: how shall we deal with jumpping configs
+    # C = ensemble[measurement][:, filtered_indices]
+    C = ensemble[measurement][:, :]  # TO DO: how shall we deal with jumpping configs
 
     return sample_bootstrap_1d(C.T, get_rng(ensemble.name))
+
 
 def bin_meson_correlator_samples(
     ensemble,
@@ -183,22 +211,23 @@ def bin_meson_correlator_samples(
     max_trajectory=None,
     trajectory_step=1,
 ):
-    filtered_indices = filter_configurations(ensemble, min_trajectory, max_trajectory, trajectory_step)
+    filtered_indices = filter_configurations(
+        ensemble, min_trajectory, max_trajectory, trajectory_step
+    )
 
     rep = get_meson_h5_representation(measurement.split("_")[0])
     target_channels = get_channel_tags(measurement.split("_")[1])
-    C_bin =[]
+    C_bin = []
     for channel in target_channels:
-
-        #C = ensemble[f"source_N{Nsource}_sink_N{Nsink}/{rep} {channel}"][:, filtered_indices]
+        # C = ensemble[f"source_N{Nsource}_sink_N{Nsink}/{rep} {channel}"][:, filtered_indices]
         C = ensemble[f"source_N{Nsource}_sink_N{Nsink}/{rep} {channel}"][:, :]
         # TO DO: how shall we deal with jumpping configs
 
         C_bin.append(C)
-    
+
     C_bin = np.array(C_bin)
     C = C_bin.mean(axis=0)
-    
+
     if target_channels[0] == "g5_g0g5_re":
         C_flod = -fold_correlators_cross(C.T)
     else:
@@ -215,12 +244,11 @@ def get_channel_tags(ch):
         "av": ["g5g1", "g5g2", "g5g3"],
         "at": ["g0g5g1", "g0g5g2", "g0g5g3"],
         "s": ["id"],
-        "ps-av" : ["g5_g0g5_re"],
-        "lambda" : "Chimera_OC",
-        "sigma" : "Chimera_OV12",
-        "sigmastar" : "Chimera_OV32",
+        "ps-av": ["g5_g0g5_re"],
+        "lambda": "Chimera_OC",
+        "sigma": "Chimera_OV12",
+        "sigmastar": "Chimera_OV32",
     }.get(ch, ch)
-
 
 
 def fold_correlators(C):
@@ -237,16 +265,15 @@ def fold_correlators_cross(C):
 
 def bin_projection_baryon(corr_e, corr_o):
     def flip_boundary(C, t):
-        if t == 2: 
+        if t == 2:
             return C
         else:
             C.samples[:, -(t - 2) :] = -C.samples[:, -(t - 2) :]
-            C.mean[ -(t - 2) :] = -C.mean[ -(t - 2) :]
+            C.mean[-(t - 2) :] = -C.mean[-(t - 2) :]
             return C
-    
+
     def flip_temporal(C):
-        
-        sample = np.flip( C.samples, axis=1)
+        sample = np.flip(C.samples, axis=1)
         mean = np.flip(C.mean)
         return BootstrapSampleSet(mean, sample)
 
@@ -261,7 +288,8 @@ def bin_projection_baryon(corr_e, corr_o):
 
     return corr_Ebin, corr_Obin
 
-def get_baryon_corr( ensemble, args, Nsource, Nsink, channel_parity):
+
+def get_baryon_corr(ensemble, args, Nsource, Nsink, channel_parity):
     channel = get_channel_tags(channel_parity.split("_")[0])
 
     try:
@@ -280,18 +308,17 @@ def get_baryon_corr( ensemble, args, Nsource, Nsink, channel_parity):
             args.max_trajectory,
             args.trajectory_step,
         )
-        
+
         corr_even, corr_odd = bin_projection_baryon(corr_e, corr_o)
-        
-        return  corr_even * args.Ns**3, corr_odd* args.Ns**3
+
+        return corr_even * args.Ns**3, corr_odd * args.Ns**3
 
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
         return None, None
 
 
-def get_meson_corr( ensemble, args, Nsource, Nsink, channel):
-
+def get_meson_corr(ensemble, args, Nsource, Nsink, channel):
     try:
         corr = bin_meson_correlator_samples(
             ensemble,
@@ -302,7 +329,7 @@ def get_meson_corr( ensemble, args, Nsource, Nsink, channel):
             args.max_trajectory,
             args.trajectory_step,
         )
-        
+
         return corr * args.Ns**3
 
     except Exception as e:

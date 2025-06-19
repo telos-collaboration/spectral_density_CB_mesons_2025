@@ -2,19 +2,29 @@
 import numpy as np
 import re
 
+
 def get_ensemble(
-    ensembles, beta=None, mF=None, mAS=None, Nt=None, Ns=None, num_source=1, epsilon=None
+    ensembles,
+    beta=None,
+    mF=None,
+    mAS=None,
+    Nt=None,
+    Ns=None,
+    num_source=1,
+    epsilon=None,
 ):
     candidate_ensembles = []
     for ensemble in ensembles.values():
         if beta is not None and ensemble.get("beta", {(): None})[()] != beta:
             continue
         if mAS is not None and (
-            len(masses := ensemble.get("quarkmasses_antisymmetric", [])) != 1 or masses[0] != mAS
+            len(masses := ensemble.get("quarkmasses_antisymmetric", [])) != 1
+            or masses[0] != mAS
         ):
             continue
         if mF is not None and (
-            len(masses := ensemble.get("quarkmasses_fundamental", [])) != 1 or masses[0] != mF
+            len(masses := ensemble.get("quarkmasses_fundamental", [])) != 1
+            or masses[0] != mF
         ):
             continue
         if Nt is not None and ensemble.get("lattice", [None])[0] != Nt:
@@ -36,8 +46,9 @@ def get_ensemble(
         return candidate_ensembles
 
 
-def filter_configurations(ensemble, min_trajectory=None, max_trajectory=None, trajectory_step=1):
-
+def filter_configurations(
+    ensemble, min_trajectory=None, max_trajectory=None, trajectory_step=1
+):
     indices = np.asarray(
         [
             int(re.match(".*n([0-9]+)$", filename.decode()).groups()[0])
@@ -51,6 +62,7 @@ def filter_configurations(ensemble, min_trajectory=None, max_trajectory=None, tr
     )
 
     return filtered_indices
+
 
 def get_meson_h5_representation(rep):
     return {

@@ -11,7 +11,8 @@ from format_multiple_errors import format_multiple_errors as ferr
 from .dump import read_sample_files
 from .bootstrap import BOOTSTRAP_SAMPLE_COUNT
 
-markers = itertools.cycle(['o','s','v'])
+markers = itertools.cycle(["o", "s", "v"])
+
 
 def save_or_show(fig, filename=None):
     if filename == "/dev/null":
@@ -127,6 +128,7 @@ def channel_color(ch):
         "at": "C5",
     }.get(ch, ch)
 
+
 def channel_marker(ch):
     return {
         "ps": "o",
@@ -151,18 +153,22 @@ def plot_line(v, e, ti, tf, color):
         )
     )
 
+
 def plot_mass_eff_exp(ax, corr_bootstrapset, ti, tf, measurement):
-    
     time_slices = np.arange(ti, tf, 1, dtype=int)
 
     mass_to_plot = []
     err_to_plot = []
-    mass_value =  -np.log(np.roll(corr_bootstrapset.mean, -1, axis=1) / corr_bootstrapset.mean)[0]
-    mass_sample = -np.log(np.roll(corr_bootstrapset.samples, -1, axis=1) / corr_bootstrapset.samples)
+    mass_value = -np.log(
+        np.roll(corr_bootstrapset.mean, -1, axis=1) / corr_bootstrapset.mean
+    )[0]
+    mass_sample = -np.log(
+        np.roll(corr_bootstrapset.samples, -1, axis=1) / corr_bootstrapset.samples
+    )
 
     for t in time_slices:
         mass_to_plot.append(mass_value[t])
-        err_to_plot.append( mass_sample[:,t].std())
+        err_to_plot.append(mass_sample[:, t].std())
 
     mass_to_plot = np.array(mass_to_plot)
     err_to_plot = np.array(err_to_plot)
@@ -190,26 +196,32 @@ def plot_mass_eff_exp(ax, corr_bootstrapset, ti, tf, measurement):
         alpha=0.1,
     )
 
+
 def plot_mass_eff_cosh(ax, corr_bootstrapset, ti, tf, measurement):
-    
     time_slices = np.arange(ti, tf, 1, dtype=int)
 
     mass_to_plot = []
     err_to_plot = []
     mass_value = np.arccosh(
-        (np.roll(corr_bootstrapset.mean, 1, axis=1) + np.roll(corr_bootstrapset.mean, -1,axis=1))
+        (
+            np.roll(corr_bootstrapset.mean, 1, axis=1)
+            + np.roll(corr_bootstrapset.mean, -1, axis=1)
+        )
         / corr_bootstrapset.mean
         / 2
     )[0]
     mass_sample = np.arccosh(
-        (np.roll(corr_bootstrapset.samples, 1, axis=1) + np.roll(corr_bootstrapset.samples, -1, axis=1))
+        (
+            np.roll(corr_bootstrapset.samples, 1, axis=1)
+            + np.roll(corr_bootstrapset.samples, -1, axis=1)
+        )
         / corr_bootstrapset.samples
         / 2
     )
 
     for t in time_slices:
         mass_to_plot.append(mass_value[t])
-        err_to_plot.append( mass_sample[:,t].std())
+        err_to_plot.append(mass_sample[:, t].std())
 
     mass_to_plot = np.array(mass_to_plot)
     err_to_plot = np.array(err_to_plot)
@@ -237,8 +249,9 @@ def plot_mass_eff_cosh(ax, corr_bootstrapset, ti, tf, measurement):
         alpha=0.1,
     )
 
+
 def plot_baryon_gevp_energy_states(args, eigenvalues, energy_states):
-    #plt.style.use(args.plot_styles)
+    # plt.style.use(args.plot_styles)
     fig, ax = plt.subplots(layout="constrained")
 
     for n, eigenvalue in enumerate(eigenvalues):
@@ -246,22 +259,30 @@ def plot_baryon_gevp_energy_states(args, eigenvalues, energy_states):
         if np.isnan(fit_value):
             fit_results = ""
         else:
-            fit_results = ": "+ferr(fit_value, fit_error , abbreviate=True)
-        plot_mass_eff_exp(ax, eigenvalue, 2, args.Nt/2 + 1, "$E_"+f"{n}"+"$"+fit_results)
+            fit_results = ": " + ferr(fit_value, fit_error, abbreviate=True)
+        plot_mass_eff_exp(
+            ax, eigenvalue, 2, args.Nt / 2 + 1, "$E_" + f"{n}" + "$" + fit_results
+        )
         plateau_start = getattr(args, f"E{n}_plateau_start")
         plateau_end = getattr(args, f"E{n}_plateau_end")
-        
-        plot_line(fit_value, fit_error , plateau_start, plateau_end, plt.gca().lines[-1].get_color())
-    
+
+        plot_line(
+            fit_value,
+            fit_error,
+            plateau_start,
+            plateau_end,
+            plt.gca().lines[-1].get_color(),
+        )
+
     ax.set_xlabel("$t / a$")
     ax.set_ylabel("$aE_n$")
     ax.set_ylim(0.5, 1.7)
     fig.legend(loc="upper right")
-    #fig.savefig(args.effmass_plot_file)
+    # fig.savefig(args.effmass_plot_file)
 
 
 def plot_meson_gevp_energy_states(args, eigenvalues, energy_states):
-    #plt.style.use(args.plot_styles)
+    # plt.style.use(args.plot_styles)
     fig, ax = plt.subplots(layout="constrained")
 
     for n, eigenvalue in enumerate(eigenvalues):
@@ -269,15 +290,23 @@ def plot_meson_gevp_energy_states(args, eigenvalues, energy_states):
         if np.isnan(fit_value):
             fit_results = ""
         else:
-            fit_results = ": "+ferr(fit_value, fit_error , abbreviate=True)
-        plot_mass_eff_cosh(ax, eigenvalue, 2, args.Nt/2 + 1, "$E_"+f"{n}"+"$"+fit_results)
+            fit_results = ": " + ferr(fit_value, fit_error, abbreviate=True)
+        plot_mass_eff_cosh(
+            ax, eigenvalue, 2, args.Nt / 2 + 1, "$E_" + f"{n}" + "$" + fit_results
+        )
         plateau_start = getattr(args, f"E{n}_plateau_start")
         plateau_end = getattr(args, f"E{n}_plateau_end")
-        
-        plot_line(fit_value, fit_error , plateau_start, plateau_end, plt.gca().lines[-1].get_color())
-    
+
+        plot_line(
+            fit_value,
+            fit_error,
+            plateau_start,
+            plateau_end,
+            plt.gca().lines[-1].get_color(),
+        )
+
     ax.set_xlabel("$t / a$")
     ax.set_ylabel("$aE_n$")
     ax.set_ylim(0.2, 2)
     fig.legend(loc="upper right")
-    #fig.savefig(args.effmass_plot_file)
+    # fig.savefig(args.effmass_plot_file)

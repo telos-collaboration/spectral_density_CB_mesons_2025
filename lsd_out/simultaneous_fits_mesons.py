@@ -23,16 +23,24 @@ if not any(
 ):
     plt.rcParams["text.usetex"] = False
 
-CB_color_cycle = ['#377eb8', '#ff7f00', '#4daf4a',
-                  '#f781bf', '#a65628', '#984ea3',
-                  '#999999', '#e41a1c', '#dede00']
+CB_color_cycle = [
+    "#377eb8",
+    "#ff7f00",
+    "#4daf4a",
+    "#f781bf",
+    "#a65628",
+    "#984ea3",
+    "#999999",
+    "#e41a1c",
+    "#dede00",
+]
 
-V = 20 ** 3
+V = 20**3
 
 
 def read_csv():
-    ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    categories = ['PS', 'V', 'T', 'AV', 'AT', 'S', 'ps', 'v', 't', 'av', 'at', 's']
+    ensembles = ["M1", "M2", "M3", "M4", "M5"]
+    categories = ["PS", "V", "T", "AV", "AT", "S", "ps", "v", "t", "av", "at", "s"]
     Nsource_C_values_MN = {}
     Nsink_C_values_MN = {}
     am_C_values_MN = {}
@@ -40,10 +48,10 @@ def read_csv():
     sigma2_over_mC_values_MN = {}
     k_peaks = {}  # kpeaks[ensemble][channel]
     Nboot_fit = []
-    with open('../metadata/metadata_spectralDensity.csv', newline='') as csvfile:
+    with open("../metadata/metadata_spectralDensity.csv", newline="") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            ensemble = row['Ensemble']
+            ensemble = row["Ensemble"]
             # Initialize lists for each ensemble if not already present
             if ensemble not in Nsource_C_values_MN:
                 Nsource_C_values_MN[ensemble] = []
@@ -53,15 +61,19 @@ def read_csv():
                 sigma2_over_mC_values_MN[ensemble] = []
                 k_peaks[ensemble] = []
 
-            Nboot_fit.append(int(row['Nboot_fit']))
+            Nboot_fit.append(int(row["Nboot_fit"]))
             # Append data for each category to the respective lists
             for category in categories:
-                Nsource_C_values_MN[ensemble].append(int(row[f'{category}_Nsource_2']))
-                Nsink_C_values_MN[ensemble].append(int(row[f'{category}_Nsink_2']))
-                am_C_values_MN[ensemble].append(float(row[f'{category}_am']))
-                sigma1_over_mC_values_MN[ensemble].append(float(row[f'{category}_sigma1_over_m']))
-                sigma2_over_mC_values_MN[ensemble].append(float(row[f'{category}_sigma2_over_m']))
-                k_peaks[ensemble].append(int(row[f'{category}_k_peaks']))
+                Nsource_C_values_MN[ensemble].append(int(row[f"{category}_Nsource_2"]))
+                Nsink_C_values_MN[ensemble].append(int(row[f"{category}_Nsink_2"]))
+                am_C_values_MN[ensemble].append(float(row[f"{category}_am"]))
+                sigma1_over_mC_values_MN[ensemble].append(
+                    float(row[f"{category}_sigma1_over_m"])
+                )
+                sigma2_over_mC_values_MN[ensemble].append(
+                    float(row[f"{category}_sigma2_over_m"])
+                )
+                k_peaks[ensemble].append(int(row[f"{category}_k_peaks"]))
 
     # Create a 3D matrix with ensemble index
     matrix_4D = [
@@ -71,7 +83,7 @@ def read_csv():
             sigma1_over_mC_values_MN[ensemble],
             sigma2_over_mC_values_MN[ensemble],
             Nsource_C_values_MN[ensemble],
-            Nsink_C_values_MN[ensemble]
+            Nsink_C_values_MN[ensemble],
         ]
         for ensemble in ensembles
     ]
@@ -79,15 +91,15 @@ def read_csv():
 
 
 def read_csv2(file_path):
-    ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    categories = ['PS', 'V', 'T', 'AV', 'AT', 'S', 'ps', 'v', 't', 'av', 'at', 's']
-    repr = ['fund']
+    ensembles = ["M1", "M2", "M3", "M4", "M5"]
+    categories = ["PS", "V", "T", "AV", "AT", "S", "ps", "v", "t", "av", "at", "s"]
+    repr = ["fund"]
     ratio1 = {}
     ratio2 = {}
-    with open(file_path, newline='') as csvfile:
+    with open(file_path, newline="") as csvfile:
         reader = csv.DictReader(csvfile)
         for row in reader:
-            ensemble = row['Ensemble']
+            ensemble = row["Ensemble"]
             # Initialize lists for each ensemble if not already present
             if ensemble not in ratio1:
                 ratio1[ensemble] = []
@@ -95,15 +107,9 @@ def read_csv2(file_path):
             for rep in repr:
                 # Append data for each category to the respective lists
                 for category in categories:
-                    ratio1[ensemble].append(float(row[f'{category}_cqr'])/100.)
+                    ratio1[ensemble].append(float(row[f"{category}_cqr"]) / 100.0)
     # Create a 2D matrix with ensemble index
-    matrix_2D = [
-        [
-            ensemble,
-            ratio1[ensemble]
-        ]
-        for ensemble in ensembles
-    ]
+    matrix_2D = [[ensemble, ratio1[ensemble]] for ensemble in ensembles]
     return matrix_2D
 
 
@@ -115,14 +121,14 @@ def read_files_from_directory(directory):
 
 
 def read_file_content(file_path):
-    with open(file_path, 'r') as file:
+    with open(file_path, "r") as file:
         content = file.readlines()
     values = [float(line.split()[1]) for line in content]
     return values
 
 
 def extract_energy_from_filename(filename):
-    match = re.search(r'E([\d.]+)sig', filename)
+    match = re.search(r"E([\d.]+)sig", filename)
     if match:
         return float(match.group(1))
     return None
@@ -155,7 +161,10 @@ def fill_spectral_density_array(dir1, dir2, mpi):
             spectral_density[bootstrap_index][1][file_index] = content2[bootstrap_index]
 
     # Find the index k where energy_values first exceeds 1.2
-    k = next((i for i, energy in enumerate(energy_values) if energy / mpi >= 1.5), len(energy_values))
+    k = next(
+        (i for i, energy in enumerate(energy_values) if energy / mpi >= 1.5),
+        len(energy_values),
+    )
 
     # Truncate spectral_density and energy_values to include only up to index k (non-inclusive of energies >= 1.2)
     spectral_density = spectral_density[:, :, :k]
@@ -166,23 +175,26 @@ def fill_spectral_density_array(dir1, dir2, mpi):
 
 def gaussian(x, mean, sigma):
     return np.exp(-0.5 * ((x - mean) / sigma) ** 2) / (
-            sigma * np.sqrt(np.pi / 2) * (1 + erf(mean / (np.sqrt(2) * sigma))))
+        sigma * np.sqrt(np.pi / 2) * (1 + erf(mean / (np.sqrt(2) * sigma)))
+    )
+
 
 def cauchy(x, mean, sigma):
-    return (sigma / ((x - mean) ** 2 + sigma ** 2))
+    return sigma / ((x - mean) ** 2 + sigma**2)
+
 
 def spectral_density_1_single(kernel, sigma, energy, a0, E0):
-    if kernel == 'GAUSS':
-        return (a0 ** 2 / (2 * E0) * gaussian(energy, E0, sigma))
+    if kernel == "GAUSS":
+        return a0**2 / (2 * E0) * gaussian(energy, E0, sigma)
     else:
-        return (a0 ** 2 / (2 * E0) * cauchy(energy, E0, sigma))
+        return a0**2 / (2 * E0) * cauchy(energy, E0, sigma)
 
 
 def spectral_density_2_single(kernel, sigma, energy, c0, E0, a0):
-    if kernel == 'GAUSS':
-        return (a0 * c0 / (2 * E0) * gaussian(energy, E0, sigma))
+    if kernel == "GAUSS":
+        return a0 * c0 / (2 * E0) * gaussian(energy, E0, sigma)
     else:
-        return (a0 * c0 / (2 * E0) * cauchy(energy, E0, sigma))
+        return a0 * c0 / (2 * E0) * cauchy(energy, E0, sigma)
 
 
 def prepare_data(dir1, dir2, mpi):
@@ -196,8 +208,12 @@ def compute_covariance_matrix(spectral_density):
     return cov_matrix
 
 
-def chisq_correlated(params, kernel, sigma, energy, spectral_density_sample, cholesky_cov):
-    model_values = spectral_density_1_single(kernel, sigma, energy, params['a0'], params['E0'])
+def chisq_correlated(
+    params, kernel, sigma, energy, spectral_density_sample, cholesky_cov
+):
+    model_values = spectral_density_1_single(
+        kernel, sigma, energy, params["a0"], params["E0"]
+    )
     diff = spectral_density_sample - model_values
     cov_inv = np.linalg.inv(cholesky_cov)
     chisq = np.dot(cov_inv, diff)
@@ -207,13 +223,17 @@ def chisq_correlated(params, kernel, sigma, energy, spectral_density_sample, cho
 def fit_spectral_density_1_single(kernel, sigma, energy, spectral_density1):
     def fit_single_bootstrap(spectral_density1_sample, cholesky_cov):
         params = Parameters()
-        params.add('a0', value=1.0)
-        params.add('E0', value=0.75, min=0.97, max=1.1)
+        params.add("a0", value=1.0)
+        params.add("E0", value=0.75, min=0.97, max=1.1)
 
-        minimizer = Minimizer(chisq_correlated, params, fcn_args=(kernel, sigma, energy, spectral_density1_sample, cholesky_cov))
+        minimizer = Minimizer(
+            chisq_correlated,
+            params,
+            fcn_args=(kernel, sigma, energy, spectral_density1_sample, cholesky_cov),
+        )
         # print(cholesky_cov)
         result = minimizer.minimize()
-        return [result.params['a0'].value, result.params['E0'].value]
+        return [result.params["a0"].value, result.params["E0"].value]
 
     # Compute the covariance matrix and its Cholesky decomposition
     cov_matrix = compute_covariance_matrix(spectral_density1)
@@ -221,7 +241,9 @@ def fit_spectral_density_1_single(kernel, sigma, energy, spectral_density1):
     # print(cov_matrix)
     cholesky_cov = cholesky(cov_matrix)
 
-    fit_params = np.array([fit_single_bootstrap(sd, cholesky_cov) for sd in spectral_density1])
+    fit_params = np.array(
+        [fit_single_bootstrap(sd, cholesky_cov) for sd in spectral_density1]
+    )
 
     avg_params = np.nanmean(fit_params, axis=0)
     std_params = np.nanstd(fit_params, axis=0)
@@ -229,30 +251,48 @@ def fit_spectral_density_1_single(kernel, sigma, energy, spectral_density1):
     return avg_params, std_params, fit_params
 
 
-def chisq_correlated_2(params, kernel, sigma, energy, spectral_density_sample, cholesky_cov, fixed_params):
+def chisq_correlated_2(
+    params, kernel, sigma, energy, spectral_density_sample, cholesky_cov, fixed_params
+):
     a0, E0 = fixed_params
-    model_values = spectral_density_2_single(kernel, sigma, energy, params['c0'], E0, a0)
+    model_values = spectral_density_2_single(
+        kernel, sigma, energy, params["c0"], E0, a0
+    )
     diff = spectral_density_sample - model_values
     chisq = np.dot(diff, cho_solve((cholesky_cov, True), diff))
     return chisq
 
 
-def fit_spectral_density_2_single_fixed_params(kernel, sigma, energy, spectral_density2, fixed_params, mpi, sugg):
+def fit_spectral_density_2_single_fixed_params(
+    kernel, sigma, energy, spectral_density2, fixed_params, mpi, sugg
+):
     def fit_single_bootstrap(spectral_density2_sample, cholesky_cov):
         params = Parameters()
-        params.add('c0', value=sugg, min=sugg-0.001*sugg, max=sugg+0.001*sugg)
+        params.add("c0", value=sugg, min=sugg - 0.001 * sugg, max=sugg + 0.001 * sugg)
 
-        minimizer = Minimizer(chisq_correlated_2, params,
-                              fcn_args=(kernel, sigma, energy, spectral_density2_sample, cholesky_cov, fixed_params))
+        minimizer = Minimizer(
+            chisq_correlated_2,
+            params,
+            fcn_args=(
+                kernel,
+                sigma,
+                energy,
+                spectral_density2_sample,
+                cholesky_cov,
+                fixed_params,
+            ),
+        )
         result = minimizer.minimize()
-        return [result.params['c0'].value]
+        return [result.params["c0"].value]
 
     # Compute the covariance matrix and its Cholesky decomposition
     cov_matrix = compute_covariance_matrix(spectral_density2)
     cov_matrix = 1.0 * cov_matrix
     cholesky_cov = cholesky(cov_matrix)
 
-    fit_params = np.array([fit_single_bootstrap(sd, cholesky_cov) for sd in spectral_density2])
+    fit_params = np.array(
+        [fit_single_bootstrap(sd, cholesky_cov) for sd in spectral_density2]
+    )
 
     avg_params = np.nanmean(fit_params, axis=0)
     std_params = np.nanstd(fit_params, axis=0)
@@ -260,7 +300,7 @@ def fit_spectral_density_2_single_fixed_params(kernel, sigma, energy, spectral_d
     return avg_params, std_params, fit_params
 
 
-'''
+"""
 def plot_with_errors_single(kernel, sigma, energy, avg_spectral_density1, avg_spectral_density2, fit_params_1, fit_params_2, num_bootstraps, spectral_density, mpi):
     # Increase resolution for smoother curves
     energy_fine = np.linspace(min(energy) - 0.3, max(energy) + 0.3, 500)
@@ -307,27 +347,29 @@ def plot_with_errors_single(kernel, sigma, energy, avg_spectral_density1, avg_sp
     plt.tight_layout()
     plt.savefig(f"spectral_density_corr_mpi{mpi}.pdf", format='pdf', bbox_inches='tight')
     #plt.show()
-'''
+"""
 
 
 def main():
     matrix_4D, k_peaks, Nboot_fit = read_csv()
-    file_path_MD = '../metadata/metadata_spectralDensity.csv'
+    file_path_MD = "../metadata/metadata_spectralDensity.csv"
     matrix_2D = read_csv2(file_path_MD)
-    ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    #ensembles = ['M1']
-    mesonic_channels = ['g5', 'gi', 'g0gi', 'g5gi', 'g0g5gi', 'id']
+    ensembles = ["M1", "M2", "M3", "M4", "M5"]
+    # ensembles = ['M1']
+    mesonic_channels = ["g5", "gi", "g0gi", "g5gi", "g0g5gi", "id"]
     # mesonic_channels = ['id']
-    reps = ['fund', 'as']
+    reps = ["fund", "as"]
     # reps = ['as']
-    kerneltype = ['GAUSS', 'CAUCHY']
-    #kerneltype = ['GAUSS']
+    kerneltype = ["GAUSS", "CAUCHY"]
+    # kerneltype = ['GAUSS']
     # ensemble_num = 1
     # channel_num = 5
 
     headers = ["ensemble", "kernel", "rep", "channel", "c0", "errorc0"]
     for index, ensemble in enumerate(ensembles):
-        with open(f'../CSVs/{ensemble}_spectral_density_matrix_elements.csv', 'a', newline='') as csvfile:
+        with open(
+            f"../CSVs/{ensemble}_spectral_density_matrix_elements.csv", "a", newline=""
+        ) as csvfile:
             csvwriter = csv.writer(csvfile)
             csvwriter.writerow(headers)
         ensemble_num = index
@@ -335,11 +377,11 @@ def main():
             for k, channel in enumerate(mesonic_channels):
                 for kernel in kerneltype:
                     channel_num = k
-                    if rep == 'as':
+                    if rep == "as":
                         channel_num += 6
-                    if kernel == 'GAUSS':
+                    if kernel == "GAUSS":
                         cauchy_fit = False
-                    elif kernel == 'CAUCHY':
+                    elif kernel == "CAUCHY":
                         cauchy_fit = True
                     if ensemble_num == 4:
                         V = 32**3
@@ -347,13 +389,13 @@ def main():
                         V = 20**3
                     # Directories containing the data
                     mpi = matrix_4D[ensemble_num][1][channel_num]
-                    if kernel == 'GAUSS':
+                    if kernel == "GAUSS":
                         sigma = matrix_4D[ensemble_num][2][channel_num]
                     else:
                         sigma = matrix_4D[ensemble_num][3][channel_num]
 
-                    dir1 = f'../input_fit/{ensemble}/{channel}_{rep}_Nsource80_Nsink80/{kernel}/{channel}_{rep}_Nsource80_Nsink80/Logs'
-                    dir2 = f'../input_fit/{ensemble}/{channel}_{rep}_Nsource80_Nsink0/{kernel}/{channel}_{rep}_Nsource80_Nsink0/Logs'
+                    dir1 = f"../input_fit/{ensemble}/{channel}_{rep}_Nsource80_Nsink80/{kernel}/{channel}_{rep}_Nsource80_Nsink80/Logs"
+                    dir2 = f"../input_fit/{ensemble}/{channel}_{rep}_Nsource80_Nsink0/{kernel}/{channel}_{rep}_Nsource80_Nsink0/Logs"
 
                     # Prepare the data
                     energy, spectral_density = prepare_data(dir1, dir2, mpi)
@@ -364,45 +406,82 @@ def main():
                     avg_spectral_density2 = np.mean(spectral_density[:, 1, :], axis=0)
 
                     if avg_spectral_density1[1] < 0:
-                        spectral_density = - spectral_density
-                        avg_spectral_density1 = - avg_spectral_density1
-                        avg_spectral_density2 = - avg_spectral_density2
+                        spectral_density = -spectral_density
+                        avg_spectral_density1 = -avg_spectral_density1
+                        avg_spectral_density2 = -avg_spectral_density2
 
                     # Fit the first spectral density
-                    fit_params_1_mean, fit_params_1_std, fit_params_1 = fit_spectral_density_1_single(kernel, sigma, energy, spectral_density[:, 0, :])
+                    fit_params_1_mean, fit_params_1_std, fit_params_1 = (
+                        fit_spectral_density_1_single(
+                            kernel, sigma, energy, spectral_density[:, 0, :]
+                        )
+                    )
 
                     # Print the fitting results for the first spectral density
                     print("Fit Results for Spectral Density 1:")
-                    print(f"a0: {fit_params_1_mean[0]:.14f} ± {fit_params_1_std[0]:.14f}")
-                    print(f"E0: {fit_params_1_mean[1]:.14f} ± {fit_params_1_std[1]:.14f}")
+                    print(
+                        f"a0: {fit_params_1_mean[0]:.14f} ± {fit_params_1_std[0]:.14f}"
+                    )
+                    print(
+                        f"E0: {fit_params_1_mean[1]:.14f} ± {fit_params_1_std[1]:.14f}"
+                    )
                     print()
                     sugg = matrix_2D[ensemble_num][1][channel_num] * np.sqrt(V) / 2
-                    #print('sugg: ', sugg*2/np.sqrt(V))
+                    # print('sugg: ', sugg*2/np.sqrt(V))
                     # Use the fitted parameters from the first fit to fit the second spectral density
-                    fit_params_2_mean, fit_params_2_std, fit_params_2 = fit_spectral_density_2_single_fixed_params(
-                        kernel, sigma, energy,
-                        spectral_density[:,
-                        1, :],
-                        fit_params_1_mean,
-                        mpi, sugg)
+                    fit_params_2_mean, fit_params_2_std, fit_params_2 = (
+                        fit_spectral_density_2_single_fixed_params(
+                            kernel,
+                            sigma,
+                            energy,
+                            spectral_density[:, 1, :],
+                            fit_params_1_mean,
+                            mpi,
+                            sugg,
+                        )
+                    )
 
                     # Print the fitting results for the second spectral density
                     print("Fit Results for Spectral Density 2:")
                     # print(f"c0: {(2* fit_params_2_mean[0] / (mpi*fit_params_1_mean[1])):.14f} ± { 2* fit_params_2_std[0] / (mpi*fit_params_1_mean[1]):.14f}")
 
-                    print(f"c0: {(2 * fit_params_2_mean[0] / np.sqrt(V)):.14f} ± {2*fit_params_2_std[0] / np.sqrt(V):.14f}")	#if you change this, change also sugg
+                    print(
+                        f"c0: {(2 * fit_params_2_mean[0] / np.sqrt(V)):.14f} ± {2 * fit_params_2_std[0] / np.sqrt(V):.14f}"
+                    )  # if you change this, change also sugg
 
                     # print(f"c0: {(fit_params_2_mean[0]):.14f} ± {fit_params_2_std[0]:.14f}")
-                    with open(f'../CSVs/{ensemble}_spectral_density_matrix_elements.csv', 'a', newline='') as csvfile:
+                    with open(
+                        f"../CSVs/{ensemble}_spectral_density_matrix_elements.csv",
+                        "a",
+                        newline="",
+                    ) as csvfile:
                         csvwriter = csv.writer(csvfile)
-                        if kernel == 'GAUSS':
-                            csvwriter.writerow([ensemble, kernel, rep, channel, 2 * fit_params_2_mean[0] / np.sqrt(V), 2 * fit_params_2_mean[0] / np.sqrt(V) * 0.011])
+                        if kernel == "GAUSS":
+                            csvwriter.writerow(
+                                [
+                                    ensemble,
+                                    kernel,
+                                    rep,
+                                    channel,
+                                    2 * fit_params_2_mean[0] / np.sqrt(V),
+                                    2 * fit_params_2_mean[0] / np.sqrt(V) * 0.011,
+                                ]
+                            )
                         else:
-                            csvwriter.writerow([ensemble, kernel, rep, channel, 2 * fit_params_2_mean[0] / np.sqrt(V), 2 * fit_params_2_mean[0] / np.sqrt(V) * 0.012])
+                            csvwriter.writerow(
+                                [
+                                    ensemble,
+                                    kernel,
+                                    rep,
+                                    channel,
+                                    2 * fit_params_2_mean[0] / np.sqrt(V),
+                                    2 * fit_params_2_mean[0] / np.sqrt(V) * 0.012,
+                                ]
+                            )
                         print()
 
                     # Plot the results
-                    #plot_with_errors_single(kernel, sigma, energy, avg_spectral_density1, avg_spectral_density2, fit_params_1, fit_params_2, spectral_density.shape[0], spectral_density, mpi)
+                    # plot_with_errors_single(kernel, sigma, energy, avg_spectral_density1, avg_spectral_density2, fit_params_1, fit_params_2, spectral_density.shape[0], spectral_density, mpi)
 
     # Avoid needing to work out the full tangle of output files,
     # while still allowing a workflow dependency on completing this rule
