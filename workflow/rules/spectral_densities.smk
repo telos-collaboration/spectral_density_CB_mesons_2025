@@ -118,12 +118,15 @@ use rule analysis_template_with_plot as simultaneous_fits_mesons with:
     input:
         script="lsd_out/simultaneous_fits_mesons.py",
         metadata="metadata/metadata_spectralDensity.csv",
-        dependency_tag="lsd_out/fit_data_mesons_complete",
+        meson_spectra=expand(
+            "CSVs/{ensemble}_spectral_density_spectrum.csv",
+            ensemble=ensembles,
+        ),
         plot_styles=plot_styles,
     output:
-        completion_tag="lsd_out/simultaneous_fit_mesons_complete",
+        completion_tag="lsd_out/simultaneous_fits_mesons_complete",
         matrix_elements=expand(
-            "CSVs/{ensemble}_spectral_density_matrix_elements_CB.csv",
+            "CSVs/{ensemble}_spectral_density_matrix_elements.csv",
             ensemble=ensembles,
         ),
 
@@ -132,10 +135,17 @@ use rule analysis_template_with_plot as simultaneous_fits_CB with:
     input:
         script="lsd_out/simultaneous_fits_CB.py",
         metadata="metadata/metadata_spectralDensity_chimerabaryons.csv",
-        dependency_tag="lsd_out/fit_data_CB_complete",
+        meson_spectra=expand(
+            "CSVs/{ensemble}_chimerabaryons_spectral_density_spectrum.csv",
+            ensemble=ensembles,
+        ),
         plot_styles=plot_styles,
     output:
-        completion_tag="lsd_out/simultaneous_fit_CB_complete",
+        completion_tag="lsd_out/simultaneous_fits_CB_complete",
+        matrix_elements=expand(
+            "CSVs/{ensemble}_spectral_density_matrix_elements_CB.csv",
+            ensemble=ensembles,
+        ),
 
 
 rule post_analysis_spdens:
@@ -253,7 +263,7 @@ rule renormalise:
         script="src/renormalise.py",
         data="metadata/renormalise.csv",
         mesons_tex=expand(
-            "assets/tables/{ensemble}_matrix_mesons.tex",
+            "assets/tables/{ensemble}_matrix_meson.tex",
             ensemble=ensembles,
         ),
         cb_tex=expand(
@@ -263,7 +273,7 @@ rule renormalise:
         topology="data_assets/flows.h5",
     output:
         mesons_tex=expand(
-            "assets/tables/renormalised_{ensemble}_matrix_mesons.tex",
+            "assets/tables/renormalised_{ensemble}_matrix_meson.tex",
             ensemble=ensembles,
         ),
         cb_tex=expand(
