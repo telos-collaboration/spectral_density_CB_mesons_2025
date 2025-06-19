@@ -19,7 +19,7 @@ rule analyse_flows:
         table="assets/tables/ensembles.tex",
         h5="data_assets/autocorr.h5",
     conda: "../envs/CB_autocorrelation_decay_constant.yml"
-    shell: f"julia --project {cb_julia_source} {cb_julia_source}/autocorrelation.jl --wilson_flow_hdf5 {{input.flows}} --wall_correlators_hdf5 {{input.correlators}} --output_hdf5 {{output.h5}} --output_tex {{output.table}} --plot_dir extra_assets/autocorrelation_plots"
+    shell: f"julia --project={cb_julia_source} {cb_julia_source}/autocorrelation.jl --wilson_flow_hdf5 {{input.flows}} --wall_correlators_hdf5 {{input.correlators}} --output_hdf5 {{output.h5}} --output_tex {{output.table}} --plot_dir extra_assets/autocorrelation_plots"
 
 
 rule mass_wall:
@@ -46,4 +46,4 @@ rule comparison_plots:
         comparison_plot="assets/plots/wall_comparison.pdf",
     conda: "../envs/CB_autocorrelation_decay_constant.yml"
     shell:
-        f"julia --project {cb_julia_source} {{input.script}} --wall_correlators_h5 {{input.correlators}} --wall_fits intermediary_data/wall_fits --smeared_results external_data/smeared --decay_output_csv {{output.comparison_csv}} --decay_output_tex {{output.comparison_table}} --decay_output_pdf {{output.wall_comparison.pdf}}"
+        f"julia --project={cb_julia_source} {{input.script}} --wall_correlators_h5 {{input.correlators}} --wall_fits intermediary_data/wall_fits --smeared_results JSONs --decay_output_csv {{output.comparison_csv}} --decay_output_tex {{output.comparison_table}} --decay_output_pdf {{output.comparison_plot}}"
