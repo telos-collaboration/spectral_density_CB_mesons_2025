@@ -1,3 +1,6 @@
+import argparse
+
+import datetime
 import sys
 import numpy as np
 import re
@@ -10,6 +13,10 @@ from scipy.optimize import curve_fit
 import multiprocessing
 import csv
 import shutil
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--ensembles", nargs="+")
+args = parser.parse_args()
 
 # Plot x-limits
 plot_min_lim = 0.20
@@ -1416,11 +1423,11 @@ headers.extend(["aE_3", "errorE3"])
 # TODO: match names with spec_dens code outputs in our inputs
 # TODO: sp_dens_code.py --> structure of 'input_fit/'
 
-for index, ensemble in enumerate(ensembles):
+for ensemble in args.ensembles:
     with open(f'../CSVs/{ensemble}_chimerabaryons_spectral_density_spectrum.csv', 'a', newline='') as csvfile:
         csvwriter = csv.writer(csvfile)
         csvwriter.writerow(headers)
-    ensemble_num = index
+    ensemble_num = ensembles.index(ensemble)
     for rep in reps:
         for k, channel in enumerate(mesonic_channels):
             for kernel in kerneltype:
