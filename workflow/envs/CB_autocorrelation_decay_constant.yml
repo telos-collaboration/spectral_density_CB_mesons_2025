@@ -4,9 +4,11 @@ channels:
 dependencies:
   - bzip2=1.0.8
   - ca-certificates=2025.4.26
-  - curl=8.14.1
+  - curl=8.9.1
   - julia=1.10.4
-  - git=2.49.0
+  - gcc=15.1.0
+  - gxx=15.1.0
+  - git=2.46.0
   - gmp=6.3.0
   - keyutils=1.6.1
   - krb5=1.21.3
@@ -14,12 +16,17 @@ dependencies:
   - libbtf=2.3.2
   - libcblas=3.9.0
   - libcholmod=5.3.1
-  - libcurl=8.14.1
+  - libcurl=8.9.1
   - libcxsparse=4.4.1
   - libedit=3.1.20250104
   - libev=4.33
   - libexpat=2.7.0
   - libffi=3.4.6
+  - libgcc=15.1.0
+  - libgcc-ng=15.1.0
+  - libgfortran=15.1.0
+  - libgfortran-ng=15.1.0
+  - libgfortran5=15.1.0
   - libgit2=1.8.4
   - libgomp=15.1.0
   - libiconv=1.18
@@ -52,6 +59,7 @@ dependencies:
   - metis=5.1.0
   - mpfr=4.2.1
   - ncurses=6.5
+  - ninja=1.12.1
   - openblas-ilp64=0.3.29
   - openlibm=0.8.1
   - openssl=3.5.0
