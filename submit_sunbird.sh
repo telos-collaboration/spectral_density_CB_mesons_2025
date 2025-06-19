@@ -13,5 +13,5 @@
 module load anaconda/2024.06
 source activate
 
-conda activate snakemake_x86
-snakemake --cores --use-conda
+conda activate snakemake
+snakemake --cores all --use-conda
