@@ -151,7 +151,8 @@ use rule analysis_template_with_plot as simultaneous_fits_CB with:
 rule post_analysis_spdens:
     input:
         script="lsd_out/post_analysis_spdens.py",
-        metadata="metadata/renormalise.csv",
+        renormalisation="metadata/renormalise.csv",
+        ensembles="metadata/ensemble_metadata.csv",
         mesons="lsd_out/simultaneous_fits_mesons_complete",
         cb="lsd_out/simultaneous_fits_CB_complete",
         topology="data_assets/flows.h5",
@@ -256,6 +257,7 @@ rule CSVs_to_tables_CB_matrixelements:
     input:
         script="src/CSVs_to_tables_CB_matrixelements.py",
         metadata="metadata/metadata_spectralDensity_chimerabaryons.csv",
+        ensembles="metadata/ensemble_metadata.csv",
         csvs=expand(
             "CSVs/{ensemble}_spectral_density_matrix_elements_CB.csv",
             ensemble=ensembles,
