@@ -1,10 +1,4 @@
-ensemble_prefixes = [
-    "Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20",
-    "Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20",
-    "Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20",
-    "Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20",
-    "Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32",
-]
+
 # chimera_channels = [
 #     "Chimera_OC_even",
 #     "Chimera_OC_odd",
