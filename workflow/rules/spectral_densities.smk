@@ -172,6 +172,8 @@ rule post_analysis_spdens:
             group=["", "CB_"],
             ensemble=ensembles,
         ),
+    conda: "../envs/spectral_densities.yml"
+    shell: "cd lsd_out && python ../{input.script} --topology_h5 ../{input.topology}"
 
 
 rule output_template:
@@ -179,7 +181,7 @@ rule output_template:
     shell: "python {input.script} --plot_styles {input.plot_styles}"
 
 
-use rule output_template as CSVs_to_tables_meson_GEVP with:
+rule CSVs_to_tables_meson_GEVP:
     input:
         script="src/CSVs_to_tables_meson_GEVP.py",
         csv=expand(
@@ -198,9 +200,11 @@ use rule output_template as CSVs_to_tables_meson_GEVP with:
             ensemble=ensembles,
             n=[0, 1, 2],
         ),
+    conda: "../envs/spectral_densities.yml"
+    shell: "python {input.script}"
 
 
-use rule output_template as CSVs_to_tables_CB_GEVP with:
+rule CSVs_to_tables_CB_GEVP:
     input:
         script="src/CSVs_to_tables_CB_GEVP.py",
         csvs=expand(
@@ -218,9 +222,11 @@ use rule output_template as CSVs_to_tables_CB_GEVP with:
             ensemble=ensembles,
             n=[0, 1, 2],
         ),
+    conda: "../envs/spectral_densities.yml"
+    shell: "python {input.script}"
 
 
-use rule output_template as CSVs_to_tables_meson_matrixelements with:
+rule CSVs_to_tables_meson_matrixelements:
     input:
         script="src/CSVs_to_tables_meson_matrixelements.py",
         matrixelement_csvs=expand(
@@ -231,14 +237,22 @@ use rule output_template as CSVs_to_tables_meson_matrixelements with:
             "CSVs/{ensemble}_spectral_density_spectrum.csv",
             ensemble=ensembles,
         ),
+        jsons=expand(
+            "JSONs/{ensemble_prefix}/meson_extraction_{representation}_{channel}_samples.json",
+            ensemble_prefix=ensemble_prefixes,
+            representation=["f", "as"],
+            channel=["ps", "v", "t", "av", "at", "s"],
+        ),
     output:
         latex=expand(
-            "assets/tables/{ensemble}_matrix_mesons.tex",
+            "assets/tables/{ensemble}_matrix_meson.tex",
             ensemble=ensembles,
         )
+    conda: "../envs/spectral_densities.yml"
+    shell: "python {input.script}"
 
 
-use rule output_template as CSVs_to_tables_CB_matrixelements with:
+rule CSVs_to_tables_CB_matrixelements:
     input:
         script="src/CSVs_to_tables_CB_matrixelements.py",
         metadata="metadata/metadata_spectralDensity_chimerabaryons.csv",
@@ -256,6 +270,8 @@ use rule output_template as CSVs_to_tables_CB_matrixelements with:
             "assets/tables/{ensemble}_matrix_CB.tex",
             ensemble=ensembles,
         ),
+    conda: "../envs/spectral_densities.yml"
+    shell: "python {input.script}"
 
 
 rule renormalise:
