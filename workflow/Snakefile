@@ -1,5 +1,6 @@
 configfile: "workflow_config.yaml"
 
+
 plot_styles = config["plot_styles"]
 plot_filetype = config["plot_filetype"]
 
@@ -11,6 +12,7 @@ ensemble_prefixes = [
     "Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20",
     "Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32",
 ]
+
 
 include: "rules/gradient_flow.smk"
 include: "rules/package.smk"
@@ -47,12 +49,14 @@ tables = expand(
         "local_smeared_decay_constants",
         "ensembles",
         "s_parameters_table",
-    ] + expand(
+    ]
+    + expand(
         "{ensemble}_aE{n}_{category}",
         ensemble=ensembles,
         n=[0, 1, 2],
-	category=["meson", "CB"],
-    ) + expand(
+        category=["meson", "CB"],
+    )
+    + expand(
         "renormalised_{ensemble}_matrix_{category}",
         ensemble=ensembles,
         category=["meson", "CB"],

@@ -11,12 +11,14 @@ dir_template = "Sp{Nc}b{beta}nF{nF}nAS{nAS}mF{mF}mAS{mAS}T{Nt}L{Ns}"
 
 channels = ["ps", "v", "t", "av", "at", "s"]
 
+
 def mpcac_data(wildcards):
     return [
         f"JSONs/{dir_template}/mpcac_mean.csv".format(**row)
         for row in metadata.to_dict(orient="records")
         if row["use_in_main_plots"]
     ]
+
 
 def wall_mass_data(wildcards):
     return [
@@ -26,9 +28,12 @@ def wall_mass_data(wildcards):
         if row["use_in_main_plots"]
     ]
 
+
 def smear_mass_data(wildcards):
     return [
-        f"JSONs/{dir_template}/smear_meson_{channel}_mean.csv".format(channel=channel, **row)
+        f"JSONs/{dir_template}/smear_meson_{channel}_mean.csv".format(
+            channel=channel, **row
+        )
         for row in metadata.to_dict(orient="records")
         for channel in channels
         if row["use_in_main_plots"]
@@ -40,13 +45,18 @@ def smear_mass_data(wildcards):
         if row["use_smear"]
     ]
 
+
 def decay_constant_data(wildcards):
     return [
-        f"JSONs/{dir_template}/decay_constant_{channel}_mean.csv".format(channel=channel, **row)
+        f"JSONs/{dir_template}/decay_constant_{channel}_mean.csv".format(
+            channel=channel, **row
+        )
         for row in metadata.to_dict(orient="records")
         for channel in ["ps", "v", "av"]
         if row["use_in_main_plots"]
     ]
+
+
 def wall_Rfps_data(wildcards):
     return [
         f"JSONs/{dir_template}/Rfps_{channel}_mean.csv".format(channel=channel, **row)
@@ -55,27 +65,32 @@ def wall_Rfps_data(wildcards):
         if row["use_in_main_plots"]
     ]
 
+
 def smear_Rfps_data(wildcards):
     return [
-        f"JSONs/{dir_template}/smear_Rfps_{channel}_mean.csv".format(channel=channel, **row)
+        f"JSONs/{dir_template}/smear_Rfps_{channel}_mean.csv".format(
+            channel=channel, **row
+        )
         for row in metadata.to_dict(orient="records")
         for channel in channels
         if row["use_in_main_plots"]
         if row["use_smear"]
     ] + [
-        f"JSONs/{dir_template}/gevp_smear_Rfps_rhoE1_mean.csv".format( **row)
+        f"JSONs/{dir_template}/gevp_smear_Rfps_rhoE1_mean.csv".format(**row)
         for row in metadata.to_dict(orient="records")
         if row["use_in_main_plots"]
         if row["use_smear"]
     ]
 
+
 def smear_Rmv_data(wildcards):
     return [
-        f"JSONs/{dir_template}/gevp_smear_Rmv_rhoE1_mean.csv".format( **row)
+        f"JSONs/{dir_template}/gevp_smear_Rmv_rhoE1_mean.csv".format(**row)
         for row in metadata.to_dict(orient="records")
         if row["use_in_main_plots"]
         if row["use_smear"]
     ]
+
 
 def continuum_massless_extrapolation_mass(wildcards):
     return [
@@ -83,11 +98,13 @@ def continuum_massless_extrapolation_mass(wildcards):
         for channel in ["v", "t", "av", "at", "s", "rhoE1"]
     ]
 
+
 def continuum_massless_extrapolation_decay(wildcards):
     return [
         f"JSONs/extrapolation_results/{channel}_extp_decay_mean.csv".format()
         for channel in ["ps", "v", "av"]
     ]
+
 
 def chipt_extrapolation_results(wildcards):
     return [
@@ -95,11 +112,13 @@ def chipt_extrapolation_results(wildcards):
         for beta in [6.6, 6.65, 6.7, 6.75, 6.8]
     ]
 
+
 def deft_extrapolation_results(wildcards):
     return [
         f"JSONs/deft_extrapolation_results/deft_b{beta}_extp_mean.csv".format()
         for beta in [6.6, 6.65, 6.7, 6.75, 6.8]
     ]
+
 
 rule continuum_massless_decay:
     params:
@@ -114,6 +133,7 @@ rule continuum_massless_decay:
     shell:
         "python -m {params.module} {input.data} --output_file {output.table}"
 
+
 rule continuum_massless_mass:
     params:
         module=lambda wildcards, input: input.script.replace("/", ".")[:-3],
@@ -126,6 +146,7 @@ rule continuum_massless_mass:
         "../envs/flow_analysis.yml"
     shell:
         "python -m {params.module} {input.data} --output_file {output.table}"
+
 
 rule wall_mass_table:
     params:
@@ -142,6 +163,7 @@ rule wall_mass_table:
         "../envs/flow_analysis.yml"
     shell:
         "python -m {params.module} {input.mass_data} {input.mpcac_data} {input.decay_data} --output_file {output.table}"
+
 
 rule wall_mass_table2:
     params:
@@ -173,6 +195,7 @@ rule wall_mass_fps_table:
     shell:
         "python -m {params.module} {input.data} --output_file {output.table}"
 
+
 rule smear_mass_table:
     params:
         module=lambda wildcards, input: input.script.replace("/", ".")[:-3],
@@ -185,6 +208,7 @@ rule smear_mass_table:
         "../envs/flow_analysis.yml"
     shell:
         "python -m {params.module} {input.data} --output_file {output.table}"
+
 
 rule smear_mass_fps_table:
     params:
@@ -199,6 +223,7 @@ rule smear_mass_fps_table:
         "../envs/flow_analysis.yml"
     shell:
         "python -m {params.module} {input.data} {input.data_Rmv} --output_file {output.table}"
+
 
 rule chipt_table:
     params:

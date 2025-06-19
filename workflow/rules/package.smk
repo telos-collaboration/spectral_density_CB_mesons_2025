@@ -13,22 +13,24 @@ topology_dirs = {
 }
 
 wall_dirs = {
-    **{f"raw_data/wall/{key}/out/out_spectrum_wall": f"{value}FUN" for key, value in topology_dirs.items()},
-    **{f"raw_data/wall/{key[:-3]}AS/out/out_spectrum_wall": f"{value}AS" for key, value in topology_dirs.items()},
+    **{
+        f"raw_data/wall/{key}/out/out_spectrum_wall": f"{value}FUN"
+        for key, value in topology_dirs.items()
+    },
+    **{
+        f"raw_data/wall/{key[:-3]}AS/out/out_spectrum_wall": f"{value}AS"
+        for key, value in topology_dirs.items()
+    },
 }
 
 
 rule wall_package_list:
     params:
-        content="\n".join(f"{subdir},{name}" for subdir, name in wall_dirs.items())
+        content="\n".join(f"{subdir},{name}" for subdir, name in wall_dirs.items()),
     output:
         listing="intermediary_data/wall_listing.csv",
     shell:
-        (
-            "cat > {output.listing} <<EOF\n"
-            "{params.content}\n"
-            "EOF\n"
-        )
+        ("cat > {output.listing} <<EOF\n" "{params.content}\n" "EOF\n")
 
 
 rule package_wall:
@@ -39,14 +41,16 @@ rule package_wall:
         script=f"{wall_parsing_base}/parse.jl",
     output:
         h5="data_assets/wall_correlators.h5",
-    conda: "../envs/CB_autocorrelation_decay_constant.yml"
-    shell: f"julia --project={wall_parsing_base} {{input.script}} --ensemble_metadata {{input.metadata}} --output_hdf5 {{output.h5}}"
+    conda:
+        "../envs/CB_autocorrelation_decay_constant.yml"
+    shell:
+        f"julia --project={wall_parsing_base} {{input.script}} --ensemble_metadata {{input.metadata}} --output_hdf5 {{output.h5}}"
 
 
 rule package_smeared:
     params:
         file_dir="raw_data/corr/{smearing}",
-        script_file_name="scripts/write_meson_{smearing}.jl"
+        script_file_name="scripts/write_meson_{smearing}.jl",
     input:
         files=glob("raw_data/corr/{smearing}/*"),
         script=f"{parsing_base}/scripts/write_meson_{{smearing}}.jl",
@@ -56,8 +60,7 @@ rule package_smeared:
         "../envs/hirep_parsing.yml"
     # Start packaging early,
     # since it is time consuming and many other processes depend on it
-    priority:
-        10
+    priority: 10
     shell:
         "cd {parsing_base} && julia {params.script_file_name} ../../{params.file_dir} ../../{output.h5}"
 
