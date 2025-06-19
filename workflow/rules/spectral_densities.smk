@@ -20,18 +20,18 @@ meson_channels = ["ps", "v", "av", "t", "at", "s"]
 
 
 rule analysis_template:
-    threads: workflow.cores
     conda: "../envs/spectral_densities.yml"
     shell: "cd lsd_out && python ../{input.script}"
 
 
 rule analysis_template_with_plot:
-    threads: workflow.cores
+    threads: 20
     conda: "../envs/spectral_densities.yml"
     shell: "cd lsd_out && python ../{input.script} --plot_styles ../{input.plot_styles}"
 
 
 use rule analysis_template as analyse_data_mesons with:
+    threads: workflow.cores
     input:
         script="lsd_out/analyse_data_mesons.py",
         data="input_correlators/chimera_data_reduced.h5",
@@ -58,6 +58,7 @@ use rule analysis_template as analyse_data_mesons with:
 
 
 use rule analysis_template as analyse_data_CB with:
+    threads: workflow.cores
     input:
         script="lsd_out/analyse_data_CB.py",
         data="input_correlators/chimera_data_reduced.h5",
