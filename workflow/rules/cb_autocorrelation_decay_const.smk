@@ -24,13 +24,13 @@ rule analyse_flows:
 
 rule mass_wall:
     params:
-        plateau_start=lambda wildcards: lookup(within=metadata, query="ensemble_name == {wildcards.ensemble_name}", cols=f"wall_{wildcards.representation}_{wildcards.channel}_plateau_start"),
-        plateau_end=lambda wildcards: lookup(within=metadata, query="ensemble_name == {wildcards.ensemble_name}", cols=f"wall_{wildcards.representation}_{wildcards.channel}_plateau_end"),
+        plateau_start=lambda wildcards: lookup(within=metadata, query="ensemble_name == '{wildcards.ensemble_name}'", cols=f"wall_{wildcards.representation}_{wildcards.channel}_plateau_start"),
+        plateau_end=lambda wildcards: lookup(within=metadata, query="ensemble_name == '{wildcards.ensemble_name}'", cols=f"wall_{wildcards.representation}_{wildcards.channel}_plateau_end"),
     input:
         correlators="data_assets/wall_correlators.h5",
         script=f"{cb_python_source}/mass_wall.py",
     output:
-        csv="intermediary_data/wall_fits/{ensemble_name}{representation}_{channel}.csv",
+        csv="intermediary_data/wall_fits/{ensemble_name,M[0-9]}{representation}_{channel}.csv",
     conda: "../envs/CB_autocorrelation_decay_constant.yml"
     shell: "python {input.script} --ensemble_name {wildcards.ensemble_name}/{wildcards.representation} --plateau_start {params.plateau_start} --plateau_end {params.plateau_end} --output_file_mean {output.csv} --channel {wildcards.channel} {input.correlators}"
 
@@ -40,6 +40,18 @@ rule comparison_plots:
         script=f"{cb_julia_source}/compare.jl",
         instantiate_julia="intermediary_data/cb_julia_instantiated",
         correlators="data_assets/wall_correlators.h5",
+        smeared_fits=expand(
+            "JSONs/{ensemble_prefix}/meson_extraction_{representation}_{channel}_samples.json",
+            ensemble_prefix=ensemble_prefixes,
+            representation=["f", "as"],
+            channel=["ps", "v"],
+        ),
+        wall_fits=expand(
+            "intermediary_data/wall_fits/{ensemble}{representation}_{channel}.csv",
+            ensemble=ensembles,
+            representation=["FUN", "AS"],
+            channel=["ps", "v"],
+        ),
     output:
         comparison_csv="data_assets/comparison_table.csv",
         comparison_table="assets/tables/local_smeared_decay_constants.tex",
