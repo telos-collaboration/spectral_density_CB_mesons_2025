@@ -5,11 +5,13 @@ import numpy as np
 from scipy.optimize import curve_fit
 from scipy.optimize import minimize
 import warnings
+
 warnings.filterwarnings("ignore")
 
 from .bootstrap import BootstrapSampleSet
 
 max_iterations_for_curve_fit = 5000
+
 
 def make_models(tmin, tmax, tp):
     """Create corrfitter model for G(t)."""
@@ -190,8 +192,10 @@ def fit_cosh_bootstrap(C, plateau_start, plateau_end):
         printing=False,
     )
 
-    E_fit = BootstrapSampleSet( gv.mean(E_mean[0]), E_sample)
-    A_fit = BootstrapSampleSet( gv.mean(a_mean[0]) / np.sqrt(gv.mean(E_mean[0])), a_sample / np.sqrt(E_sample))
+    E_fit = BootstrapSampleSet(gv.mean(E_mean[0]), E_sample)
+    A_fit = BootstrapSampleSet(
+        gv.mean(a_mean[0]) / np.sqrt(gv.mean(E_mean[0])), a_sample / np.sqrt(E_sample)
+    )
 
     return E_fit, A_fit, chi2 / dof
 
@@ -255,9 +259,10 @@ def fit_exp_bootstrap(C, plateau_start, plateau_end):
         printing=False,
     )
 
-    E_fit = BootstrapSampleSet( gv.mean(E_mean[0]), E_sample)
-    A_fit = BootstrapSampleSet( gv.mean(a_mean[0]) / np.sqrt(gv.mean(E_mean[0])), a_sample / np.sqrt(E_sample))
-
+    E_fit = BootstrapSampleSet(gv.mean(E_mean[0]), E_sample)
+    A_fit = BootstrapSampleSet(
+        gv.mean(a_mean[0]) / np.sqrt(gv.mean(E_mean[0])), a_sample / np.sqrt(E_sample)
+    )
 
     return E_fit, A_fit, chi2 / dof
 
@@ -373,11 +378,11 @@ def fit_coshsinh_simultaneous(Corr_ss, Corr_sp, plateau_start, plateau_end, latt
         printing=False,
     )
 
-    E_fit = BootstrapSampleSet( gv.mean(E_mean[0]), E_sample)
-    B_fit = BootstrapSampleSet( gv.mean(b_mean[0]), b_sample)
-
+    E_fit = BootstrapSampleSet(gv.mean(E_mean[0]), E_sample)
+    B_fit = BootstrapSampleSet(gv.mean(b_mean[0]), b_sample)
 
     return E_fit, B_fit, chi2 / dof
+
 
 def sim_coshsinh_fit(C1, C2, T, ti, tf):
     y1 = C1[ti:tf]
@@ -387,10 +392,10 @@ def sim_coshsinh_fit(C1, C2, T, ti, tf):
     comboX = np.append(t_slice, t_slice)
 
     def func_sp(t, As, f, M):
-        return As * f * (np.exp(-M * t) - np.exp(-M * (T - t))) 
+        return As * f * (np.exp(-M * t) - np.exp(-M * (T - t)))
 
     def func_ss(t, As, f, M):
-        return As**2 * (np.exp(-M * t) + np.exp(-M * (T - t))) 
+        return As**2 * (np.exp(-M * t) + np.exp(-M * (T - t)))
 
     def comboFunc(
         comboData, a, b, c
@@ -404,7 +409,9 @@ def sim_coshsinh_fit(C1, C2, T, ti, tf):
         return np.append(result1, result2)
 
     # curve fit the combined data to the combined function
-    fittedParameters, pcov = curve_fit(comboFunc, comboX, comboY, maxfev=max_iterations_for_curve_fit)
+    fittedParameters, pcov = curve_fit(
+        comboFunc, comboX, comboY, maxfev=max_iterations_for_curve_fit
+    )
 
     return fittedParameters
 
@@ -420,7 +427,7 @@ def sim_cosh_fit(C1, C2, T, ti, tf):
         return As * f * (np.exp(-M * t) + np.exp(-M * (T - t)))
 
     def func_ss(t, As, f, M):
-        return As**2 * (np.exp(-M * t) + np.exp(-M * (T - t))) 
+        return As**2 * (np.exp(-M * t) + np.exp(-M * (T - t)))
 
     def comboFunc(
         comboData, a, b, c
@@ -434,7 +441,9 @@ def sim_cosh_fit(C1, C2, T, ti, tf):
         return np.append(result1, result2)
 
     # curve fit the combined data to the combined function
-    fittedParameters, pcov = curve_fit(comboFunc, comboX, comboY, maxfev=max_iterations_for_curve_fit)
+    fittedParameters, pcov = curve_fit(
+        comboFunc, comboX, comboY, maxfev=max_iterations_for_curve_fit
+    )
 
     return fittedParameters
 
@@ -442,9 +451,7 @@ def sim_cosh_fit(C1, C2, T, ti, tf):
 def fit_cosh_simultaneous(Corr_ss, Corr_sp, plateau_start, plateau_end, lattice_t):
     """This function fits the correlators with two cosh functions simultaneously"""
 
-    x0 = sim_cosh_fit(
-        Corr_sp.mean, Corr_ss.mean, lattice_t, plateau_start, plateau_end
-    )
+    x0 = sim_cosh_fit(Corr_sp.mean, Corr_ss.mean, lattice_t, plateau_start, plateau_end)
     x0 = np.abs(x0)
     p0 = dict(
         {
@@ -497,9 +504,8 @@ def fit_cosh_simultaneous(Corr_ss, Corr_sp, plateau_start, plateau_end, lattice_
         printing=False,
     )
 
-    E_fit = BootstrapSampleSet( gv.mean(E_mean[0]), E_sample)
-    B_fit = BootstrapSampleSet( gv.mean(b_mean[0]), b_sample)
-
+    E_fit = BootstrapSampleSet(gv.mean(E_mean[0]), E_sample)
+    B_fit = BootstrapSampleSet(gv.mean(b_mean[0]), b_sample)
 
     return E_fit, B_fit, chi2 / dof
 
@@ -529,7 +535,9 @@ def sim_exp_fit(C1, C2, ti, tf):
         return np.append(result1, result2)
 
     # curve fit the combined data to the combined function
-    fittedParameters, pcov = curve_fit(comboFunc, comboX, comboY, maxfev=max_iterations_for_curve_fit)
+    fittedParameters, pcov = curve_fit(
+        comboFunc, comboX, comboY, maxfev=max_iterations_for_curve_fit
+    )
 
     return fittedParameters
 
@@ -537,9 +545,7 @@ def sim_exp_fit(C1, C2, ti, tf):
 def fit_exp_simultaneous(Corr_ss, Corr_sp, plateau_start, plateau_end):
     """This function fits the correlators with two exp functions simultaneously"""
 
-    x0 = sim_exp_fit(
-        Corr_sp.mean, Corr_ss.mean, plateau_start, plateau_end
-    )
+    x0 = sim_exp_fit(Corr_sp.mean, Corr_ss.mean, plateau_start, plateau_end)
     x0 = np.abs(x0)
     p0 = dict(
         {
@@ -593,7 +599,7 @@ def fit_exp_simultaneous(Corr_ss, Corr_sp, plateau_start, plateau_end):
         printing=False,
     )
 
-    E_fit = BootstrapSampleSet( gv.mean(E_mean[0]), E_sample)
-    B_fit = BootstrapSampleSet( gv.mean(b_mean[0]), b_sample)
+    E_fit = BootstrapSampleSet(gv.mean(E_mean[0]), E_sample)
+    B_fit = BootstrapSampleSet(gv.mean(b_mean[0]), b_sample)
 
     return E_fit, B_fit, chi2 / dof

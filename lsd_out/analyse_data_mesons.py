@@ -29,6 +29,7 @@ import shutil
 
 def main():
     multiprocess.set_start_method("fork")
+
     def get_directory_size(directory):
         total_size = 0
         for dirpath, dirnames, filenames in os.walk(directory):
@@ -38,7 +39,22 @@ def main():
                     total_size += os.path.getsize(filepath)
         return total_size
 
-    def init_variables(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi):
+    def init_variables(
+        datapath,
+        outdir,
+        ne,
+        emin,
+        emax,
+        periodicity,
+        kernel,
+        sigma,
+        prec,
+        nboot,
+        e0,
+        Na,
+        A0cut,
+        mpi,
+    ):
         in_ = Inputs()
         in_.tmax = 0
         in_.periodicity = periodicity
@@ -50,7 +66,7 @@ def main():
         in_.num_boot = nboot
         in_.sigma = sigma
         in_.emax = (
-                emax * mpi
+            emax * mpi
         )  # we pass it in unit of Mpi, here to turn it into lattice (working) units
         if emin == 0:
             in_.emin = (mpi / 20) * mpi
@@ -62,13 +78,42 @@ def main():
         in_.A0cut = A0cut
         return in_
 
-    def findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,
-                hltParams):
+    def findRho(
+        datapath,
+        outdir,
+        ne,
+        emin,
+        emax,
+        periodicity,
+        kernel,
+        sigma,
+        prec,
+        nboot,
+        e0,
+        Na,
+        A0cut,
+        mpi,
+        hltParams,
+    ):
         print(LogMessage(), "Initialising")
         # args = parseArgumentRhoFromData()
         init_precision(prec)
-        par = init_variables(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut,
-                             mpi)
+        par = init_variables(
+            datapath,
+            outdir,
+            ne,
+            emin,
+            emax,
+            periodicity,
+            kernel,
+            sigma,
+            prec,
+            nboot,
+            e0,
+            Na,
+            A0cut,
+            mpi,
+        )
 
         seed = generate_seed(par)
         random.seed(seed)
@@ -139,7 +184,7 @@ def main():
         )
         HLT.prepareHLT()
         HLT.run()
-        '''
+        """
         HLT.stabilityPlot(
             generateHLTscan=True,
             generateLikelihoodShared=True,
@@ -147,67 +192,77 @@ def main():
             generateKernelsPlot=True,
         )  # Lots of plots as it is
         HLT.plotResult()
-        '''
+        """
         # end()
 
     ####################### External data for make rho finding easier #######################
-    categories = ['PS', 'V', 'T', 'AV', 'AT', 'S', 'ps', 'v', 't', 'av', 'at', 's']
+    categories = ["PS", "V", "T", "AV", "AT", "S", "ps", "v", "t", "av", "at", "s"]
     # Mesonic channels
-    mesonic_channels = ['g5', 'gi', 'g0gi', 'g5gi', 'g0g5gi', 'id']
+    mesonic_channels = ["g5", "gi", "g0gi", "g5gi", "g0g5gi", "id"]
     # Ensembles: M1, M2, M3, M4, M5
-    ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    #ensembles = ['M1', 'M2']
+    ensembles = ["M1", "M2", "M3", "M4", "M5"]
+    # ensembles = ['M1', 'M2']
     # Roots in HDF5 for each ensemble
-    roots = ['chimera_out_48x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
-             'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
-             'chimera_out_96x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
-             'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.70mas1.01_APE0.4N50_smf0.2as0.12_s1',
-             'chimera_out_64x32x32x32nc4nf2nas3b6.5mf0.72mas1.01_APE0.4N50_smf0.24as0.12_s1']
+    roots = [
+        "chimera_out_48x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1",
+        "chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1",
+        "chimera_out_96x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1",
+        "chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.70mas1.01_APE0.4N50_smf0.2as0.12_s1",
+        "chimera_out_64x32x32x32nc4nf2nas3b6.5mf0.72mas1.01_APE0.4N50_smf0.24as0.12_s1",
+    ]
     # Representations considered
-    reps = ['fund', 'anti']
-    #reps = ['fund']
+    reps = ["fund", "anti"]
+    # reps = ['fund']
     # Kernel in HLT
-    kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
+    kerneltype = ["HALFNORMGAUSS", "CAUCHY"]
 
-    #kerneltype = ['HALFNORMGAUSS']
+    # kerneltype = ['HALFNORMGAUSS']
 
-    def process_channel(channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path):
+    def process_channel(
+        channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path
+    ):
         Nsource = matrix_4D[index][4][k]
         Nsink = matrix_4D[index][5][k]
         group_prefixes = {
-            'gi': ['g1', 'g2', 'g3'],
-            'g0gi': ['g0g1', 'g0g2', 'g0g3'],
-            'g5gi': ['g5g1', 'g5g2', 'g5g3'],
-            'g0g5gi': ['g0g5g1', 'g0g5g2', 'g0g5g3']
+            "gi": ["g1", "g2", "g3"],
+            "g0gi": ["g0g1", "g0g2", "g0g3"],
+            "g5gi": ["g5g1", "g5g2", "g5g3"],
+            "g0g5gi": ["g0g5g1", "g0g5g2", "g0g5g3"],
         }
         prefix = group_prefixes.get(channel, [channel])
         datasets = []
         for g in prefix:
-            dataset_path = f"{roots[index]}/source_N{Nsource}_sink_N{Nsink}/{rep} TRIPLET {g}"
+            dataset_path = (
+                f"{roots[index]}/source_N{Nsource}_sink_N{Nsink}/{rep} TRIPLET {g}"
+            )
             group1 = f"source_N{Nsource}_sink_N{Nsink}"
             group2 = f"{rep} TRIPLET {g}"
-            datasets.append(read_hdf2.extract_dataset(file_path, group2, roots[index], group1))
-            with open('paths.log', 'a') as file:
+            datasets.append(
+                read_hdf2.extract_dataset(file_path, group2, roots[index], group1)
+            )
+            with open("paths.log", "a") as file:
                 print(dataset_path, file=file)
         dataset = sum(datasets) / len(datasets) if datasets else None
-        if channel == 'id' or channel == 'g5':
+        if channel == "id" or channel == "g5":
             group2 = f"{rep} TRIPLET {channel}"
             dataset_path = f"{roots[index]}/{channel}/{rep} TRIPLET {channel}"
-            group1 = f'source_N{Nsource}_sink_N{Nsink}'
+            group1 = f"source_N{Nsource}_sink_N{Nsink}"
             dataset = read_hdf2.extract_dataset(file_path, group2, roots[index], group1)
-            with open('paths.log', 'a') as file:
+            with open("paths.log", "a") as file:
                 print(dataset_path, file=file)
         if dataset is not None:
-            translate.save_matrix_to_file2(dataset,
-                                           f'corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt')
+            translate.save_matrix_to_file2(
+                dataset,
+                f"corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt",
+            )
         mpi = matrix_4D[index][1][k]
-        if kernel == 'HALFNORMGAUSS':
-            if rep == 'fund':
+        if kernel == "HALFNORMGAUSS":
+            if rep == "fund":
                 tmp = mpi * matrix_4D[index][2][k]
             else:
                 tmp = mpi * matrix_4D[index][2][k + 6]
-        elif kernel == 'CAUCHY':
-            if rep == 'fund':
+        elif kernel == "CAUCHY":
+            if rep == "fund":
                 tmp = mpi * matrix_4D[index][3][k]
             else:
                 tmp = mpi * matrix_4D[index][3][k + 6]
@@ -215,8 +270,8 @@ def main():
         sigma = tmp
         decimal_part = tmp / matrix_4D[index][1][k] % 1
         decimal_as_int = int(decimal_part * 100)
-        datapath = f'./corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt'
-        outdir = f'./{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
+        datapath = f"./corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt"
+        outdir = f"./{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}"
         lambdaMax = 1e0
         hltParams = AlgorithmParameters(
             alphaA=0,
@@ -232,30 +287,74 @@ def main():
         ne = 10
         emin = 0.3
         emax = 2.2
-        periodicity = 'COSH'
+        periodicity = "COSH"
         prec = 105
         nboot = 300
         e0 = 0.0
         Na = 1
         A0cut = 0.1
         current_directory = os.getcwd()  # Get the current working directory
-        subdirectory_path = os.path.join(current_directory, outdir)  # Create the full path to the subdirectory
+        subdirectory_path = os.path.join(
+            current_directory, outdir
+        )  # Create the full path to the subdirectory
 
         if os.path.isdir(subdirectory_path):
             directory_size = get_directory_size(subdirectory_path)
-            size_in_megabytes = directory_size / (1024 * 1024)  # Convert bytes to megabytes
+            size_in_megabytes = directory_size / (
+                1024 * 1024
+            )  # Convert bytes to megabytes
             print(f"Size of the subdirectory '{outdir}': {size_in_megabytes:.2f} MB")
             if size_in_megabytes >= 0.115:
-                print(f"The subdirectory '{outdir}' exists and its size is at least 0.115 MB.")
+                print(
+                    f"The subdirectory '{outdir}' exists and its size is at least 0.115 MB."
+                )
             else:
-                print(f"The subdirectory '{outdir}' does not exist or its size is less than 0.115 MB.")
-                findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,hltParams)
+                print(
+                    f"The subdirectory '{outdir}' does not exist or its size is less than 0.115 MB."
+                )
+                findRho(
+                    datapath,
+                    outdir,
+                    ne,
+                    emin,
+                    emax,
+                    periodicity,
+                    kernel,
+                    sigma,
+                    prec,
+                    nboot,
+                    e0,
+                    Na,
+                    A0cut,
+                    mpi,
+                    hltParams,
+                )
         else:
-            print(f"The subdirectory '{outdir}' does not exist or its size is less than 0.115 MB.")
+            print(
+                f"The subdirectory '{outdir}' does not exist or its size is less than 0.115 MB."
+            )
             directory_size = get_directory_size(subdirectory_path)
-            size_in_megabytes = directory_size / (1024 * 1024)  # Convert bytes to megabytes
+            size_in_megabytes = directory_size / (
+                1024 * 1024
+            )  # Convert bytes to megabytes
             print(f"Size of the subdirectory '{outdir}': {size_in_megabytes:.2f} MB")
-            findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,hltParams)
+            findRho(
+                datapath,
+                outdir,
+                ne,
+                emin,
+                emax,
+                periodicity,
+                kernel,
+                sigma,
+                prec,
+                nboot,
+                e0,
+                Na,
+                A0cut,
+                mpi,
+                hltParams,
+            )
 
     def get_cpu_count():
         try:
@@ -266,7 +365,9 @@ def main():
     def wrapper(args):
         # Unpack the arguments tuple
         channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path = args
-        return process_channel(channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path)
+        return process_channel(
+            channel, k, index, rep, ensemble, kernel, matrix_4D, roots, file_path
+        )
 
     for sources in range(2):
         # Initialize dictionaries to store the data
@@ -276,10 +377,10 @@ def main():
         sigma1_over_mC_values_MN = {}
         sigma2_over_mC_values_MN = {}
         # Read data from CSV
-        with open('../metadata/metadata_spectralDensity.csv', newline='') as csvfile:
+        with open("../metadata/metadata_spectralDensity.csv", newline="") as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                ensemble = row['Ensemble']
+                ensemble = row["Ensemble"]
                 # Initialize lists for each ensemble if not already present
                 if ensemble not in Nsource_C_values_MN:
                     Nsource_C_values_MN[ensemble] = []
@@ -290,14 +391,26 @@ def main():
                 # Append data for each category to the respective lists
                 for category in categories:
                     if sources == 0:
-                        Nsource_C_values_MN[ensemble].append(int(row[f'{category}_Nsource_1']))
-                        Nsink_C_values_MN[ensemble].append(int(row[f'{category}_Nsink_1']))
+                        Nsource_C_values_MN[ensemble].append(
+                            int(row[f"{category}_Nsource_1"])
+                        )
+                        Nsink_C_values_MN[ensemble].append(
+                            int(row[f"{category}_Nsink_1"])
+                        )
                     else:
-                        Nsource_C_values_MN[ensemble].append(int(row[f'{category}_Nsource_2']))
-                        Nsink_C_values_MN[ensemble].append(int(row[f'{category}_Nsink_2']))
-                    am_C_values_MN[ensemble].append(float(row[f'{category}_am']))
-                    sigma1_over_mC_values_MN[ensemble].append(float(row[f'{category}_sigma1_over_m']))
-                    sigma2_over_mC_values_MN[ensemble].append(float(row[f'{category}_sigma2_over_m']))
+                        Nsource_C_values_MN[ensemble].append(
+                            int(row[f"{category}_Nsource_2"])
+                        )
+                        Nsink_C_values_MN[ensemble].append(
+                            int(row[f"{category}_Nsink_2"])
+                        )
+                    am_C_values_MN[ensemble].append(float(row[f"{category}_am"]))
+                    sigma1_over_mC_values_MN[ensemble].append(
+                        float(row[f"{category}_sigma1_over_m"])
+                    )
+                    sigma2_over_mC_values_MN[ensemble].append(
+                        float(row[f"{category}_sigma2_over_m"])
+                    )
         # Create a 3D matrix with ensemble index
         matrix_4D = [
             [
@@ -306,7 +419,7 @@ def main():
                 sigma1_over_mC_values_MN[ensemble],
                 sigma2_over_mC_values_MN[ensemble],
                 Nsource_C_values_MN[ensemble],
-                Nsink_C_values_MN[ensemble]
+                Nsink_C_values_MN[ensemble],
             ]
             for ensemble in ensembles
         ]
@@ -323,10 +436,10 @@ def main():
             lambdaMin=7e-1,
             comparisonRatio=0.001,
         )
-        
+
         ################# Download and use lsdensities on correlators ########################
         # Replace 'your_file.h5' with the path to your HDF5 file
-        file_path = '../input_correlators/chimera_data_reduced.h5'
+        file_path = "../input_correlators/chimera_data_reduced.h5"
         for kernel in kerneltype:
             for index, ensemble in enumerate(ensembles):
                 for rep in reps:
@@ -334,10 +447,10 @@ def main():
                         Nsource = matrix_4D[index][4][k]
                         Nsink = matrix_4D[index][5][k]
                         group_prefixes = {
-                            'gi': ['g1', 'g2', 'g3'],
-                            'g0gi': ['g0g1', 'g0g2', 'g0g3'],
-                            'g5gi': ['g5g1', 'g5g2', 'g5g3'],
-                            'g0g5gi': ['g0g5g1', 'g0g5g2', 'g0g5g3']
+                            "gi": ["g1", "g2", "g3"],
+                            "g0gi": ["g0g1", "g0g2", "g0g3"],
+                            "g5gi": ["g5g1", "g5g2", "g5g3"],
+                            "g0g5gi": ["g0g5g1", "g0g5g2", "g0g5g3"],
                         }
                         prefix = group_prefixes.get(channel, [channel])
                         datasets = []
@@ -345,20 +458,30 @@ def main():
                             dataset_path = f"{roots[index]}/source_N{Nsource}_sink_N{Nsink}/{rep} TRIPLET {g}"
                             group1 = f"source_N{Nsource}_sink_N{Nsink}"
                             group2 = f"{rep} TRIPLET {g}"
-                            datasets.append(read_hdf2.extract_dataset(file_path, group2, roots[index], group1))
-                            with open('paths.log', 'a') as file:
+                            datasets.append(
+                                read_hdf2.extract_dataset(
+                                    file_path, group2, roots[index], group1
+                                )
+                            )
+                            with open("paths.log", "a") as file:
                                 print(dataset_path, file=file)
                         dataset = sum(datasets) / len(datasets) if datasets else None
-                        if channel == 'id' or channel == 'g5':
+                        if channel == "id" or channel == "g5":
                             group2 = f"{rep} TRIPLET {channel}"
-                            dataset_path = f"{roots[index]}/{channel}/{rep} TRIPLET {channel}"
-                            group1 = f'source_N{Nsource}_sink_N{Nsink}'
-                            dataset = read_hdf2.extract_dataset(file_path, group2, roots[index], group1)
-                            with open('paths.log', 'a') as file:
+                            dataset_path = (
+                                f"{roots[index]}/{channel}/{rep} TRIPLET {channel}"
+                            )
+                            group1 = f"source_N{Nsource}_sink_N{Nsink}"
+                            dataset = read_hdf2.extract_dataset(
+                                file_path, group2, roots[index], group1
+                            )
+                            with open("paths.log", "a") as file:
                                 print(dataset_path, file=file)
                         if dataset is not None:
-                            translate.save_matrix_to_file2(dataset,
-                                                           f'corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt')
+                            translate.save_matrix_to_file2(
+                                dataset,
+                                f"corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt",
+                            )
 
         for kernel in kerneltype:
             # Prepare argument list
@@ -375,44 +498,62 @@ def main():
 
     # Consider M1 for vector meson fundamental
     mpi = matrix_4D[0][1][1]
-    channel = 'gi'
-    rep = 'fund'
-    kernel = 'HALFNORMGAUSS'
-    ensemble = 'M1'
+    channel = "gi"
+    rep = "fund"
+    kernel = "HALFNORMGAUSS"
+    ensemble = "M1"
     tmp = mpi * 0.70
     sigma = tmp
     decimal_part = tmp / mpi % 1
     decimal_as_int = int(decimal_part * 100)
     Nsource = 80
     Nsink = 80
-    datapath = f'./corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt'
-    outdir = f'./{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
+    datapath = f"./corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt"
+    outdir = f"./{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}"
     ne = 1
     emin = 0.45
     emax = 0.45
-    periodicity = 'COSH'
+    periodicity = "COSH"
     prec = 105
     nboot = 300
     e0 = 0.0
     Na = 3
     A0cut = 0.1
 
-    findRho(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi,
-            hltParams2)
+    findRho(
+        datapath,
+        outdir,
+        ne,
+        emin,
+        emax,
+        periodicity,
+        kernel,
+        sigma,
+        prec,
+        nboot,
+        e0,
+        Na,
+        A0cut,
+        mpi,
+        hltParams2,
+    )
 
     tmax = 24
 
-    outdir2 = outdir + f'/tmax{tmax}sigma{sigma}Ne{ne}nboot{nboot}mNorm{mpi}prec{prec}Na{Na}KerType{kernel}/Logs/'
+    outdir2 = (
+        outdir
+        + f"/tmax{tmax}sigma{sigma}Ne{ne}nboot{nboot}mNorm{mpi}prec{prec}Na{Na}KerType{kernel}/Logs/"
+    )
 
     # Define the log files to copy
     log_files = [
-        'InverseProblemLOG_AlphaA.log',
-        'InverseProblemLOG_AlphaB.log',
-        'InverseProblemLOG_AlphaC.log'
+        "InverseProblemLOG_AlphaA.log",
+        "InverseProblemLOG_AlphaB.log",
+        "InverseProblemLOG_AlphaC.log",
     ]
 
     # Define the destination directory
-    destination_dir = '../input_fit/stability_plot'
+    destination_dir = "../input_fit/stability_plot"
 
     # Ensure the destination directory exists
     os.makedirs(destination_dir, exist_ok=True)
@@ -427,24 +568,22 @@ def main():
         else:
             print(f"File {src_file} does not exist and cannot be copied")
 
-            
     import pandas as pd
 
     # Input data
     energy = np.linspace(0.30, 1.29, 7)
 
     # Load the CSV file
-    df = pd.read_csv('../metadata/metadata_spectralDensity.csv', index_col=0)
+    df = pd.read_csv("../metadata/metadata_spectralDensity.csv", index_col=0)
 
     # Define the columns and rows you're interested in
-    cols = ['af_a', 'af_b', 'af_c', 'af_d', 'af_e', 'af_f', 'af_g']
+    cols = ["af_a", "af_b", "af_c", "af_d", "af_e", "af_f", "af_g"]
 
     # Extract and scale the arrays
-    asd1 = df.loc['M1', cols].values * 1e-6
-    egf1 = df.loc['M2', cols].values * 1e-6
-    asd2 = df.loc['M3', cols].values * 1e-6
-    egf2 = df.loc['M4', cols].values * 1e-6
-
+    asd1 = df.loc["M1", cols].values * 1e-6
+    egf1 = df.loc["M2", cols].values * 1e-6
+    asd2 = df.loc["M3", cols].values * 1e-6
+    egf2 = df.loc["M4", cols].values * 1e-6
 
     # Number of bootstraps
     num_bootstrap = 300

@@ -25,14 +25,17 @@ import matplotlib.pyplot as plt
 import csv
 import read_hdf
 import translate
+
 #   Take input for Rho
 import numpy as np
 
 import os
 import shutil
 
+
 def copy_file(source_path, destination_path):
     shutil.copy(source_path, destination_path)
+
 
 def create_out_paths2(path):
     if not os.path.exists(path):
@@ -48,7 +51,24 @@ def create_out_paths2(path):
 
     return plotpath, logpath
 
-def init_variables_samples(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi, rhopath):
+
+def init_variables_samples(
+    datapath,
+    outdir,
+    ne,
+    emin,
+    emax,
+    periodicity,
+    kernel,
+    sigma,
+    prec,
+    nboot,
+    e0,
+    Na,
+    A0cut,
+    mpi,
+    rhopath,
+):
     in_ = Inputs()
     in_.tmax = 0
     in_.periodicity = periodicity
@@ -60,7 +80,7 @@ def init_variables_samples(datapath, outdir, ne, emin, emax, periodicity, kernel
     in_.num_boot = nboot
     in_.sigma = sigma
     in_.emax = (
-            emax * mpi
+        emax * mpi
     )  # we pass it in unit of Mpi, here to turn it into lattice (working) units
     if emin == 0:
         in_.emin = (mpi / 20) * mpi
@@ -73,15 +93,48 @@ def init_variables_samples(datapath, outdir, ne, emin, emax, periodicity, kernel
     in_.rhopath = rhopath
     return in_
 
-def printSamples(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi, rhopath, part_outdir):
+
+def printSamples(
+    datapath,
+    outdir,
+    ne,
+    emin,
+    emax,
+    periodicity,
+    kernel,
+    sigma,
+    prec,
+    nboot,
+    e0,
+    Na,
+    A0cut,
+    mpi,
+    rhopath,
+    part_outdir,
+):
     print(LogMessage(), "Initialising")
-    #args = parseArgumentPrintSamples()
+    # args = parseArgumentPrintSamples()
     init_precision(prec)
-    par = init_variables_samples(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi, rhopath)
+    par = init_variables_samples(
+        datapath,
+        outdir,
+        ne,
+        emin,
+        emax,
+        periodicity,
+        kernel,
+        sigma,
+        prec,
+        nboot,
+        e0,
+        Na,
+        A0cut,
+        mpi,
+        rhopath,
+    )
 
     #   Reading datafile, storing correlator
     rawcorr, par.time_extent, par.num_samples = u.read_datafile(par.datapath)
-
 
     rho_file = rhopath
     inputrhofile = np.genfromtxt(rho_file, comments="#")
@@ -219,29 +272,32 @@ def printSamples(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, p
     source_path = rhopath
     destination_path = part_outdir
     copy_file(source_path, destination_path)
-    #plt.show()
-    #end()
+    # plt.show()
+    # end()
+
 
 def main():
-    file_path = '../input_correlators/chimera_data_reduced.h5'
+    file_path = "../input_correlators/chimera_data_reduced.h5"
     ####################### External data for make rho finding easier #######################
-    categories = ['PS', 'V', 'T', 'AV', 'AT', 'S', 'ps', 'v', 't', 'av', 'at', 's']
+    categories = ["PS", "V", "T", "AV", "AT", "S", "ps", "v", "t", "av", "at", "s"]
     # Mesonic channels
-    mesonic_channels = ['g5', 'gi', 'g0gi', 'g5gi', 'g0g5gi', 'id']
+    mesonic_channels = ["g5", "gi", "g0gi", "g5gi", "g0g5gi", "id"]
     # Ensembles: M1, M2, M3, M4, M5
-    ensembles = ['M1', 'M2', 'M3', 'M4', 'M5']
-    #ensembles = ['M1']
+    ensembles = ["M1", "M2", "M3", "M4", "M5"]
+    # ensembles = ['M1']
     # Roots in HDF5 for each ensemble
-    roots = ['chimera_out_48x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
-             'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
-             'chimera_out_96x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1',
-             'chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.70mas1.01_APE0.4N50_smf0.2as0.12_s1',
-             'chimera_out_64x32x32x32nc4nf2nas3b6.5mf0.72mas1.01_APE0.4N50_smf0.24as0.12_s1']
+    roots = [
+        "chimera_out_48x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1",
+        "chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1",
+        "chimera_out_96x20x20x20nc4nf2nas3b6.5mf0.71mas1.01_APE0.4N50_smf0.2as0.12_s1",
+        "chimera_out_64x20x20x20nc4nf2nas3b6.5mf0.70mas1.01_APE0.4N50_smf0.2as0.12_s1",
+        "chimera_out_64x32x32x32nc4nf2nas3b6.5mf0.72mas1.01_APE0.4N50_smf0.24as0.12_s1",
+    ]
     # Representations considered
-    reps = ['fund', 'anti']
+    reps = ["fund", "anti"]
     # Kernel in HLT
-    kerneltype = ['HALFNORMGAUSS', 'CAUCHY']
-    #kerneltype = ['HALFNORMGAUSS']
+    kerneltype = ["HALFNORMGAUSS", "CAUCHY"]
+    # kerneltype = ['HALFNORMGAUSS']
     for sources in range(2):
         # Initialize dictionaries to store the data
         Nsource_C_values_MN = {}
@@ -250,10 +306,10 @@ def main():
         sigma1_over_mC_values_MN = {}
         sigma2_over_mC_values_MN = {}
         # Read data from CSV
-        with open('../metadata/metadata_spectralDensity.csv', newline='') as csvfile:
+        with open("../metadata/metadata_spectralDensity.csv", newline="") as csvfile:
             reader = csv.DictReader(csvfile)
             for row in reader:
-                ensemble = row['Ensemble']
+                ensemble = row["Ensemble"]
                 # Initialize lists for each ensemble if not already present
                 if ensemble not in Nsource_C_values_MN:
                     Nsource_C_values_MN[ensemble] = []
@@ -264,14 +320,26 @@ def main():
                 # Append data for each category to the respective lists
                 for category in categories:
                     if sources == 0:
-                        Nsource_C_values_MN[ensemble].append(int(row[f'{category}_Nsource_1']))
-                        Nsink_C_values_MN[ensemble].append(int(row[f'{category}_Nsink_1']))
+                        Nsource_C_values_MN[ensemble].append(
+                            int(row[f"{category}_Nsource_1"])
+                        )
+                        Nsink_C_values_MN[ensemble].append(
+                            int(row[f"{category}_Nsink_1"])
+                        )
                     else:
-                        Nsource_C_values_MN[ensemble].append(int(row[f'{category}_Nsource_2']))
-                        Nsink_C_values_MN[ensemble].append(int(row[f'{category}_Nsink_2']))
-                    am_C_values_MN[ensemble].append(float(row[f'{category}_am']))
-                    sigma1_over_mC_values_MN[ensemble].append(float(row[f'{category}_sigma1_over_m']))
-                    sigma2_over_mC_values_MN[ensemble].append(float(row[f'{category}_sigma2_over_m']))
+                        Nsource_C_values_MN[ensemble].append(
+                            int(row[f"{category}_Nsource_2"])
+                        )
+                        Nsink_C_values_MN[ensemble].append(
+                            int(row[f"{category}_Nsink_2"])
+                        )
+                    am_C_values_MN[ensemble].append(float(row[f"{category}_am"]))
+                    sigma1_over_mC_values_MN[ensemble].append(
+                        float(row[f"{category}_sigma1_over_m"])
+                    )
+                    sigma2_over_mC_values_MN[ensemble].append(
+                        float(row[f"{category}_sigma2_over_m"])
+                    )
         # Create a 3D matrix with ensemble index
         matrix_4D = [
             [
@@ -280,7 +348,7 @@ def main():
                 sigma1_over_mC_values_MN[ensemble],
                 sigma2_over_mC_values_MN[ensemble],
                 Nsource_C_values_MN[ensemble],
-                Nsink_C_values_MN[ensemble]
+                Nsink_C_values_MN[ensemble],
             ]
             for ensemble in ensembles
         ]
@@ -292,10 +360,10 @@ def main():
                         Nsource = matrix_4D[index][4][k]
                         Nsink = matrix_4D[index][5][k]
                         group_prefixes = {
-                            'gi': ['g1', 'g2', 'g3'],
-                            'g0gi': ['g0g1', 'g0g2', 'g0g3'],
-                            'g5gi': ['g5g1', 'g5g2', 'g5g3'],
-                            'g0g5gi': ['g0g5g1', 'g0g5g2', 'g0g5g3']
+                            "gi": ["g1", "g2", "g3"],
+                            "g0gi": ["g0g1", "g0g2", "g0g3"],
+                            "g5gi": ["g5g1", "g5g2", "g5g3"],
+                            "g0g5gi": ["g0g5g1", "g0g5g2", "g0g5g3"],
                         }
                         prefix = group_prefixes.get(channel, [channel])
                         datasets = []
@@ -303,27 +371,38 @@ def main():
                             dataset_path = f"{roots[index]}/source_N{Nsource}_sink_N{Nsink}/{rep} TRIPLET {g}"
                             group1 = f"source_N{Nsource}_sink_N{Nsink}"
                             group2 = f"{rep} TRIPLET {g}"
-                            datasets.append(read_hdf.extract_dataset(file_path, group2, roots[index], group1))
-                            with open('paths.log', 'a') as file:
+                            datasets.append(
+                                read_hdf.extract_dataset(
+                                    file_path, group2, roots[index], group1
+                                )
+                            )
+                            with open("paths.log", "a") as file:
                                 print(dataset_path, file=file)
                         dataset = sum(datasets) / len(datasets) if datasets else None
-                        if channel == 'id' or channel == 'g5':
+                        if channel == "id" or channel == "g5":
                             group2 = f"{rep} TRIPLET {channel}"
-                            dataset_path = f"{roots[index]}/{channel}/{rep} TRIPLET {channel}"
-                            group1 = f'source_N{Nsource}_sink_N{Nsink}'
-                            dataset = read_hdf.extract_dataset(file_path, group2, roots[index], group1)
-                            with open('paths.log', 'a') as file:
+                            dataset_path = (
+                                f"{roots[index]}/{channel}/{rep} TRIPLET {channel}"
+                            )
+                            group1 = f"source_N{Nsource}_sink_N{Nsink}"
+                            dataset = read_hdf.extract_dataset(
+                                file_path, group2, roots[index], group1
+                            )
+                            with open("paths.log", "a") as file:
                                 print(dataset_path, file=file)
                         if dataset is not None:
-                            translate.save_matrix_to_file2(dataset, f'corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt')
+                            translate.save_matrix_to_file2(
+                                dataset,
+                                f"corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt",
+                            )
                         mpi = matrix_4D[index][1][k]
-                        if kernel == 'HALFNORMGAUSS':
-                            if rep == 'fund':
+                        if kernel == "HALFNORMGAUSS":
+                            if rep == "fund":
                                 tmp = mpi * matrix_4D[index][2][k]
                             else:
                                 tmp = mpi * matrix_4D[index][2][k + 6]
-                        elif kernel == 'CAUCHY':
-                            if rep == 'fund':
+                        elif kernel == "CAUCHY":
+                            if rep == "fund":
                                 tmp = mpi * matrix_4D[index][3][k]
                             else:
                                 tmp = mpi * matrix_4D[index][3][k + 6]
@@ -331,42 +410,65 @@ def main():
                         sigma = tmp
                         decimal_part = tmp / matrix_4D[index][1][k] % 1
                         decimal_as_int = int(decimal_part * 100)
-                        datapath = f'./corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt'
-                        if kernel == 'HALFNORMGAUSS':
-                            kernel2 = 'GAUSS'
-                        elif kernel == 'CAUCHY':
+                        datapath = f"./corr_to_analyse_{channel}_{rep}_{ensemble}_Nsource{Nsource}_Nsink{Nsink}.txt"
+                        if kernel == "HALFNORMGAUSS":
+                            kernel2 = "GAUSS"
+                        elif kernel == "CAUCHY":
                             kernel2 = kernel
-                        spdens_outdir = f'./{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}'
+                        spdens_outdir = f"./{ensemble}_{rep}_{channel}_s0p{decimal_as_int}_{kernel}_Nsource{Nsource}_Nsink{Nsink}"
                         all_items = os.listdir(spdens_outdir)
-                        subdirectories = [item for item in all_items if os.path.isdir(os.path.join(spdens_outdir, item))]
+                        subdirectories = [
+                            item
+                            for item in all_items
+                            if os.path.isdir(os.path.join(spdens_outdir, item))
+                        ]
                         if len(subdirectories) == 1:
                             subdirectory_name = subdirectories[0]
-                            spdens_outdir = os.path.join(spdens_outdir, subdirectory_name)
+                            spdens_outdir = os.path.join(
+                                spdens_outdir, subdirectory_name
+                            )
                             print("Path to the only subdirectory:", spdens_outdir)
                         else:
-                            print("There is either no subdirectory or more than one subdirectory in the directory.")
-                        spdens_outdir = spdens_outdir + '/Logs/ResultHLT.txt'
+                            print(
+                                "There is either no subdirectory or more than one subdirectory in the directory."
+                            )
+                        spdens_outdir = spdens_outdir + "/Logs/ResultHLT.txt"
 
-                        if rep == 'fund':
-                            outdir = f'../input_fit/{ensemble}/{channel}_{rep}_Nsource{Nsource}_Nsink{Nsink}/{kernel2}/{channel}_{rep}_Nsource{Nsource}_Nsink{Nsink}'
-                            part_outdir = f'../input_fit/{ensemble}/{channel}_{rep}_Nsource{Nsource}_Nsink{Nsink}/{kernel2}/fit_results.txt'
-                        if rep == 'anti':
-                            outdir = f'../input_fit/{ensemble}/{channel}_as_Nsource{Nsource}_Nsink{Nsink}/{kernel2}/{channel}_as_Nsource{Nsource}_Nsink{Nsink}'
-                            part_outdir = f'../input_fit/{ensemble}/{channel}_as_Nsource{Nsource}_Nsink{Nsink}/{kernel2}/fit_results.txt'
+                        if rep == "fund":
+                            outdir = f"../input_fit/{ensemble}/{channel}_{rep}_Nsource{Nsource}_Nsink{Nsink}/{kernel2}/{channel}_{rep}_Nsource{Nsource}_Nsink{Nsink}"
+                            part_outdir = f"../input_fit/{ensemble}/{channel}_{rep}_Nsource{Nsource}_Nsink{Nsink}/{kernel2}/fit_results.txt"
+                        if rep == "anti":
+                            outdir = f"../input_fit/{ensemble}/{channel}_as_Nsource{Nsource}_Nsink{Nsink}/{kernel2}/{channel}_as_Nsource{Nsource}_Nsink{Nsink}"
+                            part_outdir = f"../input_fit/{ensemble}/{channel}_as_Nsource{Nsource}_Nsink{Nsink}/{kernel2}/fit_results.txt"
 
                         ne = 10
                         emin = 0.3
                         emax = 2.2
-                        periodicity = 'COSH'
+                        periodicity = "COSH"
                         prec = 105
                         nboot = 300
                         e0 = 0.0
                         Na = 1
                         A0cut = 0.1
 
-
-                        printSamples(datapath, outdir, ne, emin, emax, periodicity, kernel, sigma, prec, nboot, e0, Na, A0cut, mpi, spdens_outdir, part_outdir)
-
+                        printSamples(
+                            datapath,
+                            outdir,
+                            ne,
+                            emin,
+                            emax,
+                            periodicity,
+                            kernel,
+                            sigma,
+                            prec,
+                            nboot,
+                            e0,
+                            Na,
+                            A0cut,
+                            mpi,
+                            spdens_outdir,
+                            part_outdir,
+                        )
 
     # Avoid needing to work out the full tangle of output files,
     # while still allowing a workflow dependency on completing this rule

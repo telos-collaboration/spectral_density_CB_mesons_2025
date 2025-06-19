@@ -2,6 +2,7 @@ from flow_analysis.readers.read_hirep import read_flows_hirep
 from flow_analysis.measurements.scales import measure_w0
 import sys
 
+
 def flow_hirep(hirep_file, W0, filename):
     # obtain topological charge Q, the number of the configurations as specified in the configuration filenames and the
     # gradient flow scale. For the ensembles in this dataset the reference scale has been fixed to W0=0.28125 in the
@@ -18,16 +19,17 @@ def flow_hirep(hirep_file, W0, filename):
         f.write("%s,%s\n" % (i[0], i[1]))
     f.close()
 
+
 args = sys.argv
 if len(args) < 3:
     print("Missing input and/or output file")
-elif len(args)==3:
-    hirep_file  = args[1]
-    output_file = args[2] 
+elif len(args) == 3:
+    hirep_file = args[1]
+    output_file = args[2]
     W0 = 0.28125
     flow_hirep(hirep_file, W0, output_file)
-elif len(args)>3:
-    hirep_file  = args[1]
-    output_file = args[2] 
+elif len(args) > 3:
+    hirep_file = args[1]
+    output_file = args[2]
     W0 = args[3]
     flow_hirep(hirep_file, W0, output_file)

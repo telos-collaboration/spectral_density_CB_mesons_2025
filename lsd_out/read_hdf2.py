@@ -1,8 +1,9 @@
 import h5py
 
+
 def extract_dataset_column(file, dataset_path, column_index):
     try:
-        with h5py.File(file, 'r') as hdf_file:
+        with h5py.File(file, "r") as hdf_file:
             dataset = hdf_file[dataset_path][()]
             # Check if dataset is 3D (e.g., shape (1, 48, 527)) or 2D (e.g., shape (48, 873))
             if len(dataset.shape) == 3 and dataset.shape[0] == 1:
@@ -21,7 +22,7 @@ def extract_dataset_column(file, dataset_path, column_index):
 
 def extract_dataset(file, dataset_path, group1, group2):
     try:
-        with h5py.File(file, 'r') as hdf_file:
+        with h5py.File(file, "r") as hdf_file:
             dataset = hdf_file[group1][group2][dataset_path][()]
             # Check if dataset is 3D (e.g., shape (1, 48, 527)) or 2D (e.g., shape (48, 873))
             if len(dataset.shape) == 3 and dataset.shape[0] == 1:
@@ -34,4 +35,3 @@ def extract_dataset(file, dataset_path, group1, group2):
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
         return None
-

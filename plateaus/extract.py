@@ -17,10 +17,12 @@ def meson_decay_constant(Css, Csp, plateau_start, plateau_end):
     # load the ensamble info
     lattice_t = np.shape(Css.mean)[1]
 
-    E_fit, A_fit, chisquare = fitting.fit_coshsinh_simultaneous(Css, Csp, plateau_start, plateau_end, lattice_t)
+    E_fit, A_fit, chisquare = fitting.fit_coshsinh_simultaneous(
+        Css, Csp, plateau_start, plateau_end, lattice_t
+    )
 
     return E_fit, A_fit, round(chisquare, 2)
-    
+
 
 def gevp_fixT(Cmat_mean, Cmat, t0, ti, tf):
     Mshape = Cmat.shape
@@ -59,23 +61,26 @@ def gevp_fixT(Cmat_mean, Cmat, t0, ti, tf):
 
 
 def extract_energy_states(eigenvalues, args):
-
-    masses=[]
-    chisquares_dof=[]
+    masses = []
+    chisquares_dof = []
 
     for n in range(len(eigenvalues)):
         eigenvalue_n = eigenvalues[n]
         plateau_start = getattr(args, f"E{n}_plateau_start")
         plateau_end = getattr(args, f"E{n}_plateau_end")
-        
+
         if plateau_start == 0 or plateau_end == 0:
-            E_fit = BootstrapSampleSet(np.nan, np.nan * np.zeros(BOOTSTRAP_SAMPLE_COUNT))
+            E_fit = BootstrapSampleSet(
+                np.nan, np.nan * np.zeros(BOOTSTRAP_SAMPLE_COUNT)
+            )
             chisquare = np.nan
 
         else:
-            E_fit, A_fit, chisquare = fitting.fit_exp_bootstrap(eigenvalue_n, plateau_start, plateau_end)
+            E_fit, A_fit, chisquare = fitting.fit_exp_bootstrap(
+                eigenvalue_n, plateau_start, plateau_end
+            )
 
         masses.append(E_fit)
         chisquares_dof.append(chisquare)
-    
+
     return masses, chisquares_dof
