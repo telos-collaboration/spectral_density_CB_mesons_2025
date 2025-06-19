@@ -302,7 +302,7 @@ rule renormalise:
 
 rule output_template_with_topology:
     conda: "../envs/spectral_densities.yml"
-    shell: "python {input.script} --plot_styles {wildcards.plot_styles} --topology_h5 {input.topology}"
+    shell: "python {input.script} --plot_styles {input.plot_styles} --topology_h5 {input.topology}"
 
 
 use rule output_template_with_topology as spectrum_MN_plot with:
