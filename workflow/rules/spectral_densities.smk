@@ -1,4 +1,3 @@
-
 # chimera_channels = [
 #     "Chimera_OC_even",
 #     "Chimera_OC_odd",
@@ -20,14 +19,18 @@ meson_channels = ["ps", "v", "av", "t", "at", "s"]
 
 
 rule analysis_template:
-    conda: "../envs/spectral_densities.yml"
-    shell: "cd lsd_out && python ../{input.script}"
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "cd lsd_out && python ../{input.script}"
 
 
 rule analysis_template_with_plot:
     threads: 20
-    conda: "../envs/spectral_densities.yml"
-    shell: "cd lsd_out && python ../{input.script} --plot_styles ../{input.plot_styles}"
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "cd lsd_out && python ../{input.script} --plot_styles ../{input.plot_styles}"
 
 
 use rule analysis_template as analyse_data_mesons with:
@@ -54,7 +57,8 @@ use rule analysis_template as analyse_data_mesons with:
         #     energy=[0.3, 0.465, 0.63, 0.795, 0.96, 1.125, 1.29],
         #     sig=[1.28e-6, 1.28e-6, 1.28e-6, 2.6e-6, 2.52e-6, 2.4e-6, 1.467e-6],
         # ),
-    log: "lsd_out/paths.log"
+    log:
+        "lsd_out/paths.log",
 
 
 use rule analysis_template as analyse_data_CB with:
@@ -65,7 +69,8 @@ use rule analysis_template as analyse_data_CB with:
         metadata="metadata/metadata_spectralDensity_chimerabaryons.csv",
     output:
         completion_tag="lsd_out/analyse_data_CB_complete",
-    log: "lsd_out/paths.log"
+    log:
+        "lsd_out/paths.log",
 
 
 use rule analysis_template as print_samples_mesons with:
@@ -75,7 +80,8 @@ use rule analysis_template as print_samples_mesons with:
         dependency_tag="lsd_out/analyse_data_mesons_complete",
     output:
         completion_tag="lsd_out/print_samples_mesons_complete",
-    log: "lsd_out/paths.log"
+    log:
+        "lsd_out/paths.log",
 
 
 use rule analysis_template as print_samples_CB with:
@@ -85,7 +91,8 @@ use rule analysis_template as print_samples_CB with:
         dependency_tag="lsd_out/analyse_data_CB_complete",
     output:
         completion_tag="lsd_out/print_samples_CB_complete",
-    log: "lsd_out/paths.log"
+    log:
+        "lsd_out/paths.log",
 
 
 rule fit_data_mesons:
@@ -97,8 +104,10 @@ rule fit_data_mesons:
         dependency_tag="lsd_out/print_samples_mesons_complete",
     output:
         spectrum="CSVs/{ensemble,M[0-9]}_spectral_density_spectrum.csv",
-    conda: "../envs/spectral_densities.yml"
-    shell: "cd lsd_out && python ../{input.script} --ensembles {wildcards.ensemble}"
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "cd lsd_out && python ../{input.script} --ensembles {wildcards.ensemble}"
 
 
 rule fit_data_CB:
@@ -110,8 +119,10 @@ rule fit_data_CB:
         dependency_tag="lsd_out/print_samples_CB_complete",
     output:
         spectrum="CSVs/{ensemble}_chimerabaryons_spectral_density_spectrum.csv",
-    conda: "../envs/spectral_densities.yml"
-    shell: "cd lsd_out && python ../{input.script} --ensembles {wildcards.ensemble}"
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "cd lsd_out && python ../{input.script} --ensembles {wildcards.ensemble}"
 
 
 use rule analysis_template_with_plot as simultaneous_fits_mesons with:
@@ -166,20 +177,24 @@ rule post_analysis_spdens:
             "input_fit/final_spectrum/{group}{ensemble}_{state}.txt",
             group=["", "CB_"],
             ensemble=ensembles,
-            state=["ground", "first", "second"]
+            state=["ground", "first", "second"],
         ),
         cb_matrixelement=expand(
             "input_fit/final_matrixel/{group}{ensemble}_ground.txt",
             group=["", "CB_"],
             ensemble=ensembles,
         ),
-    conda: "../envs/spectral_densities.yml"
-    shell: "cd lsd_out && python ../{input.script} --topology_h5 ../{input.topology}"
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "cd lsd_out && python ../{input.script} --topology_h5 ../{input.topology}"
 
 
 rule output_template:
-    conda: "../envs/spectral_densities.yml"
-    shell: "python {input.script} --plot_styles {input.plot_styles}"
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "python {input.script} --plot_styles {input.plot_styles}"
 
 
 rule CSVs_to_tables_meson_GEVP:
@@ -201,8 +216,10 @@ rule CSVs_to_tables_meson_GEVP:
             ensemble=ensembles,
             n=[0, 1, 2],
         ),
-    conda: "../envs/spectral_densities.yml"
-    shell: "python {input.script}"
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "python {input.script}"
 
 
 rule CSVs_to_tables_CB_GEVP:
@@ -223,8 +240,10 @@ rule CSVs_to_tables_CB_GEVP:
             ensemble=ensembles,
             n=[0, 1, 2],
         ),
-    conda: "../envs/spectral_densities.yml"
-    shell: "python {input.script}"
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "python {input.script}"
 
 
 rule CSVs_to_tables_meson_matrixelements:
@@ -248,9 +267,11 @@ rule CSVs_to_tables_meson_matrixelements:
         latex=expand(
             "assets/tables/{ensemble}_matrix_meson.tex",
             ensemble=ensembles,
-        )
-    conda: "../envs/spectral_densities.yml"
-    shell: "python {input.script}"
+        ),
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "python {input.script}"
 
 
 rule CSVs_to_tables_CB_matrixelements:
@@ -266,14 +287,16 @@ rule CSVs_to_tables_CB_matrixelements:
             "JSONs/{ensemble_prefix}/chimera_extraction_{channel}_samples.json",
             ensemble_prefix=ensemble_prefixes,
             channel=chimera_channels,
-        )
+        ),
     output:
         latex=expand(
             "assets/tables/{ensemble}_matrix_CB.tex",
             ensemble=ensembles,
         ),
-    conda: "../envs/spectral_densities.yml"
-    shell: "python {input.script}"
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "python {input.script}"
 
 
 rule renormalise:
@@ -298,13 +321,17 @@ rule renormalise:
             "assets/tables/renormalised_{ensemble}_matrix_CB.tex",
             ensemble=ensembles,
         ),
-    conda: "../envs/spectral_densities.yml"
-    shell: "python {input.script} --topology_h5 {input.topology}"
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "python {input.script} --topology_h5 {input.topology}"
 
 
 rule output_template_with_topology:
-    conda: "../envs/spectral_densities.yml"
-    shell: "python {input.script} --plot_styles {input.plot_styles} --topology_h5 {input.topology}"
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "python {input.script} --plot_styles {input.plot_styles} --topology_h5 {input.topology}"
 
 
 use rule output_template_with_topology as spectrum_MN_plot with:
@@ -379,6 +406,7 @@ use rule output_template as stability_plot with:
     output:
         "assets/plots/LambdaScan.pdf",
 
+
 use rule output_template as sfs_plot with:
     input:
         script="just_plotting/code/sfs/sfs.py",
@@ -403,5 +431,7 @@ rule weinberg:
     output:
         tex="assets/tables/s_parameters_table.tex",
         csv="CSVs/s_parameters_summary.csv",
-    conda: "../envs/spectral_densities.yml"
-    shell: "python {input.script} --topology_h5 {input.topology}"
+    conda:
+        "../envs/spectral_densities.yml"
+    shell:
+        "python {input.script} --topology_h5 {input.topology}"
