@@ -1,3 +1,5 @@
+import argparse
+
 import pandas as pd
 import os
 import json
@@ -8,7 +10,10 @@ import math
 
 # Constants
 PI2 = math.pi ** 2
-h5_file = '../CB_autocorrelation_decay_constant/data_assets/topology.hdf5'
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--topology_h5", required=True)
+args = parser.parse_args()
 
 # Read the renormalise.csv file
 df = pd.read_csv('../metadata/renormalise.csv')
@@ -16,7 +21,7 @@ df = pd.read_csv('../metadata/renormalise.csv')
 # Compute Z values dynamically using CSV and HDF5 plaquette data
 computed_z = {}
 
-with h5py.File(h5_file, 'r') as f:
+with h5py.File(args.topology_h5, 'r') as f:
     for _, row in df.iterrows():
         ens = row['Ens']
         beta = row['beta']

@@ -143,12 +143,18 @@ use rule analysis_template_with_plot as simultaneous_fits_CB with:
         completion_tag="lsd_out/simultaneous_fit_CB_complete",
 
 
-use rule analysis_template as post_analysis_spdens with:
+rule post_analysis_spdens:
     input:
         script="lsd_out/post_analysis_spdens.py",
         metadata="metadata/renormalise.csv",
-        mesons="lsd_out/simultaneous_fit_mesons_complete",
-        cb="lsd_out/simultaneous_fit_CB_complete",
+        mesons="lsd_out/simultaneous_fits_mesons_complete",
+        cb="lsd_out/simultaneous_fits_CB_complete",
+        topology="data_assets/flows.h5",
+        matrix_elements=expand(
+            "CSVs/{ensemble}_spectral_density_matrix_elements{group}.csv",
+            ensemble=ensembles,
+            group=["", "_CB"],
+        ),
     output:
         spectrum=expand(
             "input_fit/final_spectrum/{group}{ensemble}_{state}.txt",
