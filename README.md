@@ -71,7 +71,7 @@ running the following commands on a login node with Internet access:
 
 ``` shellsession
 snakemake --cores 1 --sdm conda --conda-create-envs-only
-snakemake --cores 1 --use-conda cb_julia_instantiated
+snakemake --cores 1 --use-conda intermediary_data/cb_julia_instantiated
 ```
 
 Once this is complete,
