@@ -4,7 +4,13 @@ plot_styles = config["plot_styles"]
 plot_filetype = config["plot_filetype"]
 
 ensembles = ["M1", "M2", "M3", "M4", "M5"]
-
+ensemble_prefixes = [
+    "Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20",
+    "Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20",
+    "Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20",
+    "Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20",
+    "Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32",
+]
 
 include: "rules/gradient_flow.smk"
 include: "rules/package.smk"
