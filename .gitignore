@@ -14,3 +14,4 @@ JSONs
 lsd_out/*.txt
 lsd_out/*/
 lsd_out/paths.log
+lsd_out/*_complete
