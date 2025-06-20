@@ -134,7 +134,7 @@ class FlowEnsemble:
             return self.Ecs
         else:
             raise ValueError(
-                f"Invalid operator {operator}. " 'Valid operators are "plaq" and "sym".'
+                f'Invalid operator {operator}. Valid operators are "plaq" and "sym".'
             )
 
 

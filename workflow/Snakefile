@@ -1,0 +1,71 @@
+configfile: "workflow_config.yaml"
+
+
+plot_styles = config["plot_styles"]
+plot_filetype = config["plot_filetype"]
+
+ensembles = ["M1", "M2", "M3", "M4", "M5"]
+ensemble_prefixes = [
+    "Sp4b6.5nF2nAS3mF-0.71mAS-1.01T48L20",
+    "Sp4b6.5nF2nAS3mF-0.71mAS-1.01T64L20",
+    "Sp4b6.5nF2nAS3mF-0.71mAS-1.01T96L20",
+    "Sp4b6.5nF2nAS3mF-0.7mAS-1.01T64L20",
+    "Sp4b6.5nF2nAS3mF-0.72mAS-1.01T64L32",
+]
+
+
+include: "rules/gradient_flow.smk"
+include: "rules/package.smk"
+include: "rules/mass.smk"
+include: "rules/plaquette.smk"
+include: "rules/combined_plots.smk"
+include: "rules/spectrum_plots.smk"
+include: "rules/spectrum_tables.smk"
+include: "rules/extrapolation.smk"
+include: "rules/cb_autocorrelation_decay_const.smk"
+include: "rules/spectral_densities.smk"
+
+
+h5_data = expand(
+    "data_assets/{data}.h5",
+    data=["wall_correlators"],
+)
+
+plots = expand(
+    f"assets/plots/{{plot}}.{plot_filetype}",
+    plot=[
+        "wall_comparison",
+        "final_spectrum_MN3",
+        "final_spectrum_detail",
+        "matrixel_fundamental_antisymmetric",
+        "matrixel_chimera_baryons",
+        "LambdaScan",
+        "spectral_density_single_gaussian",
+    ],
+)
+tables = expand(
+    f"assets/tables/{{table}}.tex",
+    table=[
+        "local_smeared_decay_constants",
+        "ensembles",
+        "s_parameters_table",
+    ]
+    + expand(
+        "{ensemble}_aE{n}_{category}",
+        ensemble=ensembles,
+        n=[0, 1, 2],
+        category=["meson", "CB"],
+    )
+    + expand(
+        "renormalised_{ensemble}_matrix_{category}",
+        ensemble=ensembles,
+        category=["meson", "CB"],
+    ),
+)
+
+
+rule all:
+    input:
+        h5_data=h5_data,
+        plots=plots,
+        tables=tables,

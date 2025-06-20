@@ -13,20 +13,5 @@
 module load anaconda/2024.06
 source activate
 
-conda activate my-new-env2
-
-bash reproduce_everything.sh
-
-#cd plateaus
-
-#bash run_plateaus.sh
-
-#conda activate analysis-env4
-
-#cd lsd_out
-
-
-#bash run_spectral_densities.sh
-#bash reproduce_everything.sh
-#python3 analyse_data.py
-#python3 print_samples.py
+conda activate snakemake
+snakemake --cores all --use-conda
