@@ -1,8 +1,8 @@
-# Analysis code for (arXiv:####.#####)
+# Analysis code for (arXiv:2506.19804)
 
 This is the analysis code built on top of **lsdensities** code (
 <a href="https://github.com/LupoA/lsdensities"> GitHub repository </a>) to
-reproduce the results in **([arXiv:####.#####][paper])**.
+reproduce the results in **([arXiv:2506.19804][paper])**.
 
 ## Authors
 
@@ -131,10 +131,10 @@ This workflow is shared under the [GNU General Public License 3.0][gpl].
 
 [antisymmetric-paper]: https://doi.org/10.48550/arXiv.2311.14663
 [antisymmetric-workflow]: https://zenodo.org/records/10929539
-[datarelease]: https://doi.org/10.5281/zenodo.TODO_ZENODO_ID
+[datarelease]: https://doi.org/10.5281/zenodo.15625280
 [gpl]: https://choosealicense.com/licenses/gpl-3.0/
 [miniforge]: https://github.com/conda-forge/miniforge
-[paper]: https://doi.org/10.48550/arXiv.TODO_ARXIV_ID
+[paper]: https://doi.org/10.48550/arXiv.2506.19804
 [snakemake]: https://snakemake.github.io
 [snakemake-conda]: https://snakemake.readthedocs.io/en/stable/snakefiles/deployment.html
 [texlive]: https://tug.org/texlive/
