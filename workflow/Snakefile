@@ -25,6 +25,7 @@ include: "rules/extrapolation.smk"
 include: "rules/cb_autocorrelation_decay_const.smk"
 include: "rules/spectral_densities.smk"
 include: "rules/parse_chimera.smk"
+include: "rules/kernel_comparison.smk"
 
 
 h5_data = "data_assets/wall_correlators.h5"
@@ -62,6 +63,11 @@ tables = expand(
     ),
 )
 
+kernel_comparison_plots = [
+    "assets/plots/kernel_comparison_chimera.pdf",
+    "assets/plots/kernel_comparison_mesons_fund_g5_ps.pdf",
+    "assets/plots/kernel_comparison_mesons_as_g5_ps.pdf",
+]
 
 rule all:
     input:
@@ -69,3 +75,4 @@ rule all:
         h5_corr=h5_corr,
         plots=plots,
         tables=tables,
+        kernel_comparison_plots=kernel_comparison_plots,
