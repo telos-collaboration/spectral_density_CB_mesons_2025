@@ -24,12 +24,11 @@ include: "rules/spectrum_tables.smk"
 include: "rules/extrapolation.smk"
 include: "rules/cb_autocorrelation_decay_const.smk"
 include: "rules/spectral_densities.smk"
+include: "rules/parse_chimera.smk"
 
 
-h5_data = expand(
-    "data_assets/{data}.h5",
-    data=["wall_correlators"],
-)
+h5_data = "data_assets/wall_correlators.h5"
+h5_corr = "input_correlators/chimera_data_reduced.hdf5"
 
 plots = expand(
     f"assets/plots/{{plot}}.{plot_filetype}",
@@ -67,5 +66,6 @@ tables = expand(
 rule all:
     input:
         h5_data=h5_data,
+        h5_corr=h5_corr,
         plots=plots,
         tables=tables,
