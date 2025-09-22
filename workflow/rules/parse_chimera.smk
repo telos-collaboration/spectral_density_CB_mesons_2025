@@ -4,7 +4,7 @@ rule parse_chimera_smeared:
         script="plateaus/write_chimera.jl",
         metadata="metadata/channels_chimera.txt"
     output:
-        h5="input_correlators/chimera_data_reduced.hdf5",
+        h5="input_correlators/chimera_data_reduced.h5",
     conda:
         "../envs/hirep_parsing.yml"
     shell:
