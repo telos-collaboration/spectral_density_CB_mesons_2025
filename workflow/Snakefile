@@ -29,7 +29,7 @@ include: "rules/kernel_comparison.smk"
 
 
 h5_data = "data_assets/wall_correlators.h5"
-h5_corr = "input_correlators/chimera_data_reduced.hdf5"
+h5_corr = "input_correlators/chimera_data_reduced.h5"
 
 plots = expand(
     f"assets/plots/{{plot}}.{plot_filetype}",
