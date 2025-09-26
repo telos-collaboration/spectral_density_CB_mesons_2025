@@ -41,12 +41,15 @@ Davide Vadacchino.
 
 3. Download the data and metadata from the [data release][datarelease]:
 
-   1. Download the file `chimera_data_reduced.h5`,
-      and place it in the `input_correlators` directory
-   2. Download the file `metadata.zip`,
+   1. Download the file `metadata.zip`,
       and unzip it at root level to create the `metadata` directory.
-   3. Download the file `raw_data.zip`,
+   2. Download the file `raw_data.zip`,
       and unzip it at root level to create the `raw_data` directory.
+   3. Download the file `chimera_data_reduced.h5`, 
+      and place it in the `input_correlators` directory
+      OR 
+      Download the file `smear.zip` and unzip it into the `raw_data` 
+      directory to create the `raw_data/smear` directory. 
 
 ## Running the workflow
 
@@ -60,6 +63,14 @@ where the number `1`
 may be replaced by
 the number of CPU cores you wish to allocate to the computation
 (or `all` to use all available CPU cores).
+
+If you have downloaded the file `chimera_data_reduced.h5` and do
+not want to regenerate it by parsing `raw_data/smear` you can use 
+the `--touch` flag to mark the HDF5 file as current.
+
+``` shellsession
+snakemake --cores 1 --use-conda --touch
+```
 
 Snakemake will automatically download and install
 all required Python and Julia packages.
