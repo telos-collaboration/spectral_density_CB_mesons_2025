@@ -45,11 +45,17 @@ Davide Vadacchino.
       and unzip it at root level to create the `metadata` directory.
    2. Download the file `raw_data.zip`,
       and unzip it at root level to create the `raw_data` directory.
-   3. Download the file `chimera_data_reduced.h5`, 
-      and place it in the `input_correlators` directory
-      OR 
-      Download the file `smear.zip` and unzip it into the `raw_data` 
-      directory to create the `raw_data/smear` directory. 
+   3. Download the correlators. Either:
+      - Download the file `chimera_data_reduced.h5`,
+        containing the pre-parsed correlators,
+        and place it in the `input_correlators` directory,
+        or
+      - Download the file `smear.zip` containing the raw correlator logs
+        and unzip it into the `raw_data` 
+        directory to create the `raw_data/smear` directory.
+        In this case,
+        the parsing will be performed by the workflow.
+        This option requires more storage and runtime.
 
 ## Running the workflow
 
