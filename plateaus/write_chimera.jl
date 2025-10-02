@@ -1,4 +1,5 @@
 using Pkg
+Pkg.instantiate()
 using HiRepParsing
 using HDF5
 using ArgParse
