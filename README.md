@@ -48,7 +48,13 @@ Davide Vadacchino.
    3. Download the correlators. Either:
       - Download the file `chimera_data_reduced.h5`,
         containing the pre-parsed correlators,
-        and place it in the `input_correlators` directory,
+        and place it in the `input_correlators` directory.
+	Mark it to Snakemake as current by running:
+
+	``` shellsession
+	snakemake --cores 1 --use-conda --touch
+	```
+
         or
       - Download the file `smear.zip` containing the raw correlator logs
         and unzip it into the `raw_data` 
@@ -69,14 +75,6 @@ where the number `1`
 may be replaced by
 the number of CPU cores you wish to allocate to the computation
 (or `all` to use all available CPU cores).
-
-If you have downloaded the file `chimera_data_reduced.h5` and do
-not want to regenerate it by parsing `raw_data/smear` you can use 
-the `--touch` flag to mark the HDF5 file as current.
-
-``` shellsession
-snakemake --cores 1 --use-conda --touch
-```
 
 Snakemake will automatically download and install
 all required Python and Julia packages.
