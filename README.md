@@ -49,11 +49,11 @@ Davide Vadacchino.
       - Download the file `chimera_data_reduced.h5`,
         containing the pre-parsed correlators,
         and place it in the `input_correlators` directory.
-	Mark it to Snakemake as current by running:
+        Mark it to Snakemake as current by running:
 
-	``` shellsession
-	snakemake --cores 1 --use-conda --touch
-	```
+        ``` shellsession
+        snakemake --cores 1 --use-conda --touch
+        ```
 
         or
       - Download the file `smear.zip` containing the raw correlator logs
