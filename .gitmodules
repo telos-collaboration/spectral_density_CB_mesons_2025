@@ -7,3 +7,6 @@
 [submodule "libs/format_multiple_errors"]
 	path = libs/format_multiple_errors
 	url = https://github.com/edbennett/format_multiple_errors
+[submodule "libs/HiRepParsing"]
+	path = libs/HiRepParsing
+	url = https://github.com/fzierler/HiRepParsing

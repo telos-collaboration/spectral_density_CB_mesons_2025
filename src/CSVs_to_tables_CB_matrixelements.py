@@ -2,14 +2,9 @@ import pandas as pd
 import numpy as np
 import json
 
-
 def bootstrap_error(data, n_bootstrap=1000):
     """Compute the bootstrap error for a given dataset."""
-    bootstrap_means = [
-        np.mean(np.random.choice(data, size=len(data), replace=True))
-        for _ in range(n_bootstrap)
-    ]
-    return np.std(bootstrap_means)
+    return np.std(data)
 
 
 def add_error(channel_E0, err):
@@ -175,7 +170,7 @@ for idx, ensemble in enumerate(ensembles):
             if f"{channelone}_matrix_element" in json_data:
                 samples = np.array(json_data[f"{channelone}_matrix_element"])
                 ac0_val = np.mean(samples) / np.sqrt(vol)
-                ac0_err = bootstrap_error(samples) * 3 / np.sqrt(vol)
+                ac0_err = bootstrap_error(samples) / np.sqrt(vol)
                 ac0_with_error = add_error(ac0_val, ac0_err)
             else:
                 ac0_with_error = "-"

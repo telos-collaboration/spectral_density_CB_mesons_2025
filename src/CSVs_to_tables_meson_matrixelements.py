@@ -3,14 +3,9 @@ import numpy as np
 import json
 import math
 
-
+# TODO: Figure out if this is incorrect?
 def bootstrap_error(data, n_resamples=1000):
-    """Calculate the bootstrap error for a given array."""
-    resampled_means = [
-        np.mean(np.random.choice(data, size=len(data), replace=True))
-        for _ in range(n_resamples)
-    ]
-    return np.std(resampled_means)
+    return np.std(data)
 
 
 def add_error(channel_E0, err):
@@ -157,7 +152,7 @@ for idx, ensemble in enumerate(ensembles):
 
             if data:
                 ac0_val = np.mean(data)
-                ac0_err = bootstrap_error(data) * 20.0
+                ac0_err = bootstrap_error(data)
             else:
                 ac0_val = ac0_err = 0
 

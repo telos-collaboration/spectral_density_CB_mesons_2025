@@ -11,13 +11,10 @@ def read_json(file_path):
     return data
 
 
+
 def bootstrap_errors(data, num_resamples=1000):
     """Calculates the bootstrap error from the data."""
-    resamples = np.random.choice(data, size=(num_resamples, len(data)), replace=True)
-    means = np.mean(resamples, axis=1)
-    mean_of_means = np.mean(means)
-    std_error = np.std(means)
-    return mean_of_means, std_error
+    return np.mean(data), np.std(data)
 
 
 def process_gevp_En_mass_samples(file_path, channel, rep, n):
@@ -36,21 +33,16 @@ def process_gevp_En_mass_samples(file_path, channel, rep, n):
 
 def add_error(channel_E0, err):
     if channel_E0 != 0 and channel_E0 != "NaN" and channel_E0 != "-":
-        # print(err)
-        # print('channel_E0_2: ', channel_E0)
-        # print('err_channel_E0_2: ' , err)
         # Convert the error to a string with significant digits
         err_str = f"{err:.2g}".replace(
             ".", ""
         )  # Convert error to string with 2 significant digits and remove decimal
-        # print(err_str)
         # Count leading zeros
         leading_zeros = len(err_str) - len(err_str.lstrip("0"))
 
         # Remove leading zeros
         err_str = err_str.lstrip("0")
 
-        # print(err_str)
         if len(str(err_str)) == 1:
             err_str = str(int(err_str) * 10)
         # Determine the number of significant digits in the error
@@ -62,9 +54,6 @@ def add_error(channel_E0, err):
         format_precision = max(err_significant_digits - int_part_length, 0)
         format_str = f"{{:.{format_precision}f}}"
         channel_E0_str = format_str.format(channel_E0)
-
-        # print(len(str(err_str)))
-        # print(err_str)
 
         # Combine the channel_E0 value with the error part
         channel_E0_with_error = f"{channel_E0_str}({err_str})"
@@ -148,7 +137,6 @@ for n in range(3):
                         raise ValueError("Result contains NaN values")
                     print(f"average: {channel_E0}")
                     print(f"error: {err_channel_E0}")
-                    err_channel_E0 = 30.0 * err_channel_E0
                 except KeyError:
                     channel_E0 = "-"
                     err_channel_E0 = "-"
@@ -173,7 +161,6 @@ for n in range(3):
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
                     print(f"average: {channel_E0}")
-                    err_channel_E0 = 30.0 * err_channel_E0
                     print(f"error: {err_channel_E0}")
                 except KeyError:
                     channel_E0 = "-"
@@ -201,7 +188,6 @@ for n in range(3):
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
                     print(f"average: {channel_E0}")
-                    err_channel_E0 = 30.0 * err_channel_E0
                     print(f"error: {err_channel_E0}")
                 except KeyError:
                     channel_E0 = "-"
@@ -229,7 +215,6 @@ for n in range(3):
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
                     print(f"average: {channel_E0}")
-                    err_channel_E0 = 30.0 * err_channel_E0
                     print(f"error: {err_channel_E0}")
                 except KeyError:
                     channel_E0 = "-"
@@ -255,7 +240,6 @@ for n in range(3):
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
                     print(f"average: {channel_E0}")
-                    err_channel_E0 = 30.0 * err_channel_E0
                     print(f"error: {err_channel_E0}")
                 except KeyError:
                     channel_E0 = "-"
@@ -282,7 +266,6 @@ for n in range(3):
                     if np.isnan(channel_E0) or np.isnan(err_channel_E0):
                         raise ValueError("Result contains NaN values")
                     print(f"average: {channel_E0}")
-                    err_channel_E0 = 30.0 * err_channel_E0
                     print(f"error: {err_channel_E0}")
                 except KeyError:
                     channel_E0 = "-"
